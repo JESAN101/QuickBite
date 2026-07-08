@@ -10,7 +10,7 @@ import Cart from "../pages/Cart";
 import Orders from "../pages/Orders";
 import Checkout from "../pages/Checkout";
 import Restaurant from "../pages/Restaurant";
-import Food from "../pages/Food";
+import FoodDetails from "../pages/FoodDetails";
 
 const AppRoutes = () => {
   return (
@@ -37,7 +37,7 @@ const AppRoutes = () => {
   path="/food/:id"
   element={
     <MainLayout>
-      <Food />
+      <FoodDetails />
     </MainLayout>
   }
 />

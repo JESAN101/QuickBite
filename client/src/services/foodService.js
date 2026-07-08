@@ -20,3 +20,8 @@ export const getFoodsByRestaurant = async (restaurantId) => {
 
   return response.data;
 };
+
+export const getFoodById = async (id) => {
+  const response = await API.get(`/food/${id}`);
+  return response.data;
+};

@@ -1,6 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { isLoggedIn, getUser, logout } from "../utils/auth";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const user = getUser();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    window.location.reload();
+  };
+
   return (
     <nav
       style={{
@@ -20,29 +31,60 @@ const Navbar = () => {
           alignItems: "center",
         }}
       >
-        <Link to="/" style={{ color: "white" }}>
+        <Link to="/" style={{ color: "white", textDecoration: "none" }}>
           Home
         </Link>
 
-        <Link to="/cart" style={{ color: "white" }}>
+        <Link to="/cart" style={{ color: "white", textDecoration: "none" }}>
           Cart
         </Link>
 
-        <Link to="/orders" style={{ color: "white" }}>
+        <Link to="/orders" style={{ color: "white", textDecoration: "none" }}>
           Orders
         </Link>
 
-        <Link to="/profile" style={{ color: "white" }}>
+        <Link to="/profile" style={{ color: "white", textDecoration: "none" }}>
           Profile
         </Link>
 
-        <Link to="/login" style={{ color: "white" }}>
-          Login
-        </Link>
+        {!isLoggedIn() ? (
+          <>
+            <Link
+              to="/login"
+              style={{ color: "white", textDecoration: "none" }}
+            >
+              Login
+            </Link>
 
-        <Link to="/register" style={{ color: "white" }}>
-          Register
-        </Link>
+            <Link
+              to="/register"
+              style={{ color: "white", textDecoration: "none" }}
+            >
+              Register
+            </Link>
+          </>
+        ) : (
+          <>
+            <span>
+              Hello, <b>{user?.name}</b>
+            </span>
+
+            <button
+              onClick={handleLogout}
+              style={{
+                background: "white",
+                color: "#ff4d4d",
+                border: "none",
+                padding: "6px 14px",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Logout
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );
