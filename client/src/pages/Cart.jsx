@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getCart,
   updateCart,
@@ -8,6 +9,7 @@ import {
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCart();
@@ -60,42 +62,56 @@ const Cart = () => {
     }
   };
 
-  const total = cart.reduce(
+  const subtotal = cart.reduce(
     (sum, item) => sum + item.food.price * item.quantity,
     0
   );
 
+  const deliveryFee = subtotal >= 1000 ? 0 : 100;
+  const grandTotal = subtotal + deliveryFee;
+
   if (cart.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto py-20 text-center">
-        <h1 className="text-4xl font-bold">
-          Your Cart is Empty
+      <div className="max-w-4xl mx-auto py-24 text-center">
+        <h1 className="text-5xl font-bold mb-4">
+          🛒 Your Cart is Empty
         </h1>
 
-        <p className="text-gray-500 mt-4">
-          Add some delicious food first.
+        <p className="text-gray-500 text-lg mb-8">
+          Looks like you haven't added anything yet.
         </p>
+
+        <button
+          onClick={() => navigate("/")}
+          className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg transition"
+        >
+          Browse Foods
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-6 py-12">
+
+      {/* Header */}
 
       <div className="flex justify-between items-center mb-10">
 
         <h1 className="text-4xl font-bold">
-          My Cart
+          🛒 My Cart
         </h1>
 
         <button
           onClick={handleClearCart}
-          className="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-red-600"
+          className="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-lg transition"
         >
           Clear Cart
         </button>
 
       </div>
+
+      {/* Cart Items */}
 
       <div className="space-y-6">
 
@@ -103,15 +119,17 @@ const Cart = () => {
 
           <div
             key={item._id}
-            className="flex items-center justify-between bg-white shadow-lg rounded-xl p-5"
+            className="flex flex-col md:flex-row md:items-center justify-between bg-white rounded-xl shadow-lg p-5 gap-6"
           >
 
-            <div className="flex items-center gap-5">
+            {/* Left */}
+
+            <div className="flex gap-5">
 
               <img
                 src={`http://localhost:5000/uploads/${item.food.image}`}
                 alt={item.food.name}
-                className="w-28 h-28 object-cover rounded-lg"
+                className="w-32 h-32 rounded-lg object-cover"
               />
 
               <div>
@@ -120,7 +138,17 @@ const Cart = () => {
                   {item.food.name}
                 </h2>
 
-                <p className="text-gray-600">
+                <p className="text-gray-500 mt-2">
+                  {item.food.description}
+                </p>
+
+                {item.food.restaurant && (
+                  <p className="text-sm text-gray-400 mt-2">
+                    🍴 {item.food.restaurant.name}
+                  </p>
+                )}
+
+                <p className="text-orange-500 font-bold text-lg mt-3">
                   Rs. {item.food.price}
                 </p>
 
@@ -128,38 +156,44 @@ const Cart = () => {
 
             </div>
 
-            <div className="flex items-center gap-3">
+            {/* Right */}
+
+            <div className="flex items-center gap-5">
+
+              <div className="flex items-center">
+
+                <button
+                  onClick={() => decreaseQuantity(item)}
+                  className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-l-lg"
+                >
+                  −
+                </button>
+
+                <div className="border-y border-gray-300 px-5 py-2 font-bold">
+                  {item.quantity}
+                </div>
+
+                <button
+                  onClick={() => increaseQuantity(item)}
+                  className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-r-lg"
+                >
+                  +
+                </button>
+
+              </div>
+
+              <div className="text-xl font-bold text-orange-500 w-28 text-center">
+                Rs. {item.food.price * item.quantity}
+              </div>
 
               <button
-                onClick={() => decreaseQuantity(item)}
-                className="bg-gray-200 px-4 py-2 rounded-lg"
+                onClick={() => deleteItem(item._id)}
+                className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
               >
-                -
-              </button>
-
-              <span className="text-xl font-bold">
-                {item.quantity}
-              </span>
-
-              <button
-                onClick={() => increaseQuantity(item)}
-                className="bg-gray-200 px-4 py-2 rounded-lg"
-              >
-                +
+                Remove
               </button>
 
             </div>
-
-            <div className="text-xl font-bold text-orange-500">
-              Rs. {item.food.price * item.quantity}
-            </div>
-
-            <button
-              onClick={() => deleteItem(item._id)}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg"
-            >
-              Remove
-            </button>
 
           </div>
 
@@ -167,18 +201,57 @@ const Cart = () => {
 
       </div>
 
-      <div className="mt-10 bg-white shadow-lg rounded-xl p-6">
+      {/* Order Summary */}
 
-        <div className="flex justify-between text-2xl font-bold">
+      <div className="mt-12 bg-white rounded-xl shadow-xl p-8">
 
-          <span>Total</span>
+        <h2 className="text-3xl font-bold mb-8">
+          Order Summary
+        </h2>
 
-          <span>Rs. {total}</span>
+        <div className="space-y-4 text-lg">
+
+          <div className="flex justify-between">
+            <span>Subtotal</span>
+            <span>Rs. {subtotal}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span>Delivery Fee</span>
+
+            {deliveryFee === 0 ? (
+              <span className="text-green-600 font-semibold">
+                FREE
+              </span>
+            ) : (
+              <span>Rs. {deliveryFee}</span>
+            )}
+
+          </div>
+
+          <hr />
+
+          <div className="flex justify-between text-2xl font-bold">
+
+            <span>Total</span>
+
+            <span className="text-orange-500">
+              Rs. {grandTotal}
+            </span>
+
+          </div>
 
         </div>
 
+        {deliveryFee === 0 && (
+          <p className="mt-6 text-green-600 font-medium">
+            🎉 Congratulations! You qualified for FREE delivery.
+          </p>
+        )}
+
         <button
-          className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-lg text-lg font-semibold"
+          onClick={() => navigate("/checkout")}
+          className="mt-8 w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-lg text-lg font-semibold transition"
         >
           Proceed to Checkout
         </button>

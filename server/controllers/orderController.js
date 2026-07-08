@@ -1,4 +1,5 @@
 const Order = require("../models/Order");
+const Cart = require("../models/Cart");
 
 // Place Order
 const placeOrder = async (req, res) => {
@@ -31,6 +32,11 @@ const placeOrder = async (req, res) => {
       deliveryAddress,
       paymentMethod,
     });
+
+    // Clear user's cart after successful order
+await Cart.deleteMany({
+  user: req.user._id,
+});
 
     res.status(201).json({
       success: true,

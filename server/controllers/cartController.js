@@ -5,7 +5,6 @@ const Cart = require("../models/Cart");
 // ============================
 const addToCart = async (req, res) => {
   try {
-
     const { food, quantity } = req.body;
 
     if (!food) {
@@ -21,7 +20,6 @@ const addToCart = async (req, res) => {
     });
 
     if (existingItem) {
-
       existingItem.quantity += quantity || 1;
 
       await existingItem.save();
@@ -36,7 +34,7 @@ const addToCart = async (req, res) => {
     const cart = await Cart.create({
       user: req.user._id,
       food,
-      quantity,
+      quantity: quantity || 1,
     });
 
     res.status(201).json({
@@ -44,14 +42,11 @@ const addToCart = async (req, res) => {
       message: "Added to cart.",
       cart,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
@@ -60,24 +55,32 @@ const addToCart = async (req, res) => {
 // ============================
 const getCart = async (req, res) => {
   try {
-
     const cart = await Cart.find({
       user: req.user._id,
-    }).populate("food");
+    }).populate({
+      path: "food",
+      populate: [
+        {
+          path: "restaurant",
+          select: "name",
+        },
+        {
+          path: "category",
+          select: "name",
+        },
+      ],
+    });
 
     res.status(200).json({
       success: true,
       count: cart.length,
       cart,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
@@ -86,7 +89,6 @@ const getCart = async (req, res) => {
 // ============================
 const updateCart = async (req, res) => {
   try {
-
     const cart = await Cart.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -96,12 +98,10 @@ const updateCart = async (req, res) => {
     );
 
     if (!cart) {
-
       return res.status(404).json({
         success: false,
         message: "Cart item not found.",
       });
-
     }
 
     res.status(200).json({
@@ -109,14 +109,11 @@ const updateCart = async (req, res) => {
       message: "Cart updated.",
       cart,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
@@ -125,30 +122,24 @@ const updateCart = async (req, res) => {
 // ============================
 const removeFromCart = async (req, res) => {
   try {
-
     const cart = await Cart.findByIdAndDelete(req.params.id);
 
     if (!cart) {
-
       return res.status(404).json({
         success: false,
         message: "Item not found.",
       });
-
     }
 
     res.status(200).json({
       success: true,
       message: "Item removed.",
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
@@ -157,7 +148,6 @@ const removeFromCart = async (req, res) => {
 // ============================
 const clearCart = async (req, res) => {
   try {
-
     await Cart.deleteMany({
       user: req.user._id,
     });
@@ -166,14 +156,11 @@ const clearCart = async (req, res) => {
       success: true,
       message: "Cart cleared.",
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
