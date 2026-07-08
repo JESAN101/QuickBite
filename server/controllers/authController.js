@@ -126,8 +126,45 @@ const getProfile = async (req, res) => {
   }
 };
 
+// ============================
+// Update Profile
+// ============================
+const updateProfile = async (req, res) => {
+  try {
+    const { name, phone, address } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        name,
+        phone,
+        address,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).select("-password");
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully.",
+      user,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getProfile,
+  updateProfile,
 };
