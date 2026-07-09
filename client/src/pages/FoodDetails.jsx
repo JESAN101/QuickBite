@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { getFoodById } from "../services/foodService";
 import { addToCart } from "../services/cartService";
@@ -24,23 +25,27 @@ const FoodDetails = () => {
   }, [id]);
 
   const handleAddToCart = async () => {
-    try {
-      const data = await addToCart(food._id, quantity);
+  const loadingToast = toast.loading("Adding to cart...");
 
-      alert(data.message);
-    } catch (error) {
-      console.log(error);
+  try {
+    const data = await addToCart(food._id, quantity);
 
-      if (error.response?.status === 401) {
-        alert("Please login first.");
-      } else {
-        alert(
-          error.response?.data?.message ||
-            "Failed to add item to cart."
-        );
-      }
+    toast.dismiss(loadingToast);
+    toast.success(data.message);
+  } catch (error) {
+    toast.dismiss(loadingToast);
+    console.log(error);
+
+    if (error.response?.status === 401) {
+      toast.error("Please login first.");
+    } else {
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to add item to cart."
+      );
     }
-  };
+  }
+};
 
   if (!food) {
     return (

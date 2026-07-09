@@ -11,6 +11,8 @@ import Orders from "../pages/Orders";
 import Checkout from "../pages/Checkout";
 import Restaurant from "../pages/Restaurant";
 import FoodDetails from "../pages/FoodDetails";
+import OrderSuccess from "../pages/OrderSuccess";
+import Favorites from "../pages/Favorites";
 
 const AppRoutes = () => {
   return (
@@ -95,7 +97,27 @@ const AppRoutes = () => {
           </MainLayout>
         }
       />
+
+      <Route
+  path="/order-success"
+  element={
+    <MainLayout>
+      <OrderSuccess />
+    </MainLayout>
+  }
+/>
+
+<Route
+  path="/favorites"
+  element={
+    <MainLayout>
+      <Favorites />
+    </MainLayout>
+  }
+/>
     </Routes>
+
+    
   );
 };
 

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import {
   getCart,
   updateCart,
@@ -21,6 +23,7 @@ const Cart = () => {
       setCart(data.cart);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load cart.");
     }
   };
 
@@ -30,6 +33,7 @@ const Cart = () => {
       fetchCart();
     } catch (error) {
       console.log(error);
+      toast.error("Failed to update quantity.");
     }
   };
 
@@ -41,24 +45,43 @@ const Cart = () => {
       fetchCart();
     } catch (error) {
       console.log(error);
+      toast.error("Failed to update quantity.");
     }
   };
 
   const deleteItem = async (id) => {
+    const loadingToast = toast.loading("Removing item...");
+
     try {
       await removeFromCart(id);
+
+      toast.dismiss(loadingToast);
+      toast.success("Item removed from cart.");
+
       fetchCart();
     } catch (error) {
       console.log(error);
+
+      toast.dismiss(loadingToast);
+      toast.error("Failed to remove item.");
     }
   };
 
   const handleClearCart = async () => {
+    const loadingToast = toast.loading("Clearing cart...");
+
     try {
       await clearCart();
+
+      toast.dismiss(loadingToast);
+      toast.success("Cart cleared successfully.");
+
       fetchCart();
     } catch (error) {
       console.log(error);
+
+      toast.dismiss(loadingToast);
+      toast.error("Failed to clear cart.");
     }
   };
 
@@ -122,8 +145,6 @@ const Cart = () => {
             className="flex flex-col md:flex-row md:items-center justify-between bg-white rounded-xl shadow-lg p-5 gap-6"
           >
 
-            {/* Left */}
-
             <div className="flex gap-5">
 
               <img
@@ -155,8 +176,6 @@ const Cart = () => {
               </div>
 
             </div>
-
-            {/* Right */}
 
             <div className="flex items-center gap-5">
 

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import { login } from "../services/authService";
 
 const Login = () => {
@@ -20,6 +22,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const loadingToast = toast.loading("Logging in...");
+
     try {
       const data = await login(form);
 
@@ -32,17 +36,19 @@ const Login = () => {
         JSON.stringify(data.user)
       );
 
-      alert(data.message);
+      toast.dismiss(loadingToast);
+      toast.success(data.message);
 
       navigate("/");
-
     } catch (error) {
+      console.log(error);
 
-      alert(
+      toast.dismiss(loadingToast);
+
+      toast.error(
         error.response?.data?.message ||
-        "Login Failed"
+          "Login Failed"
       );
-
     }
   };
 
@@ -62,20 +68,25 @@ const Login = () => {
           name="email"
           type="email"
           placeholder="Email"
-          className="w-full border p-3 rounded mb-4"
+          value={form.email}
           onChange={handleChange}
+          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          required
         />
 
         <input
           name="password"
           type="password"
           placeholder="Password"
-          className="w-full border p-3 rounded mb-6"
+          value={form.password}
           onChange={handleChange}
+          className="w-full border p-3 rounded mb-6 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          required
         />
 
         <button
-          className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600"
+          type="submit"
+          className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition duration-300"
         >
           Login
         </button>
@@ -85,7 +96,7 @@ const Login = () => {
 
           <Link
             to="/register"
-            className="text-orange-500 ml-2"
+            className="text-orange-500 ml-2 hover:underline"
           >
             Register
           </Link>

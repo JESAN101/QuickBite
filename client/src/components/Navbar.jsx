@@ -47,6 +47,10 @@ const Navbar = () => {
           Profile
         </Link>
 
+        <Link to="/favorites" style={{ color: "white" }}>
+  Favorites
+</Link>
+
         {!isLoggedIn() ? (
           <>
             <Link

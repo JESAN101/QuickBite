@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import { register } from "../services/authService";
 
 const Register = () => {
@@ -23,20 +25,24 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const loadingToast = toast.loading("Creating your account...");
+
     try {
       const data = await register(form);
 
-      alert(data.message);
+      toast.dismiss(loadingToast);
+      toast.success(data.message);
 
       navigate("/login");
-
     } catch (error) {
+      console.log(error);
 
-      alert(
+      toast.dismiss(loadingToast);
+
+      toast.error(
         error.response?.data?.message ||
-        "Registration Failed"
+          "Registration Failed"
       );
-
     }
   };
 
@@ -55,42 +61,52 @@ const Register = () => {
         <input
           name="name"
           placeholder="Full Name"
-          className="w-full border p-3 rounded mb-4"
+          value={form.name}
           onChange={handleChange}
+          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          required
         />
 
         <input
           name="email"
           type="email"
           placeholder="Email"
-          className="w-full border p-3 rounded mb-4"
+          value={form.email}
           onChange={handleChange}
+          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          required
         />
 
         <input
           name="password"
           type="password"
           placeholder="Password"
-          className="w-full border p-3 rounded mb-4"
+          value={form.password}
           onChange={handleChange}
+          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          required
         />
 
         <input
           name="phone"
           placeholder="Phone"
-          className="w-full border p-3 rounded mb-4"
+          value={form.phone}
           onChange={handleChange}
+          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
 
         <textarea
           name="address"
           placeholder="Address"
-          className="w-full border p-3 rounded mb-4"
+          value={form.address}
           onChange={handleChange}
+          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          rows="3"
         />
 
         <button
-          className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600"
+          type="submit"
+          className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition duration-300"
         >
           Register
         </button>
@@ -100,7 +116,7 @@ const Register = () => {
 
           <Link
             to="/login"
-            className="text-orange-500 ml-2"
+            className="text-orange-500 ml-2 hover:underline"
           >
             Login
           </Link>

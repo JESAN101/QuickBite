@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-import { getCart } from "../services/cartService";
+import {
+  getCart,
+  clearCart,
+} from "../services/cartService";
 import { placeOrder } from "../services/orderService";
 
 const Checkout = () => {
@@ -22,6 +26,7 @@ const Checkout = () => {
       setCart(data.cart);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load cart.");
     }
   };
 
@@ -36,14 +41,18 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     if (cart.length === 0) {
-      return alert("Cart is empty.");
+      toast.error("Your cart is empty.");
+      return;
     }
 
     if (!address.trim()) {
-      return alert("Please enter delivery address.");
+      toast.error("Please enter your delivery address.");
+      return;
     }
 
     setLoading(true);
+
+    const loadingToast = toast.loading("Placing your order...");
 
     try {
       const orderData = {
@@ -63,19 +72,25 @@ const Checkout = () => {
 
       const response = await placeOrder(orderData);
 
-      alert(response.message);
+      // Clear cart
+      await clearCart();
 
-      navigate("/orders");
+      toast.dismiss(loadingToast);
+      toast.success(response.message);
+
+      navigate("/order-success");
     } catch (error) {
       console.log(error);
 
-      alert(
+      toast.dismiss(loadingToast);
+
+      toast.error(
         error.response?.data?.message ||
           "Failed to place order."
       );
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -153,11 +168,9 @@ const Checkout = () => {
         <textarea
           rows="4"
           value={address}
-          onChange={(e) =>
-            setAddress(e.target.value)
-          }
+          onChange={(e) => setAddress(e.target.value)}
           placeholder="Enter complete delivery address..."
-          className="w-full border rounded-lg p-4"
+          className="w-full border rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
 
       </div>
@@ -172,10 +185,8 @@ const Checkout = () => {
 
         <select
           value={paymentMethod}
-          onChange={(e) =>
-            setPaymentMethod(e.target.value)
-          }
-          className="w-full border rounded-lg p-3"
+          onChange={(e) => setPaymentMethod(e.target.value)}
+          className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
         >
           <option value="Cash">
             Cash on Delivery
@@ -196,7 +207,7 @@ const Checkout = () => {
       <button
         onClick={handlePlaceOrder}
         disabled={loading}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-lg text-xl font-bold"
+        className="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-lg text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading
           ? "Placing Order..."
