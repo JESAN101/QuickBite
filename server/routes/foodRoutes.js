@@ -9,36 +9,53 @@ const {
   getFoodsByRestaurant,
 } = require("../controllers/foodController");
 
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
+
 const router = express.Router();
 
 // =============================
-// Create Food
+// Public Routes
 // =============================
-router.post("/create", createFood);
 
-// =============================
 // Get All Foods
-// =============================
 router.get("/all", getAllFood);
 
-// =============================
 // Get Foods By Restaurant
-// =============================
-router.get("/restaurant/:restaurantId", getFoodsByRestaurant);
+router.get(
+  "/restaurant/:restaurantId",
+  getFoodsByRestaurant
+);
 
-// =============================
 // Get Food By ID
-// =============================
 router.get("/:id", getFoodById);
 
 // =============================
-// Update Food
+// Admin Routes
 // =============================
-router.put("/:id", updateFood);
 
-// =============================
+// Create Food
+router.post(
+  "/create",
+  authMiddleware,
+  adminMiddleware,
+  createFood
+);
+
+// Update Food
+router.put(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  updateFood
+);
+
 // Delete Food
-// =============================
-router.delete("/:id", deleteFood);
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  deleteFood
+);
 
 module.exports = router;

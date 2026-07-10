@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-
 import MainLayout from "../layouts/MainLayout";
-
+import AdminLayout from "../layouts/AdminLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -14,10 +13,17 @@ import FoodDetails from "../pages/FoodDetails";
 import OrderSuccess from "../pages/OrderSuccess";
 import Favorites from "../pages/Favorites";
 import AdminDashboard from "../pages/AdminDashboard";
+import AdminUsers from "../pages/AdminUsers";
+import AdminFoods from "../pages/AdminFoods";
+import AdminRestaurants from "../pages/AdminRestaurants";
+import AdminOrders from "../pages/AdminOrders";
 
 const AppRoutes = () => {
   return (
     <Routes>
+
+      {/* ================= Public Routes ================= */}
+
       <Route
         path="/"
         element={
@@ -28,22 +34,22 @@ const AppRoutes = () => {
       />
 
       <Route
-  path="/restaurant/:id"
-  element={
-    <MainLayout>
-      <Restaurant />
-    </MainLayout>
-  }
-/>
+        path="/restaurant/:id"
+        element={
+          <MainLayout>
+            <Restaurant />
+          </MainLayout>
+        }
+      />
 
-<Route
-  path="/food/:id"
-  element={
-    <MainLayout>
-      <FoodDetails />
-    </MainLayout>
-  }
-/>
+      <Route
+        path="/food/:id"
+        element={
+          <MainLayout>
+            <FoodDetails />
+          </MainLayout>
+        }
+      />
 
       <Route
         path="/login"
@@ -100,30 +106,71 @@ const AppRoutes = () => {
       />
 
       <Route
-  path="/order-success"
-  element={
-    <MainLayout>
-      <OrderSuccess />
-    </MainLayout>
-  }
-/>
+        path="/order-success"
+        element={
+          <MainLayout>
+            <OrderSuccess />
+          </MainLayout>
+        }
+      />
 
-<Route
-  path="/favorites"
-  element={
-    <MainLayout>
-      <Favorites />
-    </MainLayout>
-  }
-/>
+      <Route
+        path="/favorites"
+        element={
+          <MainLayout>
+            <Favorites />
+          </MainLayout>
+        }
+      />
 
-<Route
-  path="/admin/dashboard"
-  element={<AdminDashboard />}
-/>
+      {/* ================= Admin Routes ================= */}
+
+      <Route
+        path="/admin/dashboard"
+        element={
+          <AdminLayout>
+            <AdminDashboard />
+          </AdminLayout>
+        }
+      />
+
+      <Route
+        path="/admin/users"
+        element={
+          <AdminLayout>
+            <AdminUsers />
+          </AdminLayout>
+        }
+      />
+
+      <Route
+        path="/admin/foods"
+        element={
+          <AdminLayout>
+            <AdminFoods />
+          </AdminLayout>
+        }
+      />
+
+      <Route
+        path="/admin/restaurants"
+        element={
+          <AdminLayout>
+            <AdminRestaurants />
+          </AdminLayout>
+        }
+      />
+
+      <Route
+        path="/admin/orders"
+        element={
+          <AdminLayout>
+            <AdminOrders />
+          </AdminLayout>
+        }
+      />
+
     </Routes>
-
-    
   );
 };
 

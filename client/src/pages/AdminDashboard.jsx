@@ -21,15 +21,14 @@ const AdminDashboard = () => {
 
   if (!stats) {
     return (
-      <div className="min-h-screen flex justify-center items-center text-xl">
+      <div className="flex justify-center items-center h-full text-xl">
         Loading Dashboard...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-
+    <>
       <h1 className="text-4xl font-bold mb-8">
         📊 Admin Dashboard
       </h1>
@@ -87,8 +86,7 @@ const AdminDashboard = () => {
       </div>
 
       <RecentOrders />
-
-    </div>
+    </>
   );
 };
 
