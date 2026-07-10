@@ -1,7 +1,9 @@
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 
+// ==========================================
 // Place Order
+// ==========================================
 const placeOrder = async (req, res) => {
   try {
     const {
@@ -33,10 +35,10 @@ const placeOrder = async (req, res) => {
       paymentMethod,
     });
 
-    // Clear user's cart after successful order
-await Cart.deleteMany({
-  user: req.user._id,
-});
+    // Clear user's cart
+    await Cart.deleteMany({
+      user: req.user._id,
+    });
 
     res.status(201).json({
       success: true,
@@ -52,7 +54,9 @@ await Cart.deleteMany({
   }
 };
 
+// ==========================================
 // Get Logged-in User Orders
+// ==========================================
 const getMyOrders = async (req, res) => {
   try {
 
@@ -76,7 +80,9 @@ const getMyOrders = async (req, res) => {
   }
 };
 
+// ==========================================
 // Get Single Order
+// ==========================================
 const getOrder = async (req, res) => {
   try {
 
@@ -92,6 +98,19 @@ const getOrder = async (req, res) => {
       });
     }
 
+    // Admin can view any order
+    if (req.user.role !== "admin") {
+
+      // Customer can only view their own order
+      if (order.user._id.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+          success: false,
+          message: "Access denied.",
+        });
+      }
+
+    }
+
     res.status(200).json({
       success: true,
       order,
@@ -105,9 +124,18 @@ const getOrder = async (req, res) => {
   }
 };
 
-// Get All Orders
+// ==========================================
+// Get All Orders (Admin Only)
+// ==========================================
 const getAllOrders = async (req, res) => {
   try {
+
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Admin access only.",
+      });
+    }
 
     const orders = await Order.find()
       .populate("user")
@@ -128,9 +156,18 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-// Update Status
+// ==========================================
+// Update Order Status (Admin Only)
+// ==========================================
 const updateOrderStatus = async (req, res) => {
   try {
+
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Admin access only.",
+      });
+    }
 
     const order = await Order.findByIdAndUpdate(
       req.params.id,
@@ -149,7 +186,7 @@ const updateOrderStatus = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Status Updated.",
+      message: "Order status updated successfully.",
       order,
     });
 
@@ -161,11 +198,22 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
-// Delete Order
+// ==========================================
+// Delete Order (Admin Only)
+// ==========================================
 const deleteOrder = async (req, res) => {
   try {
 
-    const order = await Order.findByIdAndDelete(req.params.id);
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Admin access only.",
+      });
+    }
+
+    const order = await Order.findByIdAndDelete(
+      req.params.id
+    );
 
     if (!order) {
       return res.status(404).json({
@@ -176,7 +224,7 @@ const deleteOrder = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Order Deleted.",
+      message: "Order deleted successfully.",
     });
 
   } catch (error) {

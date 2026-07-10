@@ -13,6 +13,7 @@ import Restaurant from "../pages/Restaurant";
 import FoodDetails from "../pages/FoodDetails";
 import OrderSuccess from "../pages/OrderSuccess";
 import Favorites from "../pages/Favorites";
+import AdminDashboard from "../pages/AdminDashboard";
 
 const AppRoutes = () => {
   return (
@@ -114,6 +115,11 @@ const AppRoutes = () => {
       <Favorites />
     </MainLayout>
   }
+/>
+
+<Route
+  path="/admin/dashboard"
+  element={<AdminDashboard />}
 />
     </Routes>
 

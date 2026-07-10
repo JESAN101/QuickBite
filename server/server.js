@@ -13,6 +13,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -47,6 +48,7 @@ app.use("/api/order", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/favorite", favoriteRoutes);
 app.use("/api/review", reviewRoutes);
+app.use("/api/admin", adminRoutes);
 
 // =======================
 // Home Route

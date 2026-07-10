@@ -23,3 +23,8 @@ export const getOrder = async (id) => {
   const response = await API.get(`/order/${id}`);
   return response.data;
 };
+
+export const getAllOrders = async () => {
+  const response = await API.get("/order/all");
+  return response.data;
+};
