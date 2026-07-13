@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+
 import {
   FaHome,
   FaChartPie,
@@ -7,6 +8,7 @@ import {
   FaStore,
   FaClipboardList,
   FaSignOutAlt,
+  FaTags,
 } from "react-icons/fa";
 
 const AdminSidebar = () => {
@@ -93,6 +95,18 @@ const AdminSidebar = () => {
           <FaHamburger />
           Foods
         </NavLink>
+
+        <NavLink
+  to="/admin/categories"
+  className={({ isActive }) =>
+    `flex items-center gap-3 px-6 py-4 hover:bg-gray-800 ${
+      isActive ? "bg-orange-500" : ""
+    }`
+  }
+>
+  <FaTags />
+  Categories
+</NavLink>
 
         <NavLink
           to="/admin/restaurants"

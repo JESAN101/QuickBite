@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getRestaurant } from "../services/restaurantService";
+import { getRestaurantById } from "../services/restaurantService";
 import { getFoodsByRestaurant } from "../services/foodService";
 import { Link } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const Restaurant = () => {
 
   const fetchRestaurant = async () => {
     try {
-      const data = await getRestaurant(id);
+      const data = await getRestaurantById(id);
       setRestaurant(data.restaurant);
     } catch (error) {
       console.log(error);

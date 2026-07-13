@@ -141,7 +141,7 @@ const updateProfile = async (req, res) => {
         address,
       },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     ).select("-password");

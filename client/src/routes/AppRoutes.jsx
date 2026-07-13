@@ -17,6 +17,12 @@ import AdminUsers from "../pages/AdminUsers";
 import AdminFoods from "../pages/AdminFoods";
 import AdminRestaurants from "../pages/AdminRestaurants";
 import AdminOrders from "../pages/AdminOrders";
+import AdminAddFood from "../pages/AdminAddFood";
+import AdminEditFood from "../pages/AdminEditFood";
+import AdminAddRestaurant from "../pages/AdminAddRestaurant";
+import AdminEditRestaurant from "../pages/AdminEditRestaurant";
+import AdminCategories from "../pages/AdminCategories";
+import AddEditCategory from "../pages/AddEditCategory";
 
 const AppRoutes = () => {
   return (
@@ -163,12 +169,45 @@ const AppRoutes = () => {
 
       <Route
         path="/admin/orders"
-        element={
-          <AdminLayout>
+        element={ 
             <AdminOrders />
-          </AdminLayout>
         }
+
       />
+      <Route
+  path="/admin/foods/add"
+  element={<AdminAddFood />}
+/>
+
+<Route
+  path="/admin/foods/edit/:id"
+  element={<AdminEditFood />}
+/>
+
+<Route
+  path="/admin/restaurants/add"
+  element={<AdminAddRestaurant />}
+/>
+
+<Route
+  path="/admin/restaurants/edit/:id"
+  element={<AdminEditRestaurant />}
+/>
+
+<Route
+  path="/admin/categories"
+  element={<AdminCategories />}
+/>
+
+<Route
+  path="/admin/categories/add"
+  element={<AddEditCategory />}
+/>
+
+<Route
+  path="/admin/categories/edit/:id"
+  element={<AddEditCategory />}
+/>
 
     </Routes>
   );

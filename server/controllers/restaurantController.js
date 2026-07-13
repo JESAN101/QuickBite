@@ -5,7 +5,9 @@ const Restaurant = require("../models/Restaurant");
 // =============================
 const createRestaurant = async (req, res) => {
   try {
-    const { name, description, address, phone, image } = req.body;
+    const { name, description, address, phone } = req.body;
+
+    const image = req.file ? req.file.filename : "";
 
     if (!name || !description || !address || !phone) {
       return res.status(400).json({
@@ -28,7 +30,6 @@ const createRestaurant = async (req, res) => {
       message: "Restaurant created successfully.",
       restaurant,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -52,7 +53,6 @@ const getRestaurants = async (req, res) => {
       count: restaurants.length,
       restaurants,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -82,7 +82,6 @@ const getRestaurant = async (req, res) => {
       success: true,
       restaurant,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -96,13 +95,7 @@ const getRestaurant = async (req, res) => {
 // =============================
 const updateRestaurant = async (req, res) => {
   try {
-    const restaurant = await Restaurant.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const restaurant = await Restaurant.findById(req.params.id);
 
     if (!restaurant) {
       return res.status(404).json({
@@ -111,12 +104,25 @@ const updateRestaurant = async (req, res) => {
       });
     }
 
+    if (req.file) {
+      req.body.image = req.file.filename;
+    }
+
+    const updatedRestaurant =
+      await Restaurant.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+          returnDocument: "after",
+          runValidators: true,
+        }
+      );
+
     res.status(200).json({
       success: true,
       message: "Restaurant updated successfully.",
-      restaurant,
+      restaurant: updatedRestaurant,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -143,7 +149,6 @@ const deleteRestaurant = async (req, res) => {
       success: true,
       message: "Restaurant deleted successfully.",
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,

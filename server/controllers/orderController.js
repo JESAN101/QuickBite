@@ -157,25 +157,13 @@ const getAllOrders = async (req, res) => {
 };
 
 // ==========================================
-// Update Order Status (Admin Only)
+// Update Order Status 
 // ==========================================
 const updateOrderStatus = async (req, res) => {
   try {
+    const { orderStatus } = req.body;
 
-    if (req.user.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Admin access only.",
-      });
-    }
-
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const order = await Order.findById(req.params.id);
 
     if (!order) {
       return res.status(404).json({
@@ -184,17 +172,23 @@ const updateOrderStatus = async (req, res) => {
       });
     }
 
+    order.orderStatus = orderStatus;
+
+    await order.save();
+
     res.status(200).json({
       success: true,
-      message: "Order status updated successfully.",
+      message: "Order updated successfully.",
       order,
     });
 
   } catch (error) {
+
     res.status(500).json({
       success: false,
       message: error.message,
     });
+
   }
 };
 

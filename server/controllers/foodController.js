@@ -12,10 +12,12 @@ const createFood = async (req, res) => {
       price,
       category,
       restaurant,
-      image,
       isAvailable,
       preparationTime,
     } = req.body;
+
+    // Uploaded image filename
+    const image = req.file ? req.file.filename : "";
 
     // Validation
     if (!name || !description || !price || !category) {
@@ -148,11 +150,21 @@ const updateFood = async (req, res) => {
 
     }
 
+    // Create update object
+    const updateData = {
+      ...req.body,
+    };
+
+    // If a new image was uploaded
+    if (req.file) {
+      updateData.image = req.file.filename;
+    }
+
     const updatedFood = await Food.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     )
@@ -207,11 +219,12 @@ const deleteFood = async (req, res) => {
   }
 };
 
-// =============================
+// ===================================
 // Get Foods By Restaurant
-// =============================
+// ===================================
 const getFoodsByRestaurant = async (req, res) => {
   try {
+
     const foods = await Food.find({
       restaurant: req.params.restaurantId,
     })
@@ -225,10 +238,12 @@ const getFoodsByRestaurant = async (req, res) => {
     });
 
   } catch (error) {
+
     res.status(500).json({
       success: false,
       message: error.message,
     });
+
   }
 };
 

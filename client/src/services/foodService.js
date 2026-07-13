@@ -31,24 +31,37 @@ export const getFoodById = async (id) => {
 // Admin APIs
 // =========================
 
-export const createFood = async (foodData) => {
+// Create Food
+export const createFood = async (formData) => {
   const response = await API.post(
     "/food/create",
-    foodData
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
   return response.data;
 };
 
-export const updateFood = async (id, foodData) => {
+// Update Food
+export const updateFood = async (id, formData) => {
   const response = await API.put(
     `/food/${id}`,
-    foodData
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
   return response.data;
 };
 
+// Delete Food
 export const deleteFood = async (id) => {
   const response = await API.delete(
     `/food/${id}`

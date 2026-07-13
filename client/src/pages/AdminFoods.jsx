@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 import {
   getAllFoods,
@@ -9,6 +10,7 @@ import {
 const AdminFoods = () => {
   const [foods, setFoods] = useState([]);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchFoods();
@@ -62,11 +64,12 @@ const AdminFoods = () => {
           🍔 Food Management
         </h1>
 
-        <button
-          className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg"
-        >
-          + Add Food
-        </button>
+       <button
+  onClick={() => navigate("/admin/foods/add")}
+  className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg"
+>
+  + Add Food
+</button>
 
       </div>
 
@@ -154,10 +157,13 @@ const AdminFoods = () => {
                 <td className="p-4 space-x-2">
 
                   <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-                  >
-                    Edit
-                  </button>
+  onClick={() =>
+    navigate(`/admin/foods/edit/${food._id}`)
+  }
+  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+>
+  Edit
+</button>
 
                   <button
                     onClick={() =>

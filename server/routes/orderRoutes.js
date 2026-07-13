@@ -14,14 +14,29 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 
 const router = express.Router();
 
-// Customer
-router.post("/place", authMiddleware, placeOrder);
+// =====================================
+// Customer Routes
+// =====================================
 
-router.get("/my-orders", authMiddleware, getMyOrders);
+// Place Order
+router.post(
+  "/place",
+  authMiddleware,
+  placeOrder
+);
 
-router.get("/:id", authMiddleware, getOrder);
+// Logged-in User Orders
+router.get(
+  "/my-orders",
+  authMiddleware,
+  getMyOrders
+);
 
-// Admin
+// =====================================
+// Admin Routes
+// =====================================
+
+// Get All Orders
 router.get(
   "/all",
   authMiddleware,
@@ -29,6 +44,7 @@ router.get(
   getAllOrders
 );
 
+// Update Order Status
 router.put(
   "/update/:id",
   authMiddleware,
@@ -36,11 +52,22 @@ router.put(
   updateOrderStatus
 );
 
+// Delete Order
 router.delete(
   "/delete/:id",
   authMiddleware,
   adminMiddleware,
   deleteOrder
+);
+
+// =====================================
+// Single Order (KEEP THIS LAST)
+// =====================================
+
+router.get(
+  "/:id",
+  authMiddleware,
+  getOrder
 );
 
 module.exports = router;

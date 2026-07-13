@@ -11,6 +11,7 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
 
@@ -39,6 +40,7 @@ router.post(
   "/create",
   authMiddleware,
   adminMiddleware,
+  upload.single("image"),
   createFood
 );
 
@@ -47,6 +49,7 @@ router.put(
   "/:id",
   authMiddleware,
   adminMiddleware,
+  upload.single("image"),
   updateFood
 );
 

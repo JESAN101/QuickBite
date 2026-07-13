@@ -106,14 +106,7 @@ const getCategoryById = async (req, res) => {
 const updateCategory = async (req, res) => {
   try {
 
-    const category = await Category.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const category = await Category.findById(req.params.id);
 
     if (!category) {
       return res.status(404).json({
@@ -122,10 +115,20 @@ const updateCategory = async (req, res) => {
       });
     }
 
+    const updatedCategory =
+      await Category.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+          returnDocument: "after",
+          runValidators: true,
+        }
+      );
+
     res.status(200).json({
       success: true,
       message: "Category updated successfully.",
-      category,
+      category: updatedCategory,
     });
 
   } catch (error) {
