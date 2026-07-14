@@ -109,33 +109,87 @@ const filteredFoods = foods
     <>
       <Hero />
 
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-      />
+      {/* ---------- discovery toolbar: search + filters ---------- */}
+      <section className="border-b border-[#EADFC8] bg-[#FFFBF3]">
+        <div className="mx-auto max-w-7xl space-y-6 px-6 py-10">
+          <SearchBar search={search} setSearch={setSearch} />
 
-      <Categories
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
+          <Categories
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
 
-      <RestaurantFilter
-        restaurants={restaurants}
-        selectedRestaurant={selectedRestaurant}
-        setSelectedRestaurant={setSelectedRestaurant}
-      />  
+          <RestaurantFilter
+            restaurants={restaurants}
+            selectedRestaurant={selectedRestaurant}
+            setSelectedRestaurant={setSelectedRestaurant}
+          />
+        </div>
+      </section>
 
-<FilterBar
-  sortBy={sortBy}
-  setSortBy={setSortBy}
-  clearFilters={clearFilters}
-  foodCount={filteredFoods.length}
-/>
+      {/* ---------- foods ---------- */}
+      <section
+        id="foods-section"
+        className="scroll-mt-24 bg-[#FFFBF3] py-16"
+      >
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#D64933]/25 bg-[#D64933]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#D64933]">
+                On the menu
+              </span>
+              <h2 className="mt-4 font-['Plus_Jakarta_Sans',sans-serif] text-3xl font-bold text-[#1D1512] md:text-4xl">
+                Something{" "}
+                <span className="font-['Fraunces',serif] italic font-normal text-[#D64933]">
+                  delicious
+                </span>{" "}
+                for everyone
+              </h2>
+              <p className="mt-2 max-w-xl text-[#3A2A20]/60">
+                Search, filter, and sort your way to the dish you're craving
+                right now.
+              </p>
+            </div>
 
-      <Foods foods={filteredFoods} />
+            <FilterBar
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              clearFilters={clearFilters}
+              foodCount={filteredFoods.length}
+            />
+          </div>
 
-      <Restaurants />
+          <div className="mt-10">
+            <Foods foods={filteredFoods} />
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- restaurants ---------- */}
+      <section
+        id="restaurants-section"
+        className="scroll-mt-24 bg-gradient-to-b from-[#1D1512] to-[#2A1F1A] py-16"
+      >
+        <div className="mx-auto max-w-7xl px-6">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#F0A438]/30 bg-[#F0A438]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#F0A438]">
+            Kitchens we love
+          </span>
+          <h2 className="mt-4 font-['Plus_Jakarta_Sans',sans-serif] text-3xl font-bold text-[#F7ECD9] md:text-4xl">
+            Restaurants{" "}
+            <span className="font-['Fraunces',serif] italic font-normal text-[#F0A438]">
+              near you
+            </span>
+          </h2>
+          <p className="mt-2 max-w-xl text-[#C9B8A3]">
+            Local favorites and hidden gems, all ready to deliver.
+          </p>
+
+          <div className="mt-10">
+            <Restaurants />
+          </div>
+        </div>
+      </section>
     </>
   );
 };

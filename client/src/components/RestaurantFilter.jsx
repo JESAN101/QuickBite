@@ -4,45 +4,43 @@ const RestaurantFilter = ({
   setSelectedRestaurant,
 }) => {
   return (
-    <section className="max-w-7xl mx-auto px-6 py-8">
+    <section className="mx-auto max-w-7xl px-6 pb-6">
+      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#3A2A20]/50">
+        Filter by restaurant
+      </p>
 
-      <h2 className="text-2xl font-bold mb-6">
-        Filter by Restaurant
-      </h2>
-
-      <div className="flex flex-wrap gap-3">
-
+      <div className="flex flex-wrap gap-x-6 gap-y-3 border-b border-[#EADFC8]">
         <button
           onClick={() => setSelectedRestaurant("all")}
-          className={`px-5 py-2 rounded-full transition ${
+          className={`relative pb-3 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-semibold transition ${
             selectedRestaurant === "all"
-              ? "bg-orange-500 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
+              ? "text-[#1D1512]"
+              : "text-[#3A2A20]/45 hover:text-[#1D1512]"
           }`}
         >
           All Restaurants
+          {selectedRestaurant === "all" && (
+            <span className="absolute inset-x-0 -bottom-px h-[2px] rounded-full bg-[#D64933]" />
+          )}
         </button>
 
         {restaurants.map((restaurant) => (
           <button
             key={restaurant._id}
-            onClick={() =>
-              setSelectedRestaurant(
-                restaurant._id
-              )
-            }
-            className={`px-5 py-2 rounded-full transition ${
+            onClick={() => setSelectedRestaurant(restaurant._id)}
+            className={`relative pb-3 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-semibold transition ${
               selectedRestaurant === restaurant._id
-                ? "bg-orange-500 text-white"
-                : "bg-gray-200 hover:bg-gray-300"
+                ? "text-[#1D1512]"
+                : "text-[#3A2A20]/45 hover:text-[#1D1512]"
             }`}
           >
             {restaurant.name}
+            {selectedRestaurant === restaurant._id && (
+              <span className="absolute inset-x-0 -bottom-px h-[2px] rounded-full bg-[#D64933]" />
+            )}
           </button>
         ))}
-
       </div>
-
     </section>
   );
 };

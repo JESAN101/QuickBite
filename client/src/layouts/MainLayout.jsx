@@ -1,12 +1,15 @@
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const MainLayout = ({ children }) => {
   return (
     <>
       <Navbar />
-      {children}
+      <main>{children}</main>
+      <Footer />
     </>
   );
 };
 
 export default MainLayout;
+

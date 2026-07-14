@@ -1,3 +1,4 @@
+// Categories.jsx
 import CategoryCard from "./CategoryCard";
 
 const Categories = ({
@@ -6,35 +7,45 @@ const Categories = ({
   setSelectedCategory,
 }) => {
   return (
-    <section className="max-w-7xl mx-auto py-16 px-6">
+    <section className="mx-auto max-w-7xl px-6 py-20">
+      <div className="mb-10 flex items-end justify-between">
+        <div>
+          <span className="text-xs font-semibold uppercase tracking-[0.15em] text-[#D64933]">
+            Browse
+          </span>
+          <h2 className="mt-2 font-['Plus_Jakarta_Sans',sans-serif] text-3xl font-bold text-[#1D1512]">
+            What are you{" "}
+            <span className="font-['Fraunces',serif] italic font-normal text-[#D64933]">
+              craving
+            </span>
+            ?
+          </h2>
+        </div>
+      </div>
 
-      <h2 className="text-3xl font-bold mb-8">
-        Food Categories
-      </h2>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-        {/* All */}
-
-        <div
+      {/* horizontal scroll row — no visible scrollbar, works on mobile as a swipe strip */}
+      <div className="flex gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <button
           onClick={() => setSelectedCategory("all")}
-          className={`cursor-pointer rounded-xl p-6 text-center shadow-md transition
-          ${
+          className={`flex shrink-0 items-center gap-3 rounded-full border px-5 py-3 transition ${
             selectedCategory === "all"
-              ? "bg-orange-500 text-white"
-              : "bg-white hover:shadow-lg"
+              ? "border-[#1D1512] bg-[#1D1512] text-[#F7ECD9]"
+              : "border-[#EADFC8] bg-[#FFFBF3] text-[#1D1512] hover:border-[#F0A438]/60"
           }`}
         >
-          <h3
-            className={`text-xl font-semibold ${
+          <span
+            className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
               selectedCategory === "all"
-                ? "text-white"
-                : "text-orange-500"
+                ? "bg-[#F0A438] text-[#1D1512]"
+                : "bg-[#F0A438]/15 text-[#D64933]"
             }`}
           >
+            ✦
+          </span>
+          <span className="whitespace-nowrap font-['Plus_Jakarta_Sans',sans-serif] font-semibold">
             All
-          </h3>
-        </div>
+          </span>
+        </button>
 
         {categories.map((category) => (
           <CategoryCard
@@ -44,9 +55,7 @@ const Categories = ({
             setSelectedCategory={setSelectedCategory}
           />
         ))}
-
       </div>
-
     </section>
   );
 };
