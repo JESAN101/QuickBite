@@ -9,6 +9,8 @@ import {
   FaClipboardList,
   FaSignOutAlt,
   FaTags,
+  FaTicketAlt,
+  FaUserCheck,
 } from "react-icons/fa";
 
 const AdminSidebar = () => {
@@ -97,16 +99,28 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-  to="/admin/categories"
-  className={({ isActive }) =>
-    `flex items-center gap-3 px-6 py-4 hover:bg-gray-800 ${
-      isActive ? "bg-orange-500" : ""
-    }`
-  }
->
-  <FaTags />
-  Categories
-</NavLink>
+          to="/admin/categories"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-6 py-4 hover:bg-gray-800 ${
+              isActive ? "bg-orange-500" : ""
+            }`
+          }
+        >
+          <FaTags />
+          Categories
+        </NavLink>
+
+        <NavLink
+          to="/admin/coupons"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-6 py-4 hover:bg-gray-800 ${
+              isActive ? "bg-orange-500" : ""
+            }`
+          }
+        >
+          <FaTicketAlt />
+          Coupons
+        </NavLink>
 
         <NavLink
           to="/admin/restaurants"
@@ -130,6 +144,30 @@ const AdminSidebar = () => {
         >
           <FaClipboardList />
           Orders
+        </NavLink>
+
+        <NavLink
+          to="/admin/requests/rider"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-6 py-4 hover:bg-gray-800 ${
+              isActive ? "bg-orange-500" : ""
+            }`
+          }
+        >
+          <FaUserCheck />
+          Rider Requests
+        </NavLink>
+
+        <NavLink
+          to="/admin/requests/restaurant"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-6 py-4 hover:bg-gray-800 ${
+              isActive ? "bg-orange-500" : ""
+            }`
+          }
+        >
+          <FaUserCheck />
+          Rest. Requests
         </NavLink>
 
       </nav>

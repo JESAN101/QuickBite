@@ -6,15 +6,95 @@ const {
   getRestaurant,
   updateRestaurant,
   deleteRestaurant,
+  getMyRestaurant,
+  updateMyRestaurant,
+  getMyOrders,
+  updateMyOrderStatus,
+  getMyFoods,
+  createMyFood,
+  updateMyFood,
+  deleteMyFood,
+  getMyStats,
 } = require("../controllers/restaurantController");
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+const restaurantMiddleware = require("../middleware/restaurantMiddleware");
 
 const upload = require("../middleware/upload");
 
 const router = express.Router();
 
+// ===========================
+// Restaurant Owner Routes
+// (MUST be registered before "/:id")
+// ===========================
+
+router.get(
+  "/owner/mine",
+  authMiddleware,
+  restaurantMiddleware,
+  getMyRestaurant
+);
+
+router.put(
+  "/owner/update",
+  authMiddleware,
+  restaurantMiddleware,
+  upload.single("image"),
+  updateMyRestaurant
+);
+
+router.get(
+  "/owner/stats",
+  authMiddleware,
+  restaurantMiddleware,
+  getMyStats
+);
+
+router.get(
+  "/owner/orders",
+  authMiddleware,
+  restaurantMiddleware,
+  getMyOrders
+);
+
+router.put(
+  "/owner/orders/:id",
+  authMiddleware,
+  restaurantMiddleware,
+  updateMyOrderStatus
+);
+
+router.get(
+  "/owner/foods",
+  authMiddleware,
+  restaurantMiddleware,
+  getMyFoods
+);
+
+router.post(
+  "/owner/foods",
+  authMiddleware,
+  restaurantMiddleware,
+  upload.single("image"),
+  createMyFood
+);
+
+router.put(
+  "/owner/foods/:id",
+  authMiddleware,
+  restaurantMiddleware,
+  upload.single("image"),
+  updateMyFood
+);
+
+router.delete(
+  "/owner/foods/:id",
+  authMiddleware,
+  restaurantMiddleware,
+  deleteMyFood
+);
 
 // ===========================
 // Public Routes
@@ -23,7 +103,6 @@ const router = express.Router();
 router.get("/all", getRestaurants);
 
 router.get("/:id", getRestaurant);
-
 
 // ===========================
 // Admin Routes

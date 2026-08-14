@@ -171,6 +171,18 @@ const OrderDetailsModal = ({ order, onClose }) => {
 
           <div className="text-right">
 
+            {order.discount > 0 && (
+              <div className="mb-2">
+                <p className="text-gray-500">
+                  Coupon ({order.coupon?.code})
+                </p>
+
+                <p className="font-semibold text-green-600">
+                  - Rs. {order.discount}
+                </p>
+              </div>
+            )}
+
             <p className="text-gray-500">
               Total Amount
             </p>

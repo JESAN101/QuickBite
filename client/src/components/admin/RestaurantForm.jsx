@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 const RestaurantForm = ({
   initialData = {},
+  owners = [],
   onSubmit,
   loading,
 }) => {
@@ -11,6 +12,7 @@ const RestaurantForm = ({
     address: "",
     phone: "",
     image: null,
+    owner: "",
   });
 
   const [preview, setPreview] = useState("");
@@ -23,6 +25,7 @@ const RestaurantForm = ({
         address: initialData.address || "",
         phone: initialData.phone || "",
         image: null,
+        owner: initialData.owner?._id || "",
       });
 
       if (initialData.image) {
@@ -67,6 +70,10 @@ const RestaurantForm = ({
 
     if (formData.image) {
       data.append("image", formData.image);
+    }
+
+    if (formData.owner) {
+      data.append("owner", formData.owner);
     }
 
     onSubmit(data);
@@ -135,6 +142,39 @@ const RestaurantForm = ({
           required
           className="w-full border rounded-lg p-3 mt-2"
         />
+      </div>
+
+      <div>
+        <label className="font-semibold">
+          Assign Owner (Restaurant Account)
+        </label>
+
+        <select
+          name="owner"
+          value={formData.owner}
+          onChange={handleChange}
+          className="w-full border rounded-lg p-3 mt-2"
+        >
+          <option value="">
+            {initialData._id
+              ? "Keep current owner"
+              : "Select an owner (optional)"}
+          </option>
+
+          {owners.map((owner) => (
+            <option
+              key={owner._id}
+              value={owner._id}
+            >
+              {owner.name} ({owner.email})
+            </option>
+          ))}
+        </select>
+
+        <p className="text-xs text-gray-500 mt-1">
+          This account will be able to manage this restaurant. If none is
+          selected, the creator becomes the owner.
+        </p>
       </div>
 
       <div>

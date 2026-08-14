@@ -35,6 +35,26 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    // Coupon applied to this order (if any)
+    coupon: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Coupon",
+      default: null,
+    },
+
+    // Discount amount applied (Rs.)
+    discount: {
+      type: Number,
+      default: 0,
+    },
+
+    // Rider assigned to deliver this order (if any)
+    rider: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+
     deliveryAddress: {
       type: String,
       required: true,

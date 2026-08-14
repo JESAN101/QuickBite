@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaTag, FaTimes } from "react-icons/fa";
 
 import { getCart, clearCart } from "../services/cartService";
 import { placeOrder } from "../services/orderService";
+import {
+  validateCoupon,
+  getActiveCoupons,
+} from "../services/couponService";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -13,9 +18,10 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
+  const [availableCoupons, setAvailableCoupons] = useState([]);
 
   const fetchCart = async () => {
     try {
@@ -27,6 +33,20 @@ const Checkout = () => {
     }
   };
 
+  const fetchActiveCoupons = async () => {
+    try {
+      const data = await getActiveCoupons();
+      setAvailableCoupons(data.coupons || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+    fetchActiveCoupons();
+  }, []);
+
   const subtotal = cart.reduce(
     (sum, item) => sum + item.food.price * item.quantity,
     0
@@ -34,7 +54,49 @@ const Checkout = () => {
 
   const deliveryFee = subtotal > 1000 ? 0 : 100;
 
-  const total = subtotal + deliveryFee;
+  const discount = appliedCoupon?.discount || 0;
+
+  const total = subtotal + deliveryFee - discount;
+
+  const handleApplyCoupon = async () => {
+    const code = couponCode.trim();
+
+    if (!code) {
+      toast.error("Please enter a coupon code.");
+      return;
+    }
+
+    if (cart.length === 0) {
+      toast.error("Your cart is empty.");
+      return;
+    }
+
+    setApplyingCoupon(true);
+
+    try {
+      const data = await validateCoupon(code, subtotal);
+
+      setAppliedCoupon({
+        code: code.toUpperCase(),
+        discount: data.discount,
+      });
+
+      toast.success(data.message);
+    } catch (error) {
+      setAppliedCoupon(null);
+
+      toast.error(
+        error.response?.data?.message || "Invalid coupon code."
+      );
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+  };
 
   const handlePlaceOrder = async () => {
     if (cart.length === 0) {
@@ -65,6 +127,8 @@ const Checkout = () => {
         deliveryAddress: address,
 
         paymentMethod,
+
+        couponCode: appliedCoupon?.code || "",
       };
 
       const response = await placeOrder(orderData);
@@ -164,6 +228,13 @@ const Checkout = () => {
               </span>
             </div>
 
+            {appliedCoupon && (
+              <div className="flex justify-between text-sm font-semibold text-[#3F6B3F]">
+                <span>Coupon ({appliedCoupon.code})</span>
+                <span>- Rs. {discount}</span>
+              </div>
+            )}
+
             <hr className="border-[#EADFC8]" />
 
             <div className="flex justify-between font-['Plus_Jakarta_Sans',sans-serif] text-xl font-bold text-[#D64933]">
@@ -171,6 +242,74 @@ const Checkout = () => {
               <span>Rs. {total}</span>
             </div>
           </div>
+        </div>
+
+        {/* Coupon */}
+        <div className="mt-8">
+          <label className="mb-2 block text-sm font-semibold text-[#1D1512]">
+            Coupon Code
+          </label>
+
+          {appliedCoupon ? (
+            <div className="flex items-center justify-between rounded-lg border border-[#3F6B3F]/30 bg-[#3F6B3F]/10 p-4">
+              <div className="flex items-center gap-3">
+                <FaTag className="text-[#3F6B3F]" />
+                <span className="font-semibold text-[#1D1512]">
+                  {appliedCoupon.code}
+                </span>
+                <span className="text-sm font-bold text-[#3F6B3F]">
+                  - Rs. {discount}
+                </span>
+              </div>
+
+              <button
+                onClick={handleRemoveCoupon}
+                className="text-[#3A2A20]/50 transition hover:text-[#D64933]"
+                aria-label="Remove coupon"
+              >
+                <FaTimes />
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-3">
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                placeholder="Enter coupon code (e.g. SAVE10)"
+                className="flex-1 rounded-lg border border-[#EADFC8] bg-white p-3 text-[#1D1512] uppercase outline-none transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/25"
+              />
+
+              <button
+                onClick={handleApplyCoupon}
+                disabled={applyingCoupon}
+                className="rounded-lg bg-[#1D1512] px-5 py-3 text-sm font-semibold text-[#F7ECD9] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:opacity-60"
+              >
+                {applyingCoupon ? "Checking…" : "Apply"}
+              </button>
+            </div>
+          )}
+
+          {/* Available coupons */}
+          {availableCoupons.length > 0 && !appliedCoupon && (
+            <div className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#3A2A20]/50">
+                Available coupons
+              </p>
+
+              <div className="mt-2 flex flex-wrap gap-2">
+                {availableCoupons.map((coupon) => (
+                  <button
+                    key={coupon._id}
+                    onClick={() => setCouponCode(coupon.code)}
+                    className="rounded-full border border-[#EADFC8] bg-white px-3 py-1.5 text-xs font-semibold text-[#1D1512] transition hover:border-[#F0A438] hover:text-[#946022]"
+                  >
+                    {coupon.code}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Delivery Address */}

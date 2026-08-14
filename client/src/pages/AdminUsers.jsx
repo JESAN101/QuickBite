@@ -178,6 +178,14 @@ const AdminUsers = () => {
         Customer
       </option>
 
+      <option value="restaurant">
+        Restaurant
+      </option>
+
+      <option value="rider">
+        Rider
+      </option>
+
       <option value="admin">
         Admin
       </option>

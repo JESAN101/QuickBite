@@ -13,6 +13,9 @@ const orderRoutes = require("./routes/orderRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const couponRoutes = require("./routes/couponRoutes");
+const riderRoutes = require("./routes/riderRoutes");
+const roleRequestRoutes = require("./routes/roleRequestRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 
 // Load environment variables
@@ -48,6 +51,9 @@ app.use("/api/order", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/favorite", favoriteRoutes);
 app.use("/api/review", reviewRoutes);
+app.use("/api/coupon", couponRoutes);
+app.use("/api/rider", riderRoutes);
+app.use("/api/role-request", roleRequestRoutes);
 app.use("/api/admin", adminRoutes);
 
 // =======================

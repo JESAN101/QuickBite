@@ -8,16 +8,19 @@ import {
   getRestaurantById,
   updateRestaurant,
 } from "../services/restaurantService";
+import { getAllUsers } from "../services/adminService";
 
 const AdminEditRestaurant = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [restaurant, setRestaurant] = useState({});
+  const [owners, setOwners] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchRestaurant();
+    fetchRestaurantOwners();
   }, []);
 
   const fetchRestaurant = async () => {
@@ -27,6 +30,20 @@ const AdminEditRestaurant = () => {
     } catch (error) {
       console.log(error);
       toast.error("Failed to load restaurant.");
+    }
+  };
+
+  const fetchRestaurantOwners = async () => {
+    try {
+      const data = await getAllUsers();
+
+      setOwners(
+        (data.users || []).filter(
+          (user) => user.role === "restaurant"
+        )
+      );
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -59,19 +76,18 @@ const AdminEditRestaurant = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-
+    <>
       <h1 className="text-4xl font-bold mb-8">
         ✏ Edit Restaurant
       </h1>
 
       <RestaurantForm
         initialData={restaurant}
+        owners={owners}
         onSubmit={handleSubmit}
         loading={loading}
       />
-
-    </div>
+    </>
   );
 };
 

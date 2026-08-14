@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaShoppingCart,
+  FaMotorcycle,
+  FaStore,
+} from "react-icons/fa";
 import toast from "react-hot-toast";
 import { isLoggedIn, getUser, logout } from "../utils/auth";
 import { useCart } from "../context/CartContext";
@@ -11,6 +17,23 @@ const navLinks = [
   { to: "/orders", label: "Orders" },
   { to: "/favorites", label: "Favorites" },
 ];
+
+// Role-based panel links appended to the main navigation
+const getRoleLinks = (role) => {
+  if (role === "restaurant") {
+    return [{ to: "/restaurant/dashboard", label: "My Restaurant" }];
+  }
+
+  if (role === "admin") {
+    return [{ to: "/admin/dashboard", label: "Admin" }];
+  }
+
+  if (role === "rider") {
+    return [{ to: "/rider/dashboard", label: "Rider" }];
+  }
+
+  return [];
+};
 
 const getInitials = (name = "") => {
   const parts = name.trim().split(" ").filter(Boolean);
@@ -23,6 +46,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const user = getUser();
+  const links = [...navLinks, ...getRoleLinks(user?.role)];
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -31,10 +55,28 @@ const Navbar = () => {
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
 
+  // Customers (and logged-out visitors) can apply for a role
+  const canApply = !isLoggedIn() || user?.role === "customer";
+
+  const applyLinks = [
+    { to: "/apply/rider", label: "Become a Rider", icon: FaMotorcycle },
+    {
+      to: "/apply/restaurant",
+      label: "Register Your Restaurant",
+      icon: FaStore,
+    },
+  ];
+
+  const dropdownItemClass =
+    "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-[#1D1512] transition hover:bg-[#F0A438]/15 hover:text-[#946022]";
+
   const requireLogin = (e) => {
     e.preventDefault();
+    setMenuOpen(false);
     toast.error("Please login first to continue.");
   };
+
+  const closeMenu = () => setMenuOpen(false);
 
   const confirmLogout = () => {
     setLoggingOut(true);
@@ -60,8 +102,8 @@ const Navbar = () => {
         </Link>
 
         {/* desktop links */}
-        <div className="hidden items-center gap-7 md:flex">
-          {navLinks.map((link) =>
+        <div className="hidden items-center gap-6 md:flex">
+          {links.map((link) =>
             isAuthPage ? (
               <button
                 key={link.to}
@@ -83,8 +125,9 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* desktop right side: cart + auth/avatar */}
-        <div className="hidden items-center gap-5 md:flex">
+        {/* right side: cart + auth + menu button */}
+        <div className="flex items-center gap-4">
+          {/* cart */}
           {isAuthPage ? (
             <button
               type="button"
@@ -112,163 +155,191 @@ const Navbar = () => {
             </Link>
           )}
 
-          {!isLoggedIn() ? (
-            <>
-              <Link
-                to="/login"
-                className="font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium text-[#F7ECD9]/75 hover:text-[#F0A438]"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="rounded-lg bg-[#F0A438] px-4 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-semibold text-[#1D1512] transition hover:bg-[#F7ECD9]"
-              >
-                Register
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/profile"
-                title={user?.name}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F0A438] font-['Plus_Jakarta_Sans',sans-serif] text-xs font-bold text-[#1D1512] transition hover:ring-2 hover:ring-[#F7ECD9]/30"
-              >
-                {getInitials(user?.name)}
-              </Link>
-              <button
-                onClick={() => setShowLogoutConfirm(true)}
-                className="rounded-lg border border-[#F7ECD9]/20 px-4 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-semibold text-[#F7ECD9] transition hover:border-[#D64933] hover:text-[#D64933]"
-              >
-                Logout
-              </button>
-            </>
-          )}
-        </div>
-
-        {/* mobile: cart icon + toggle */}
-        <div className="flex items-center gap-4 md:hidden">
-          {isAuthPage ? (
-            <button
-              type="button"
-              onClick={requireLogin}
-              className="relative text-[#F7ECD9]/85"
-            >
-              <FaShoppingCart size={19} />
-              {cartCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[#D64933] px-1 text-[10px] font-bold leading-none text-[#F7ECD9]">
-                  {cartCount > 9 ? "9+" : cartCount}
-                </span>
-              )}
-            </button>
-          ) : (
-            <Link to="/cart" className="relative text-[#F7ECD9]/85">
-              <FaShoppingCart size={19} />
-              {cartCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[#D64933] px-1 text-[10px] font-bold leading-none text-[#F7ECD9]">
-                  {cartCount > 9 ? "9+" : cartCount}
-                </span>
-              )}
-            </Link>
-          )}
-          <button
-            onClick={() => setMenuOpen((prev) => !prev)}
-            className="text-[#F7ECD9]"
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-          </button>
-        </div>
-      </div>
-
-      {/* mobile menu */}
-      {menuOpen && (
-        <div className="flex flex-col gap-1 border-t border-[#F7ECD9]/10 bg-[#1D1512] px-6 py-4 md:hidden">
-          {isLoggedIn() && (
-            <div className="mb-2 flex items-center gap-3 border-b border-[#F7ECD9]/10 pb-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F0A438] font-['Plus_Jakarta_Sans',sans-serif] text-xs font-bold text-[#1D1512]">
-                {getInitials(user?.name)}
-              </span>
-              <span className="font-['Plus_Jakarta_Sans',sans-serif] text-sm text-[#F7ECD9]">
-                {user?.name}
-              </span>
-            </div>
-          )}
-
-          {navLinks.map((link) =>
-            isAuthPage ? (
-              <button
-                key={link.to}
-                type="button"
-                onClick={() => {
-                  setMenuOpen(false);
-                  toast.error("Please login first to continue.");
-                }}
-                className="py-2.5 text-left font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium text-[#F7ECD9]/80"
-              >
-                {link.label}
-              </button>
-            ) : (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMenuOpen(false)}
-                className="py-2.5 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium text-[#F7ECD9]/80"
-              >
-                {link.label}
-              </Link>
-            )
-          )}
-
-          {isAuthPage ? (
-            <button
-              type="button"
-              onClick={() => {
-                setMenuOpen(false);
-                toast.error("Please login first to continue.");
-              }}
-              className="py-2.5 text-left font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium text-[#F7ECD9]/80"
-            >
-              Profile
-            </button>
-          ) : (
-            <Link
-              to="/profile"
-              onClick={() => setMenuOpen(false)}
-              className="py-2.5 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium text-[#F7ECD9]/80"
-            >
-              Profile
-            </Link>
-          )}
-
-          <div className="mt-2 border-t border-[#F7ECD9]/10 pt-3">
+          {/* auth (desktop only) */}
+          <div className="hidden items-center gap-5 md:flex">
             {!isLoggedIn() ? (
-              <div className="flex gap-3">
+              <>
                 <Link
                   to="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex-1 rounded-lg border border-[#F7ECD9]/20 py-2 text-center text-sm font-semibold text-[#F7ECD9]"
+                  className="font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium text-[#F7ECD9]/75 hover:text-[#F0A438]"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex-1 rounded-lg bg-[#F0A438] py-2 text-center text-sm font-semibold text-[#1D1512]"
+                  className="rounded-lg bg-[#F0A438] px-4 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-semibold text-[#1D1512] transition hover:bg-[#F7ECD9]"
                 >
                   Register
                 </Link>
-              </div>
+              </>
             ) : (
-              <button
-                onClick={() => {
-                  setMenuOpen(false);
-                  setShowLogoutConfirm(true);
-                }}
-                className="w-full rounded-lg border border-[#F7ECD9]/20 py-2 text-sm font-semibold text-[#F7ECD9]"
-              >
-                Logout
-              </button>
+              <>
+                <Link
+                  to="/profile"
+                  title={user?.name}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F0A438] font-['Plus_Jakarta_Sans',sans-serif] text-xs font-bold text-[#1D1512] transition hover:ring-2 hover:ring-[#F7ECD9]/30"
+                >
+                  {getInitials(user?.name)}
+                </Link>
+                <button
+                  onClick={() => setShowLogoutConfirm(true)}
+                  className="rounded-lg border border-[#F7ECD9]/20 px-4 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-sm font-semibold text-[#F7ECD9] transition hover:border-[#D64933] hover:text-[#D64933]"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* three-line menu button */}
+          <button
+            onClick={() => setMenuOpen((prev) => !prev)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#F7ECD9]/20 text-[#F7ECD9] transition hover:border-[#F0A438] hover:text-[#F0A438]"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+          </button>
+        </div>
+      </div>
+
+      {/* dropdown menu */}
+      {menuOpen && (
+        <div className="absolute right-6 top-20 z-[150] w-72 overflow-hidden rounded-2xl border border-[#EADFC8] bg-[#FFFBF3] shadow-2xl">
+          {isLoggedIn() && (
+            <div className="flex items-center gap-3 border-b border-[#EADFC8] bg-[#1D1512] px-5 py-4">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F0A438] font-['Plus_Jakarta_Sans',sans-serif] text-sm font-bold text-[#1D1512]">
+                {getInitials(user?.name)}
+              </span>
+
+              <div className="min-w-0">
+                <p className="truncate font-['Plus_Jakarta_Sans',sans-serif] text-sm font-bold text-[#F7ECD9]">
+                  {user?.name}
+                </p>
+                <p className="truncate text-xs text-[#F7ECD9]/50">
+                  {user?.email}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="p-2">
+            {/* apply for a role */}
+            {canApply && (
+              <>
+                <p className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#3A2A20]/45">
+                  Join QuickBite
+                </p>
+
+                {applyLinks.map((link) => {
+                  const Icon = link.icon;
+
+                  return isAuthPage ? (
+                    <button
+                      key={link.to}
+                      type="button"
+                      onClick={requireLogin}
+                      className={dropdownItemClass}
+                    >
+                      <Icon className="text-[#D64933]" />
+                      {link.label}
+                    </button>
+                  ) : (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      onClick={closeMenu}
+                      className={dropdownItemClass}
+                    >
+                      <Icon className="text-[#D64933]" />
+                      {link.label}
+                    </Link>
+                  );
+                })}
+              </>
+            )}
+
+            {/* main navigation */}
+            {links.map((link) =>
+              isAuthPage ? (
+                <button
+                  key={link.to}
+                  type="button"
+                  onClick={requireLogin}
+                  className={dropdownItemClass}
+                >
+                  {link.label}
+                </button>
+              ) : (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={closeMenu}
+                  className={dropdownItemClass}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
+
+            {/* logged in: profile + logout */}
+            {isLoggedIn() && (
+              <>
+                <div className="my-1 border-t border-[#EADFC8]" />
+
+                {isAuthPage ? (
+                  <button
+                    type="button"
+                    onClick={requireLogin}
+                    className={dropdownItemClass}
+                  >
+                    Profile
+                  </button>
+                ) : (
+                  <Link
+                    to="/profile"
+                    onClick={closeMenu}
+                    className={dropdownItemClass}
+                  >
+                    Profile
+                  </Link>
+                )}
+
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setShowLogoutConfirm(true);
+                  }}
+                  className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-[#D64933] transition hover:bg-[#D64933]/10"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+
+            {/* logged out: login + register */}
+            {!isLoggedIn() && (
+              <>
+                <div className="my-1 border-t border-[#EADFC8]" />
+
+                <div className="flex gap-2 p-1">
+                  <Link
+                    to="/login"
+                    onClick={closeMenu}
+                    className="flex-1 rounded-lg border border-[#EADFC8] py-2 text-center text-sm font-semibold text-[#1D1512] transition hover:bg-[#1D1512]/5"
+                  >
+                    Login
+                  </Link>
+
+                  <Link
+                    to="/register"
+                    onClick={closeMenu}
+                    className="flex-1 rounded-lg bg-[#F0A438] py-2 text-center text-sm font-semibold text-[#1D1512] transition hover:bg-[#F7ECD9]"
+                  >
+                    Register
+                  </Link>
+                </div>
+              </>
             )}
           </div>
         </div>

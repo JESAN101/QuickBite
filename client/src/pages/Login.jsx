@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { login } from "../services/authService";
-import { isLoggedIn } from "../utils/auth";
+import { isLoggedIn, getUser } from "../utils/auth";
+
+// Send each role to their own home page after login
+const getRoleHome = (role) => {
+  if (role === "admin") return "/admin/dashboard";
+  if (role === "restaurant") return "/restaurant/dashboard";
+  if (role === "rider") return "/rider/dashboard";
+  return "/";
+};
 
 const Login = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const [form, setForm] = useState({
     email: "",
@@ -20,7 +30,7 @@ const Login = () => {
   // Already-logged-in users shouldn't see the login form
   useEffect(() => {
     if (isLoggedIn()) {
-      navigate("/", { replace: true });
+      navigate(getRoleHome(getUser()?.role), { replace: true });
     }
   }, [navigate]);
 
@@ -49,7 +59,16 @@ const Login = () => {
       toast.dismiss(loadingToast);
       toast.success(data.message);
 
-      navigate("/");
+      // Customers who were on their way to apply get sent back there
+      const safeRedirect =
+        redirect &&
+        data.user.role === "customer" &&
+        !redirect.startsWith("/login") &&
+        !redirect.startsWith("/register")
+          ? redirect
+          : getRoleHome(data.user.role);
+
+      navigate(safeRedirect);
     } catch (error) {
       console.log(error);
 

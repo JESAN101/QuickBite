@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMyOrders } from "../services/orderService";
-import { FaStore, FaCalendarAlt, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
+import { FaStore, FaCalendarAlt, FaMapMarkerAlt, FaMoneyBillWave, FaTag, FaMotorcycle } from "react-icons/fa";
 
 const statusStyles = {
   Pending: "bg-[#F0A438]/15 text-[#946022]",
@@ -76,6 +76,15 @@ const Orders = () => {
                 <p className="font-['Fraunces',serif] text-2xl font-semibold text-[#D64933]">
                   Rs. {order.totalPrice}
                 </p>
+
+                {order.discount > 0 && (
+                  <p className="mt-1 flex items-center justify-end gap-1.5 text-xs font-semibold text-[#3F6B3F]">
+                    <FaTag className="text-[10px]" />
+                    {order.coupon?.code || "Coupon"} · saved Rs.{" "}
+                    {order.discount}
+                  </p>
+                )}
+
                 <span
                   className={`mt-2 inline-block rounded-full px-3.5 py-1 text-xs font-semibold ${
                     statusStyles[order.orderStatus] || "bg-[#EADFC8] text-[#1D1512]"
@@ -83,6 +92,16 @@ const Orders = () => {
                 >
                   {order.orderStatus}
                 </span>
+
+                {order.rider && (
+                  <p className="mt-1.5 flex items-center justify-end gap-1.5 text-xs font-medium text-[#3A2A20]/55">
+                    <FaMotorcycle className="text-xs" />
+                    {order.orderStatus === "Delivered"
+                      ? "Delivered by"
+                      : "Delivering by"}{" "}
+                    {order.rider.name}
+                  </p>
+                )}
               </div>
             </div>
 

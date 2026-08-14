@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
-import AdminSidebar from "../components/admin/AdminSidebar";
 import RestaurantTable from "../components/admin/RestaurantTable";
 
 import {

@@ -4,6 +4,7 @@ const FoodForm = ({
   initialData = {},
   categories,
   restaurants,
+  fixedRestaurantId,
   onSubmit,
   loading,
 }) => {
@@ -12,7 +13,7 @@ const FoodForm = ({
     description: "",
     price: "",
     category: "",
-    restaurant: "",
+    restaurant: fixedRestaurantId || "",
     preparationTime: 20,
     isAvailable: true,
   });
@@ -27,7 +28,10 @@ const FoodForm = ({
         description: initialData.description || "",
         price: initialData.price || "",
         category: initialData.category?._id || "",
-        restaurant: initialData.restaurant?._id || "",
+        restaurant:
+          fixedRestaurantId ||
+          initialData.restaurant?._id ||
+          "",
         preparationTime:
           initialData.preparationTime || 20,
         isAvailable:
@@ -208,7 +212,8 @@ const FoodForm = ({
             value={formData.restaurant}
             onChange={handleChange}
             required
-            className="w-full border rounded-lg p-3 mt-2"
+            disabled={Boolean(fixedRestaurantId)}
+            className="w-full border rounded-lg p-3 mt-2 disabled:bg-gray-100 disabled:text-gray-500"
           >
             <option value="">
               Select Restaurant

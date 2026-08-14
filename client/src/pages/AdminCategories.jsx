@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 
-import AdminLayout from "../layouts/AdminLayout";
 import CategoryTable from "../components/admin/CategoryTable";
 
 import {
@@ -68,7 +67,6 @@ const AdminCategories = () => {
   );
 
   return (
-    <AdminLayout>
       <div className="space-y-8">
 
         <div>
@@ -137,7 +135,6 @@ const AdminCategories = () => {
         )}
 
       </div>
-    </AdminLayout>
   );
 };
 

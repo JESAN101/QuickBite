@@ -1,5 +1,10 @@
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
+const Food = require("../models/Food");
+const Coupon = require("../models/Coupon");
+const {
+  validateCouponLogic,
+} = require("./couponController");
 
 // ==========================================
 // Place Order
@@ -9,15 +14,15 @@ const placeOrder = async (req, res) => {
     const {
       restaurant,
       foods,
-      totalPrice,
       deliveryAddress,
       paymentMethod,
+      couponCode,
     } = req.body;
 
     if (
       !restaurant ||
       !foods ||
-      !totalPrice ||
+      foods.length === 0 ||
       !deliveryAddress
     ) {
       return res.status(400).json({
@@ -26,14 +31,80 @@ const placeOrder = async (req, res) => {
       });
     }
 
+    // Load foods from the database to compute the authoritative subtotal
+    const foodIds = foods.map((item) => item.food);
+    const foodDocs = await Food.find({
+      _id: { $in: foodIds },
+    });
+
+    const foodMap = new Map(
+      foodDocs.map((food) => [
+        food._id.toString(),
+        food,
+      ])
+    );
+
+    let subtotal = 0;
+
+    for (const item of foods) {
+      const food = foodMap.get(item.food.toString());
+
+      if (!food) {
+        return res.status(400).json({
+          success: false,
+          message: "One or more foods in your cart are invalid.",
+        });
+      }
+
+      subtotal += food.price * item.quantity;
+    }
+
+    // Delivery fee (same rule as the checkout page)
+    const deliveryFee = subtotal > 1000 ? 0 : 100;
+
+    // Apply coupon (validated server-side)
+    let discount = 0;
+    let coupon = null;
+
+    if (couponCode) {
+      const foundCoupon = await Coupon.findOne({
+        code: couponCode.toUpperCase().trim(),
+      });
+
+      const result = validateCouponLogic(
+        foundCoupon,
+        subtotal
+      );
+
+      if (!result.valid) {
+        return res.status(400).json({
+          success: false,
+          message: result.message,
+        });
+      }
+
+      discount = result.discount;
+      coupon = foundCoupon;
+    }
+
+    const totalPrice = subtotal + deliveryFee - discount;
+
     const order = await Order.create({
       user: req.user._id,
       restaurant,
       foods,
       totalPrice,
+      coupon: coupon ? coupon._id : null,
+      discount,
       deliveryAddress,
       paymentMethod,
     });
+
+    // Increment coupon usage
+    if (coupon) {
+      coupon.usedCount += 1;
+      await coupon.save();
+    }
 
     // Clear user's cart
     await Cart.deleteMany({
@@ -64,6 +135,8 @@ const getMyOrders = async (req, res) => {
       user: req.user._id,
     })
       .populate("restaurant")
+      .populate("coupon")
+      .populate("rider", "name phone")
       .populate("foods.food");
 
     res.status(200).json({
@@ -89,6 +162,8 @@ const getOrder = async (req, res) => {
     const order = await Order.findById(req.params.id)
       .populate("user")
       .populate("restaurant")
+      .populate("coupon")
+      .populate("rider", "name phone")
       .populate("foods.food");
 
     if (!order) {
@@ -140,6 +215,8 @@ const getAllOrders = async (req, res) => {
     const orders = await Order.find()
       .populate("user")
       .populate("restaurant")
+      .populate("coupon")
+      .populate("rider", "name phone")
       .populate("foods.food");
 
     res.status(200).json({

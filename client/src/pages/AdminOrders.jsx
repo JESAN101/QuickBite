@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import AdminLayout from "../layouts/AdminLayout";
 import OrderTable from "../components/admin/OrderTable";
 import OrderDetailsModal from "../components/admin/OrderDetailsModal";
 
@@ -121,7 +120,6 @@ const totalRevenue = orders
   });
 
   return (
-    <AdminLayout>
       <div className="space-y-8">
         <div>
           <h1 className="text-4xl font-bold">
@@ -189,7 +187,7 @@ const totalRevenue = orders
           </div>
         ) : (
           <OrderTable
-  orders={orders}
+  orders={filteredOrders}
   onStatusChange={handleStatusChange}
   onDelete={handleDelete}
   onView={handleView}
@@ -204,8 +202,6 @@ const totalRevenue = orders
 )}
 
       </div>
-      
-    </AdminLayout>
   );
 };
 
