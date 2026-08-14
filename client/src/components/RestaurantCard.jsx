@@ -1,6 +1,7 @@
 // RestaurantCard.jsx
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+import { getImageUrl } from "../utils/image";
 
 const RestaurantCard = ({ restaurant }) => {
   return (
@@ -10,7 +11,7 @@ const RestaurantCard = ({ restaurant }) => {
     >
       <div className="relative h-52 overflow-hidden">
         <img
-          src={`http://localhost:5000/uploads/${restaurant.image}`}
+          src={getImageUrl(restaurant.image)}
           alt={restaurant.name}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />

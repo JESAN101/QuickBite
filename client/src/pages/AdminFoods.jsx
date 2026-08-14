@@ -6,6 +6,7 @@ import {
   getAllFoods,
   deleteFood,
 } from "../services/foodService";
+import { getImageUrl } from "../utils/image";
 
 const AdminFoods = () => {
   const [foods, setFoods] = useState([]);
@@ -64,13 +65,6 @@ const AdminFoods = () => {
           🍔 Food Management
         </h1>
 
-       <button
-  onClick={() => navigate("/admin/foods/add")}
-  className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg"
->
-  + Add Food
-</button>
-
       </div>
 
       <input
@@ -115,7 +109,7 @@ const AdminFoods = () => {
                 <td className="p-4">
 
                   <img
-                    src={`http://localhost:5000/uploads/${food.image}`}
+                    src={getImageUrl(food.image)}
                     alt={food.name}
                     className="w-20 h-20 rounded-lg object-cover"
                   />

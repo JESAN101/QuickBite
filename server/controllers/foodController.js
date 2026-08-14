@@ -2,69 +2,6 @@ const Food = require("../models/Food");
 const Category = require("../models/Category");
 
 // ===================================
-// Create Food
-// ===================================
-const createFood = async (req, res) => {
-  try {
-    const {
-      name,
-      description,
-      price,
-      category,
-      restaurant,
-      isAvailable,
-      preparationTime,
-    } = req.body;
-
-    // Uploaded image filename
-    const image = req.file ? req.file.filename : "";
-
-    // Validation
-    if (!name || !description || !price || !category) {
-      return res.status(400).json({
-        success: false,
-        message: "Please fill all required fields.",
-      });
-    }
-
-    // Check Category
-    const categoryExists = await Category.findById(category);
-
-    if (!categoryExists) {
-      return res.status(404).json({
-        success: false,
-        message: "Category not found.",
-      });
-    }
-
-    const food = await Food.create({
-      name,
-      description,
-      price,
-      category,
-      restaurant,
-      image,
-      isAvailable,
-      preparationTime,
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Food created successfully.",
-      food,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-};
-
-// ===================================
 // Get All Foods
 // ===================================
 const getAllFood = async (req, res) => {
@@ -157,7 +94,7 @@ const updateFood = async (req, res) => {
 
     // If a new image was uploaded
     if (req.file) {
-      updateData.image = req.file.filename;
+      updateData.image = req.file.path;
     }
 
     const updatedFood = await Food.findByIdAndUpdate(
@@ -248,7 +185,6 @@ const getFoodsByRestaurant = async (req, res) => {
 };
 
 module.exports = {
-  createFood,
   getAllFood,
   getFoodById,
   updateFood,

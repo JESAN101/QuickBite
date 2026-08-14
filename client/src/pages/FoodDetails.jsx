@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 import { getFoodById } from "../services/foodService";
 import { addToCart } from "../services/cartService";
+import { getImageUrl } from "../utils/image";
 
 const FoodDetails = () => {
   const { id } = useParams();
@@ -70,7 +71,7 @@ const FoodDetails = () => {
           {/* image */}
           <div className="relative">
             <img
-              src={`http://localhost:5000/uploads/${food.image}`}
+              src={getImageUrl(food.image)}
               alt={food.name}
               className="h-[420px] w-full rounded-2xl object-cover shadow-[0_20px_40px_-16px_rgba(29,21,18,0.25)] md:h-[480px]"
             />

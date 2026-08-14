@@ -9,6 +9,14 @@ export const getDashboardStats = async () => {
 };
 
 // =========================
+// Analytics (Charts)
+// =========================
+export const getDashboardAnalytics = async () => {
+  const response = await API.get("/admin/analytics");
+  return response.data;
+};
+
+// =========================
 // Get All Users
 // =========================
 export const getAllUsers = async () => {

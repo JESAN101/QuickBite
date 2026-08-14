@@ -1,4 +1,5 @@
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { getImageUrl } from "../../utils/image";
 
 const RestaurantTable = ({
   restaurants,
@@ -48,7 +49,7 @@ const RestaurantTable = ({
                   <img
                     src={
                       restaurant.image
-                        ? `http://localhost:5000/uploads/${restaurant.image}`
+                        ? getImageUrl(restaurant.image)
                         : "https://via.placeholder.com/80x60?text=No+Image"
                     }
                     alt={restaurant.name}

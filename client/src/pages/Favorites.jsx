@@ -5,6 +5,7 @@ import { FaHeartBroken, FaShoppingCart } from "react-icons/fa";
 
 import { getFavorites, removeFavorite } from "../services/favoriteService";
 import { addToCart } from "../services/cartService";
+import { getImageUrl } from "../utils/image";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -78,7 +79,7 @@ const Favorites = () => {
           >
             <Link to={`/food/${item.food._id}`}>
               <img
-                src={`http://localhost:5000/uploads/${item.food.image}`}
+                src={getImageUrl(item.food.image)}
                 alt={item.food.name}
                 className="h-52 w-full object-cover"
               />

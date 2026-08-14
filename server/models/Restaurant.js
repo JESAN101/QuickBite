@@ -23,6 +23,36 @@ const restaurantSchema = new mongoose.Schema(
       required: true,
     },
 
+    email: {
+      type: String,
+      default: "",
+    },
+
+    cuisineType: {
+      type: String,
+      default: "",
+    },
+
+    openingTime: {
+      type: String,
+      default: "",
+    },
+
+    closingTime: {
+      type: String,
+      default: "",
+    },
+
+    estimatedDeliveryTime: {
+      type: String,
+      default: "",
+    },
+
+    licenseNumber: {
+      type: String,
+      default: "",
+    },
+
     image: {
       type: String,
       default: "",

@@ -6,9 +6,20 @@ import API from "./api";
 
 // Apply for a role (rider / restaurant)
 export const applyForRole = async (requestedRole, formData) => {
-  const response = await API.post("/role-request/apply", {
-    requestedRole,
-    ...formData,
+  const data = new FormData();
+
+  data.append("requestedRole", requestedRole);
+
+  Object.keys(formData).forEach((key) => {
+    if (formData[key] !== null && formData[key] !== undefined) {
+      data.append(key, formData[key]);
+    }
+  });
+
+  const response = await API.post("/role-request/apply", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 
   return response.data;

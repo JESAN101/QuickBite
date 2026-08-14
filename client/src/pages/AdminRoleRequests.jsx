@@ -6,6 +6,7 @@ import {
   getAllRoleRequests,
   updateRoleRequestStatus,
 } from "../services/roleRequestService";
+import { getImageUrl } from "../utils/image";
 
 const statusStyles = {
   Pending: "bg-yellow-100 text-yellow-700",
@@ -77,10 +78,27 @@ const AdminRoleRequests = ({ roleToFilter }) => {
     }
 
     return (
-      <div className="text-sm">
+      <div className="text-sm space-y-0.5">
+        {request.restaurantImage && (
+          <img
+            src={getImageUrl(request.restaurantImage)}
+            alt={request.restaurantName}
+            className="w-16 h-16 object-cover rounded-lg mb-2"
+          />
+        )}
         <p><strong>Restaurant:</strong> {request.restaurantName}</p>
+        <p><strong>Cuisine:</strong> {request.cuisineType}</p>
         <p><strong>Address:</strong> {request.restaurantAddress}</p>
         <p><strong>Phone:</strong> {request.restaurantPhone}</p>
+        <p><strong>Email:</strong> {request.restaurantEmail}</p>
+        <p><strong>Hours:</strong> {request.openingTime && request.closingTime ? `${request.openingTime} – ${request.closingTime}` : "—"}</p>
+        <p><strong>Est. Delivery:</strong> {request.estimatedDeliveryTime ? `${request.estimatedDeliveryTime} min` : "—"}</p>
+        <p><strong>License:</strong> {request.licenseNumber || "—"}</p>
+        <div className="mt-1 pt-1 border-t border-gray-200">
+          <p><strong>Owner:</strong> {request.ownerName}</p>
+          <p><strong>Owner Phone:</strong> {request.ownerPhone}</p>
+          <p><strong>Owner Email:</strong> {request.ownerEmail}</p>
+        </div>
         <p className="text-gray-600 mt-1 max-w-xs line-clamp-2">{request.restaurantDescription}</p>
       </div>
     );

@@ -71,17 +71,27 @@ const RestaurantFoodForm = () => {
 
   if (!restaurant) {
     return (
-      <div className="flex justify-center items-center h-full text-xl">
-        Loading...
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-orange-200 border-t-orange-500" />
+          <p className="text-gray-500">Loading...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <>
-      <h1 className="text-4xl font-bold mb-8">
-        {isEditing ? "✏ Edit Food" : "➕ Add Food"}
-      </h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-extrabold text-gray-900 lg:text-4xl">
+          {isEditing ? "Edit Food" : "Add Food"}
+        </h1>
+        <p className="mt-1 text-gray-500">
+          {isEditing
+            ? "Update the details of this dish"
+            : "Add a new dish to your menu"}
+        </p>
+      </div>
 
       <FoodForm
         initialData={food}
@@ -91,7 +101,7 @@ const RestaurantFoodForm = () => {
         onSubmit={handleSubmit}
         loading={loading}
       />
-    </>
+    </div>
   );
 };
 

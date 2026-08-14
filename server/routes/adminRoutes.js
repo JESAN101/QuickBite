@@ -1,6 +1,9 @@
 const express = require("express");
 
-const { getDashboardStats } = require("../controllers/adminController");
+const {
+  getDashboardStats,
+  getAnalytics,
+} = require("../controllers/adminController");
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
@@ -15,6 +18,16 @@ router.get(
   authMiddleware,
   adminMiddleware,
   getDashboardStats
+);
+
+// ===============================
+// Admin Analytics (Charts)
+// ===============================
+router.get(
+  "/analytics",
+  authMiddleware,
+  adminMiddleware,
+  getAnalytics
 );
 
 module.exports = router;

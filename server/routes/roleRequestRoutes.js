@@ -9,11 +9,17 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+const upload = require("../middleware/upload");
 
 const router = express.Router();
 
 // Apply for a rider / restaurant role (customer)
-router.post("/apply", authMiddleware, applyForRole);
+router.post(
+  "/apply",
+  authMiddleware,
+  upload.single("image"),
+  applyForRole
+);
 
 // My applications (customer)
 router.get("/my", authMiddleware, getMyRoleRequests);

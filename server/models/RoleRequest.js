@@ -42,6 +42,21 @@ const roleRequestSchema = new mongoose.Schema(
     },
 
     // ----- Restaurant application fields -----
+    ownerName: {
+      type: String,
+      default: "",
+    },
+
+    ownerEmail: {
+      type: String,
+      default: "",
+    },
+
+    ownerPhone: {
+      type: String,
+      default: "",
+    },
+
     restaurantName: {
       type: String,
       default: "",
@@ -58,6 +73,41 @@ const roleRequestSchema = new mongoose.Schema(
     },
 
     restaurantPhone: {
+      type: String,
+      default: "",
+    },
+
+    restaurantEmail: {
+      type: String,
+      default: "",
+    },
+
+    cuisineType: {
+      type: String,
+      default: "",
+    },
+
+    openingTime: {
+      type: String,
+      default: "",
+    },
+
+    closingTime: {
+      type: String,
+      default: "",
+    },
+
+    estimatedDeliveryTime: {
+      type: String,
+      default: "",
+    },
+
+    licenseNumber: {
+      type: String,
+      default: "",
+    },
+
+    restaurantImage: {
       type: String,
       default: "",
     },

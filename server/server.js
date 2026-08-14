@@ -3,6 +3,9 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
+// Load environment variables
+dotenv.config();
+
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
@@ -17,9 +20,6 @@ const couponRoutes = require("./routes/couponRoutes");
 const riderRoutes = require("./routes/riderRoutes");
 const roleRequestRoutes = require("./routes/roleRequestRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-
-// Load environment variables
-dotenv.config();
 
 // Connect Database
 connectDB();

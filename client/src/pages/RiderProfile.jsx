@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaUser, FaMotorcycle, FaBox, FaCheckCircle, FaClock, FaEnvelope, FaPhone } from "react-icons/fa";
 
 import { getUser } from "../utils/auth";
 import { getRiderStats } from "../services/riderService";
@@ -12,7 +13,6 @@ const RiderProfile = () => {
   const fetchStats = async () => {
     try {
       const data = await getRiderStats();
-
       setStats(data.stats);
     } catch (error) {
       console.log(error);
@@ -24,84 +24,104 @@ const RiderProfile = () => {
     fetchStats();
   }, []);
 
-  const infoRows = [
-    { label: "Name", value: user?.name },
-    { label: "Email", value: user?.email },
-    { label: "Phone", value: user?.phone },
-    { label: "Role", value: "Delivery Rider" },
+  const infoItems = [
+    { icon: <FaUser />, label: "Full Name", value: user?.name },
+    { icon: <FaEnvelope />, label: "Email", value: user?.email },
+    { icon: <FaPhone />, label: "Phone", value: user?.phone },
   ];
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-4xl font-bold">
+    <div className="space-y-6">
+      <h1 className="text-3xl font-extrabold text-gray-900 lg:text-4xl">
         My Profile
       </h1>
 
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <div className="flex items-center gap-6">
-          <div className="h-24 w-24 rounded-full bg-orange-500 text-white flex items-center justify-center text-3xl font-bold">
+      {/* Profile Card */}
+      <div className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
+        <div className="flex flex-col items-center gap-6 sm:flex-row">
+          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-4xl font-extrabold text-white shadow-lg shadow-orange-500/25">
             {user?.name?.charAt(0).toUpperCase()}
           </div>
 
-          <div>
-            <h2 className="text-2xl font-bold">
+          <div className="text-center sm:text-left">
+            <h2 className="text-2xl font-extrabold text-gray-900">
               {user?.name}
             </h2>
-
-            <span className="mt-1 inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+            <p className="mt-1 text-gray-500">{user?.email}</p>
+            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-green-100 px-4 py-1.5 text-xs font-bold text-green-700">
+              <FaMotorcycle className="text-[10px]" />
               Delivery Rider
             </span>
           </div>
         </div>
 
-        <div className="mt-8 grid md:grid-cols-2 gap-6">
-          {infoRows.map((row) => (
+        <div className="mt-8 grid gap-6 sm:grid-cols-3">
+          {infoItems.map((item) => (
             <div
-              key={row.label}
-              className="border-b border-gray-100 pb-3"
+              key={item.label}
+              className="rounded-xl bg-gray-50 p-4 ring-1 ring-gray-100"
             >
-              <p className="text-sm text-gray-500">
-                {row.label}
-              </p>
-
-              <p className="font-semibold mt-0.5">
-                {row.value || "—"}
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+                {item.icon}
+                {item.label}
+              </div>
+              <p className="mt-1 font-bold text-gray-900">
+                {item.value || "—"}
               </p>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Stats Grid */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl shadow-lg p-5">
-            <p className="text-sm text-gray-500">
-              Total Deliveries
-            </p>
-
-            <p className="text-3xl font-bold text-orange-500 mt-1">
-              {stats.totalDeliveries}
-            </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                <FaBox className="text-xl" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase text-gray-400">
+                  Total Deliveries
+                </p>
+                <p className="text-3xl font-extrabold text-gray-900">
+                  {stats.totalDeliveries}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-5">
-            <p className="text-sm text-gray-500">
-              Active Deliveries
-            </p>
-
-            <p className="text-3xl font-bold text-yellow-500 mt-1">
-              {stats.activeDeliveries}
-            </p>
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+                <FaClock className="text-xl" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase text-gray-400">
+                  Active Now
+                </p>
+                <p className="text-3xl font-extrabold text-gray-900">
+                  {stats.activeDeliveries}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-5">
-            <p className="text-sm text-gray-500">
-              Delivered Today
-            </p>
-
-            <p className="text-3xl font-bold text-green-500 mt-1">
-              {stats.todayDeliveries}
-            </p>
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600">
+                <FaCheckCircle className="text-xl" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase text-gray-400">
+                  Delivered Today
+                </p>
+                <p className="text-3xl font-extrabold text-gray-900">
+                  {stats.todayDeliveries}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}

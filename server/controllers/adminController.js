@@ -95,6 +95,135 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
+// =====================================
+// Analytics Data (Charts)
+// =====================================
+const getAnalytics = async (req, res) => {
+  try {
+    // Date 7 days ago
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    // Revenue last 7 days (delivered orders only)
+    const revenueByDay = await Order.aggregate([
+      {
+        $match: {
+          orderStatus: "Delivered",
+          createdAt: { $gte: sevenDaysAgo },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          },
+          revenue: { $sum: "$totalPrice" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // Orders last 7 days (all statuses)
+    const ordersByDay = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: sevenDaysAgo },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // Orders by status (all time, for doughnut chart)
+    const ordersByStatus = await Order.aggregate([
+      {
+        $group: {
+          _id: "$orderStatus",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
+    // Top 5 selling foods
+    const topFoods = await Order.aggregate([
+      { $unwind: "$foods" },
+      {
+        $group: {
+          _id: "$foods.food",
+          totalQuantity: { $sum: "$foods.quantity" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "foods",
+          localField: "_id",
+          foreignField: "_id",
+          as: "foodInfo",
+        },
+      },
+      { $unwind: "$foodInfo" },
+      {
+        $project: {
+          name: "$foodInfo.name",
+          totalQuantity: 1,
+          totalOrders: 1,
+        },
+      },
+      { $sort: { totalQuantity: -1 } },
+      { $limit: 5 },
+    ]);
+
+    // Fill in missing days with zero values for the 7-day charts
+    const fillDays = (data, valueKey) => {
+      const result = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(sevenDaysAgo);
+        d.setDate(d.getDate() + i);
+        const dateStr = d.toISOString().split("T")[0];
+        const found = data.find((item) => item._id === dateStr);
+        result.push({
+          date: dateStr,
+          [valueKey]: found ? found[valueKey] : 0,
+        });
+      }
+      return result;
+    };
+
+    const revenueLast7Days = fillDays(revenueByDay, "revenue");
+    const ordersLast7Days = fillDays(ordersByDay, "count");
+
+    res.status(200).json({
+      success: true,
+      analytics: {
+        revenueLast7Days,
+        ordersLast7Days,
+        ordersByStatus: ordersByStatus.map((s) => ({
+          status: s._id,
+          count: s.count,
+        })),
+        topFoods,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getDashboardStats,
+  getAnalytics,
 };

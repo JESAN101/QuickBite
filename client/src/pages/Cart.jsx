@@ -10,6 +10,7 @@ import {
   removeFromCart,
   clearCart,
 } from "../services/cartService";
+import { getImageUrl } from "../utils/image";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -164,7 +165,7 @@ return (
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div className="flex gap-5">
                 <img
-                  src={`http://localhost:5000/uploads/${item.food.image}`}
+                  src={getImageUrl(item.food.image)}
                   alt={item.food.name}
                   className="h-32 w-32 rounded-xl object-cover"
                 />
@@ -331,7 +332,7 @@ return (
             <div className="flex gap-5">
 
               <img
-                src={`http://localhost:5000/uploads/${item.food.image}`}
+                src={getImageUrl(item.food.image)}
                 alt={item.food.name}
                 className="w-32 h-32 rounded-lg object-cover"
               />

@@ -9,7 +9,7 @@ const createRestaurant = async (req, res) => {
   try {
     const { name, description, address, phone, owner } = req.body;
 
-    const image = req.file ? req.file.filename : "";
+    const image = req.file ? req.file.path : "";
 
     if (!name || !description || !address || !phone) {
       return res.status(400).json({
@@ -108,7 +108,7 @@ const updateRestaurant = async (req, res) => {
     }
 
     if (req.file) {
-      req.body.image = req.file.filename;
+      req.body.image = req.file.path;
     }
 
     const updatedRestaurant =
@@ -198,7 +198,7 @@ const updateMyRestaurant = async (req, res) => {
     restaurant.isOpen = isOpen !== undefined ? isOpen : restaurant.isOpen;
 
     if (req.file) {
-      restaurant.image = req.file.filename;
+      restaurant.image = req.file.path;
     }
 
     await restaurant.save();
@@ -332,7 +332,7 @@ const createMyFood = async (req, res) => {
       });
     }
 
-    const image = req.file ? req.file.filename : "";
+    const image = req.file ? req.file.path : "";
 
     const food = await Food.create({
       name,
@@ -402,7 +402,7 @@ const updateMyFood = async (req, res) => {
       isAvailable !== undefined ? isAvailable : food.isAvailable;
 
     if (req.file) {
-      food.image = req.file.filename;
+      food.image = req.file.path;
     }
 
     await food.save();

@@ -33,12 +33,24 @@ const ApplyRole = () => {
           experienceYears: "",
         }
       : {
+          ownerName: user?.name || "",
+          ownerEmail: user?.email || "",
+          ownerPhone: user?.phone || "",
           restaurantName: "",
           restaurantDescription: "",
           restaurantAddress: "",
           restaurantPhone: "",
+          restaurantEmail: "",
+          cuisineType: "",
+          openingTime: "",
+          closingTime: "",
+          estimatedDeliveryTime: "",
+          licenseNumber: "",
         }
   );
+
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState("");
 
   // Load my existing applications for this role
   const fetchMyRequests = async () => {
@@ -75,13 +87,28 @@ const ApplyRole = () => {
     });
   };
 
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const payload = { ...formData };
+
+    if (isRestaurant && image) {
+      payload.image = image;
+    }
 
     try {
       setSubmitting(true);
 
-      const data = await applyForRole(role, formData);
+      const data = await applyForRole(role, payload);
 
       toast.success(data.message);
 
@@ -115,10 +142,10 @@ const ApplyRole = () => {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-[#EADFC8] bg-white p-3 text-[#1D1512] outline-none transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/25";
+    "w-full border rounded-lg p-3 mt-2";
 
   const labelClass =
-    "mb-2 block text-sm font-semibold text-[#1D1512]";
+    "font-semibold";
 
   const heading = isRider ? "Become a Rider" : "Register Your Restaurant";
   const icon = isRider ? FaMotorcycle : FaStore;
@@ -311,6 +338,56 @@ const ApplyRole = () => {
               </>
             ) : (
               <>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className={labelClass}>
+                      Owner Name
+                    </label>
+
+                    <input
+                      type="text"
+                      name="ownerName"
+                      value={formData.ownerName}
+                      onChange={handleChange}
+                      placeholder="e.g. Ram Sharma"
+                      required
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>
+                      Owner Phone
+                    </label>
+
+                    <input
+                      type="text"
+                      name="ownerPhone"
+                      value={formData.ownerPhone}
+                      onChange={handleChange}
+                      placeholder="e.g. 9800000000"
+                      required
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>
+                    Owner Email
+                  </label>
+
+                  <input
+                    type="email"
+                    name="ownerEmail"
+                    value={formData.ownerEmail}
+                    onChange={handleChange}
+                    placeholder="e.g. owner@example.com"
+                    required
+                    className={inputClass}
+                  />
+                </div>
+
                 <div>
                   <label className={labelClass}>
                     Restaurant Name
@@ -374,6 +451,123 @@ const ApplyRole = () => {
                     className={inputClass}
                   />
                 </div>
+
+                <div>
+                  <label className={labelClass}>
+                    Restaurant Email
+                  </label>
+
+                  <input
+                    type="email"
+                    name="restaurantEmail"
+                    value={formData.restaurantEmail}
+                    onChange={handleChange}
+                    placeholder="e.g. info@burgerhouse.com"
+                    required
+                    className={inputClass}
+                  />
+                </div>
+
+                <div>
+                  <label className={labelClass}>
+                    Cuisine Type
+                  </label>
+
+                  <input
+                    type="text"
+                    name="cuisineType"
+                    value={formData.cuisineType}
+                    onChange={handleChange}
+                    placeholder="e.g. Nepali, Chinese, Fast Food"
+                    required
+                    className={inputClass}
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className={labelClass}>
+                      Opening Time
+                    </label>
+
+                    <input
+                      type="time"
+                      name="openingTime"
+                      value={formData.openingTime}
+                      onChange={handleChange}
+                      required
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>
+                      Closing Time
+                    </label>
+
+                    <input
+                      type="time"
+                      name="closingTime"
+                      value={formData.closingTime}
+                      onChange={handleChange}
+                      required
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>
+                    Estimated Delivery Time (minutes)
+                  </label>
+
+                  <input
+                    type="number"
+                    name="estimatedDeliveryTime"
+                    value={formData.estimatedDeliveryTime}
+                    onChange={handleChange}
+                    placeholder="e.g. 30"
+                    min="1"
+                    required
+                    className={inputClass}
+                  />
+                </div>
+
+                <div>
+                  <label className={labelClass}>
+                    License Number <span className="text-gray-400 font-normal">(optional)</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    name="licenseNumber"
+                    value={formData.licenseNumber}
+                    onChange={handleChange}
+                    placeholder="e.g. FSSAI / business license"
+                    className={inputClass}
+                  />
+                </div>
+
+                <div>
+                  <label className={labelClass}>
+                    Restaurant Image
+                  </label>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImage}
+                    className={inputClass}
+                  />
+
+                  {preview && (
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="mt-4 w-48 h-32 rounded-lg object-cover border"
+                    />
+                  )}
+                </div>
               </>
             )}
 
@@ -388,7 +582,7 @@ const ApplyRole = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-lg bg-[#1D1512] py-3.5 text-lg font-semibold text-[#F7ECD9] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:opacity-60"
+                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg disabled:opacity-60"
               >
                 {submitting
                   ? "Submitting..."

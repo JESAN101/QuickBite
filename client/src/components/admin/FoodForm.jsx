@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getImageUrl } from "../../utils/image";
 
 const FoodForm = ({
   initialData = {},
@@ -39,9 +40,7 @@ const FoodForm = ({
       });
 
       if (initialData.image) {
-        setPreview(
-          `http://localhost:5000/uploads/${initialData.image}`
-        );
+        setPreview(getImageUrl(initialData.image));
       }
     }
   }, [initialData]);
@@ -85,125 +84,111 @@ const FoodForm = ({
     onSubmit(data);
   };
 
+  const inputClass =
+    "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100";
+
+  const labelClass =
+    "mb-1 block text-sm font-semibold text-gray-700";
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-lg p-8 space-y-6"
+      className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-100"
     >
-      <div>
-        <label className="font-semibold">
-          Food Name
-        </label>
+      <div className="space-y-6">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>
+              Food Name
+            </label>
 
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full border rounded-lg p-3 mt-2"
-        />
-      </div>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className={inputClass}
+            />
+          </div>
 
-      <div>
-        <label className="font-semibold">
-          Description
-        </label>
+          <div>
+            <label className={labelClass}>
+              Price (Rs.)
+            </label>
 
-        <textarea
-          rows="4"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className="w-full border rounded-lg p-3 mt-2"
-        />
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <label className="font-semibold">
-            Price
-          </label>
-
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-            className="w-full border rounded-lg p-3 mt-2"
-          />
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              required
+              className={inputClass}
+            />
+          </div>
         </div>
 
         <div>
-          <label className="font-semibold">
-            Preparation Time
+          <label className={labelClass}>
+            Description
           </label>
 
-          <input
-            type="number"
-            name="preparationTime"
-            value={formData.preparationTime}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-3 mt-2"
-          />
-        </div>
-      </div>
-
-      {/* Image Upload */}
-
-      <div>
-        <label className="font-semibold block mb-3">
-          Food Image
-        </label>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-full border rounded-lg p-3"
-        />
-
-        {preview && (
-          <img
-            src={preview}
-            alt="Preview"
-            className="mt-4 w-44 h-44 object-cover rounded-xl border shadow"
-          />
-        )}
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <label className="font-semibold">
-            Category
-          </label>
-
-          <select
-            name="category"
-            value={formData.category}
+          <textarea
+            rows="4"
+            name="description"
+            value={formData.description}
             onChange={handleChange}
             required
-            className="w-full border rounded-lg p-3 mt-2"
-          >
-            <option value="">
-              Select Category
-            </option>
+            className={inputClass}
+          />
+        </div>
 
-            {categories.map((cat) => (
-              <option
-                key={cat._id}
-                value={cat._id}
-              >
-                {cat.name}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>
+              Preparation Time (min)
+            </label>
+
+            <input
+              type="number"
+              name="preparationTime"
+              value={formData.preparationTime}
+              onChange={handleChange}
+              min="1"
+              className={inputClass}
+            />
+          </div>
+
+          <div>
+            <label className={labelClass}>
+              Category
+            </label>
+
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              className={inputClass}
+            >
+              <option value="">
+                Select Category
               </option>
-            ))}
-          </select>
+
+              {categories.map((cat) => (
+                <option
+                  key={cat._id}
+                  value={cat._id}
+                >
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div>
-          <label className="font-semibold">
+          <label className={labelClass}>
             Restaurant
           </label>
 
@@ -213,7 +198,7 @@ const FoodForm = ({
             onChange={handleChange}
             required
             disabled={Boolean(fixedRestaurantId)}
-            className="w-full border rounded-lg p-3 mt-2 disabled:bg-gray-100 disabled:text-gray-500"
+            className={`${inputClass} disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500`}
           >
             <option value="">
               Select Restaurant
@@ -229,27 +214,51 @@ const FoodForm = ({
             ))}
           </select>
         </div>
+
+        <div>
+          <label className={labelClass}>
+            Food Image
+          </label>
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100"
+          />
+
+          {preview && (
+            <img
+              src={preview}
+              alt="Preview"
+              className="mt-4 h-44 w-44 rounded-xl object-cover ring-1 ring-gray-200"
+            />
+          )}
+        </div>
+
+        <label className="flex items-center gap-3 rounded-xl bg-gray-50 px-4 py-3 ring-1 ring-gray-100">
+          <input
+            type="checkbox"
+            name="isAvailable"
+            checked={formData.isAvailable}
+            onChange={handleChange}
+            className="h-4 w-4 accent-orange-500"
+          />
+
+          <span className="text-sm font-semibold text-gray-700">
+            Available for ordering
+          </span>
+        </label>
+
+        <button
+          disabled={loading}
+          className="rounded-xl bg-orange-500 px-8 py-3 text-sm font-bold text-white shadow-md shadow-orange-500/25 transition hover:bg-orange-600 disabled:opacity-60"
+        >
+          {loading
+            ? "Saving..."
+            : "Save Food"}
+        </button>
       </div>
-
-      <label className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          name="isAvailable"
-          checked={formData.isAvailable}
-          onChange={handleChange}
-        />
-
-        Available
-      </label>
-
-      <button
-        disabled={loading}
-        className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg"
-      >
-        {loading
-          ? "Saving..."
-          : "Save Food"}
-      </button>
     </form>
   );
 };

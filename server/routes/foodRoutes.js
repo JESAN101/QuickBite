@@ -1,7 +1,6 @@
 const express = require("express");
 
 const {
-  createFood,
   getAllFood,
   getFoodById,
   updateFood,
@@ -34,15 +33,6 @@ router.get("/:id", getFoodById);
 // =============================
 // Admin Routes
 // =============================
-
-// Create Food
-router.post(
-  "/create",
-  authMiddleware,
-  adminMiddleware,
-  upload.single("image"),
-  createFood
-);
 
 // Update Food
 router.put(

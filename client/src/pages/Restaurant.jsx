@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 
 import { getRestaurantById } from "../services/restaurantService";
 import { getFoodsByRestaurant } from "../services/foodService";
+import { getImageUrl } from "../utils/image";
 
 const Restaurant = () => {
   const { id } = useParams();
@@ -52,7 +53,7 @@ const Restaurant = () => {
         {/* Restaurant hero */}
         <div className="relative">
           <img
-            src={`http://localhost:5000/uploads/${restaurant.image}`}
+            src={getImageUrl(restaurant.image)}
             alt={restaurant.name}
             className="h-[320px] w-full rounded-2xl object-cover shadow-[0_20px_40px_-16px_rgba(29,21,18,0.25)] md:h-[420px]"
           />
@@ -119,7 +120,7 @@ const Restaurant = () => {
               >
                 <div className="relative overflow-hidden">
                   <img
-                    src={`http://localhost:5000/uploads/${food.image}`}
+                    src={getImageUrl(food.image)}
                     alt={food.name}
                     className="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
                   />

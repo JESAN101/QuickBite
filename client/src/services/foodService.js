@@ -31,21 +31,6 @@ export const getFoodById = async (id) => {
 // Admin APIs
 // =========================
 
-// Create Food
-export const createFood = async (formData) => {
-  const response = await API.post(
-    "/food/create",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
-
-  return response.data;
-};
-
 // Update Food
 export const updateFood = async (id, formData) => {
   const response = await API.put(

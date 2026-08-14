@@ -23,7 +23,6 @@ import AdminUsers from "../pages/AdminUsers";
 import AdminFoods from "../pages/AdminFoods";
 import AdminRestaurants from "../pages/AdminRestaurants";
 import AdminOrders from "../pages/AdminOrders";
-import AdminAddFood from "../pages/AdminAddFood";
 import AdminEditFood from "../pages/AdminEditFood";
 import AdminAddRestaurant from "../pages/AdminAddRestaurant";
 import AdminEditRestaurant from "../pages/AdminEditRestaurant";
@@ -193,17 +192,6 @@ const AppRoutes = () => {
           <AdminRoute>
             <AdminLayout>
               <AdminFoods />
-            </AdminLayout>
-          </AdminRoute>
-        }
-      />
-
-      <Route
-        path="/admin/foods/add"
-        element={
-          <AdminRoute>
-            <AdminLayout>
-              <AdminAddFood />
             </AdminLayout>
           </AdminRoute>
         }

@@ -5,6 +5,7 @@ import { FaHeart, FaRegHeart, FaStar, FaShoppingCart } from "react-icons/fa";
 import { addToCart } from "../services/cartService";
 import { useFavorites } from "../context/FavoritesContext";
 import { useCart } from "../context/CartContext";
+import { getImageUrl } from "../utils/image";
 
 const FoodCard = ({ food }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -49,7 +50,7 @@ const FoodCard = ({ food }) => {
     >
       <div className="relative h-52 overflow-hidden">
         <img
-          src={`http://localhost:5000/uploads/${food.image}`}
+          src={getImageUrl(food.image)}
           alt={food.name}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />

@@ -69,17 +69,35 @@ const applyForRole = async (req, res) => {
       };
     } else {
       const {
+        ownerName,
+        ownerEmail,
+        ownerPhone,
         restaurantName,
         restaurantDescription,
         restaurantAddress,
         restaurantPhone,
+        restaurantEmail,
+        cuisineType,
+        openingTime,
+        closingTime,
+        estimatedDeliveryTime,
+        licenseNumber,
       } = req.body;
+
+      const image = req.file ? req.file.path : "";
 
       if (
         !restaurantName ||
         !restaurantDescription ||
         !restaurantAddress ||
-        !restaurantPhone
+        !restaurantPhone ||
+        !restaurantEmail ||
+        !cuisineType ||
+        !openingTime ||
+        !closingTime ||
+        !ownerName ||
+        !ownerEmail ||
+        !ownerPhone
       ) {
         return res.status(400).json({
           success: false,
@@ -89,10 +107,20 @@ const applyForRole = async (req, res) => {
 
       data = {
         ...data,
+        ownerName,
+        ownerEmail,
+        ownerPhone,
         restaurantName,
         restaurantDescription,
         restaurantAddress,
         restaurantPhone,
+        restaurantEmail,
+        cuisineType,
+        openingTime,
+        closingTime,
+        estimatedDeliveryTime: estimatedDeliveryTime || "",
+        licenseNumber: licenseNumber || "",
+        restaurantImage: image,
       };
     }
 
@@ -206,6 +234,13 @@ const updateRoleRequestStatus = async (req, res) => {
           description: request.restaurantDescription,
           address: request.restaurantAddress,
           phone: request.restaurantPhone,
+          email: request.restaurantEmail,
+          cuisineType: request.cuisineType,
+          openingTime: request.openingTime,
+          closingTime: request.closingTime,
+          estimatedDeliveryTime: request.estimatedDeliveryTime,
+          licenseNumber: request.licenseNumber,
+          image: request.restaurantImage,
           owner: user._id,
         });
       }

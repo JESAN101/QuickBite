@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getImageUrl } from "../../utils/image";
 
 const RestaurantForm = ({
   initialData = {},
@@ -29,9 +30,7 @@ const RestaurantForm = ({
       });
 
       if (initialData.image) {
-        setPreview(
-          `http://localhost:5000/uploads/${initialData.image}`
-        );
+        setPreview(getImageUrl(initialData.image));
       }
     }
   }, [initialData]);
