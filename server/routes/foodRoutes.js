@@ -10,7 +10,11 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
-const upload = require("../middleware/uploadMiddleware");
+const upload = require("../middleware/upload");
+const { validate } = require("../middleware/validate");
+const {
+  updateFoodSchema,
+} = require("../validators/foodValidator");
 
 const router = express.Router();
 
@@ -40,6 +44,7 @@ router.put(
   authMiddleware,
   adminMiddleware,
   upload.single("image"),
+  validate(updateFoodSchema),
   updateFood
 );
 

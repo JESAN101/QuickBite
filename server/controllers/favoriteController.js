@@ -1,93 +1,65 @@
 const Favorite = require("../models/Favorite");
+const asyncHandler = require("../utils/asyncHandler");
+const ErrorResponse = require("../utils/errorResponse");
 
 // ==========================
 // Add Favorite
 // ==========================
-const addFavorite = async (req, res) => {
-  try {
+const addFavorite = asyncHandler(async (req, res) => {
+  const { food } = req.body;
 
-    const { food } = req.body;
+  const exists = await Favorite.findOne({
+    user: req.user._id,
+    food,
+  });
 
-    const exists = await Favorite.findOne({
-      user: req.user._id,
-      food,
-    });
-
-    if (exists) {
-      return res.status(400).json({
-        success: false,
-        message: "Already in favorites.",
-      });
-    }
-
-    const favorite = await Favorite.create({
-      user: req.user._id,
-      food,
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Added to favorites.",
-      favorite,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
+  if (exists) {
+    throw new ErrorResponse("Already in favorites.", 400);
   }
-};
+
+  const favorite = await Favorite.create({
+    user: req.user._id,
+    food,
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Added to favorites.",
+    favorite,
+  });
+});
 
 // ==========================
 // Get Favorites
 // ==========================
-const getFavorites = async (req, res) => {
-  try {
+const getFavorites = asyncHandler(async (req, res) => {
+  const favorites = await Favorite.find({
+    user: req.user._id,
+  }).populate("food");
 
-    const favorites = await Favorite.find({
-      user: req.user._id,
-    }).populate("food");
-
-    res.status(200).json({
-      success: true,
-      favorites,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-};
+  res.status(200).json({
+    success: true,
+    favorites,
+  });
+});
 
 // ==========================
 // Remove Favorite
 // ==========================
-const removeFavorite = async (req, res) => {
-  try {
+const removeFavorite = asyncHandler(async (req, res) => {
+  const favorite = await Favorite.findByIdAndDelete(
+    req.params.id
+  );
 
-    await Favorite.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({
-      success: true,
-      message: "Removed from favorites.",
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
+  if (!favorite) {
+    throw new ErrorResponse("Item not found.", 404);
   }
-};
+
+  res.status(200).json({
+    success: true,
+    message: "Removed from favorites.",
+  });
+});
 
 module.exports = {
   addFavorite,

@@ -7,10 +7,19 @@ const {
 } = require("../controllers/reviewController");
 
 const authMiddleware = require("../middleware/authMiddleware");
+const { validate } = require("../middleware/validate");
+const {
+  addReviewSchema,
+} = require("../validators/reviewValidator");
 
 const router = express.Router();
 
-router.post("/add", authMiddleware, addReview);
+router.post(
+  "/add",
+  authMiddleware,
+  validate(addReviewSchema),
+  addReview
+);
 
 router.get("/:foodId", getReviews);
 

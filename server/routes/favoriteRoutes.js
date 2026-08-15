@@ -7,10 +7,19 @@ const {
 } = require("../controllers/favoriteController");
 
 const authMiddleware = require("../middleware/authMiddleware");
+const { validate } = require("../middleware/validate");
+const {
+  addFavoriteSchema,
+} = require("../validators/favoriteValidator");
 
 const router = express.Router();
 
-router.post("/add", authMiddleware, addFavorite);
+router.post(
+  "/add",
+  authMiddleware,
+  validate(addFavoriteSchema),
+  addFavorite
+);
 
 router.get("/all", authMiddleware, getFavorites);
 

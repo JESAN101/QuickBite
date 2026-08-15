@@ -22,6 +22,18 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 const restaurantMiddleware = require("../middleware/restaurantMiddleware");
 
 const upload = require("../middleware/upload");
+const { validate } = require("../middleware/validate");
+const {
+  createRestaurantSchema,
+  updateRestaurantSchema,
+} = require("../validators/restaurantValidator");
+const {
+  createFoodSchema,
+  updateFoodSchema,
+} = require("../validators/foodValidator");
+const {
+  updateOrderStatusSchema,
+} = require("../validators/orderValidator");
 
 const router = express.Router();
 
@@ -42,6 +54,7 @@ router.put(
   authMiddleware,
   restaurantMiddleware,
   upload.single("image"),
+  validate(updateRestaurantSchema),
   updateMyRestaurant
 );
 
@@ -63,6 +76,7 @@ router.put(
   "/owner/orders/:id",
   authMiddleware,
   restaurantMiddleware,
+  validate(updateOrderStatusSchema),
   updateMyOrderStatus
 );
 
@@ -78,6 +92,7 @@ router.post(
   authMiddleware,
   restaurantMiddleware,
   upload.single("image"),
+  validate(createFoodSchema),
   createMyFood
 );
 
@@ -86,6 +101,7 @@ router.put(
   authMiddleware,
   restaurantMiddleware,
   upload.single("image"),
+  validate(updateFoodSchema),
   updateMyFood
 );
 
@@ -113,6 +129,7 @@ router.post(
   authMiddleware,
   adminMiddleware,
   upload.single("image"),
+  validate(createRestaurantSchema),
   createRestaurant
 );
 
@@ -121,6 +138,7 @@ router.put(
   authMiddleware,
   adminMiddleware,
   upload.single("image"),
+  validate(updateRestaurantSchema),
   updateRestaurant
 );
 

@@ -1,115 +1,77 @@
 const Review = require("../models/Review");
+const asyncHandler = require("../utils/asyncHandler");
+const ErrorResponse = require("../utils/errorResponse");
 
 // =========================
 // Add Review
 // =========================
+const addReview = asyncHandler(async (req, res) => {
+  const { food, rating, comment } = req.body;
 
-const addReview = async (req, res) => {
-  try {
+  const alreadyReviewed = await Review.findOne({
+    user: req.user._id,
+    food,
+  });
 
-    const { food, rating, comment } = req.body;
-
-    const alreadyReviewed = await Review.findOne({
-      user: req.user._id,
-      food,
-    });
-
-    if (alreadyReviewed) {
-      return res.status(400).json({
-        success: false,
-        message: "You already reviewed this food.",
-      });
-    }
-
-    const review = await Review.create({
-      user: req.user._id,
-      food,
-      rating,
-      comment,
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Review added successfully.",
-      review,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
+  if (alreadyReviewed) {
+    throw new ErrorResponse(
+      "You already reviewed this food.",
+      400
+    );
   }
-};
+
+  const review = await Review.create({
+    user: req.user._id,
+    food,
+    rating,
+    comment,
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Review added successfully.",
+    review,
+  });
+});
 
 // =========================
 // Get Reviews By Food
 // =========================
+const getReviews = asyncHandler(async (req, res) => {
+  const reviews = await Review.find({
+    food: req.params.foodId,
+  }).populate("user", "name");
 
-const getReviews = async (req, res) => {
-  try {
-
-    const reviews = await Review.find({
-      food: req.params.foodId,
-    }).populate("user", "name");
-
-    res.status(200).json({
-      success: true,
-      total: reviews.length,
-      reviews,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-};
+  res.status(200).json({
+    success: true,
+    total: reviews.length,
+    reviews,
+  });
+});
 
 // =========================
 // Delete Review
 // =========================
+const deleteReview = asyncHandler(async (req, res) => {
+  const review = await Review.findById(req.params.id);
 
-const deleteReview = async (req, res) => {
-  try {
-
-    const review = await Review.findById(req.params.id);
-
-    if (!review) {
-      return res.status(404).json({
-        success: false,
-        message: "Review not found.",
-      });
-    }
-
-    if (review.user.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: "Not authorized.",
-      });
-    }
-
-    await review.deleteOne();
-
-    res.status(200).json({
-      success: true,
-      message: "Review deleted.",
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
+  if (!review) {
+    throw new ErrorResponse("Review not found.", 404);
   }
-};
+
+  if (
+    review.user.toString() !== req.user._id.toString()
+  ) {
+    throw new ErrorResponse("Not authorized.", 403);
+  }
+
+  await review.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Review deleted.",
+  });
+});
 
 module.exports = {
   addReview,

@@ -10,6 +10,11 @@ const {
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const upload = require("../middleware/upload");
+const { validate } = require("../middleware/validate");
+const {
+  applyForRoleSchema,
+  updateRoleRequestStatusSchema,
+} = require("../validators/roleRequestValidator");
 
 const router = express.Router();
 
@@ -18,6 +23,7 @@ router.post(
   "/apply",
   authMiddleware,
   upload.single("image"),
+  validate(applyForRoleSchema),
   applyForRole
 );
 
@@ -25,9 +31,20 @@ router.post(
 router.get("/my", authMiddleware, getMyRoleRequests);
 
 // All applications (admin)
-router.get("/all", authMiddleware, adminMiddleware, getAllRoleRequests);
+router.get(
+  "/all",
+  authMiddleware,
+  adminMiddleware,
+  getAllRoleRequests
+);
 
 // Approve / reject an application (admin)
-router.put("/:id", authMiddleware, adminMiddleware, updateRoleRequestStatus);
+router.put(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  validate(updateRoleRequestStatusSchema),
+  updateRoleRequestStatus
+);
 
 module.exports = router;

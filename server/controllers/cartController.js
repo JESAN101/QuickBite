@@ -1,168 +1,122 @@
 const Cart = require("../models/Cart");
+const asyncHandler = require("../utils/asyncHandler");
+const ErrorResponse = require("../utils/errorResponse");
 
 // ============================
 // Add To Cart
 // ============================
-const addToCart = async (req, res) => {
-  try {
-    const { food, quantity } = req.body;
+const addToCart = asyncHandler(async (req, res) => {
+  const { food, quantity } = req.body;
 
-    if (!food) {
-      return res.status(400).json({
-        success: false,
-        message: "Food ID is required.",
-      });
-    }
+  const existingItem = await Cart.findOne({
+    user: req.user._id,
+    food,
+  });
 
-    const existingItem = await Cart.findOne({
-      user: req.user._id,
-      food,
-    });
+  if (existingItem) {
+    existingItem.quantity += quantity || 1;
 
-    if (existingItem) {
-      existingItem.quantity += quantity || 1;
+    await existingItem.save();
 
-      await existingItem.save();
-
-      return res.status(200).json({
-        success: true,
-        message: "Cart updated.",
-        cart: existingItem,
-      });
-    }
-
-    const cart = await Cart.create({
-      user: req.user._id,
-      food,
-      quantity: quantity || 1,
-    });
-
-    res.status(201).json({
+    return res.status(200).json({
       success: true,
-      message: "Added to cart.",
-      cart,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+      message: "Cart updated.",
+      cart: existingItem,
     });
   }
-};
+
+  const cart = await Cart.create({
+    user: req.user._id,
+    food,
+    quantity: quantity || 1,
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Added to cart.",
+    cart,
+  });
+});
 
 // ============================
 // Get My Cart
 // ============================
-const getCart = async (req, res) => {
-  try {
-    const cart = await Cart.find({
-      user: req.user._id,
-    }).populate({
-      path: "food",
-      populate: [
-        {
-          path: "restaurant",
-          select: "name",
-        },
-        {
-          path: "category",
-          select: "name",
-        },
-      ],
-    });
+const getCart = asyncHandler(async (req, res) => {
+  const cart = await Cart.find({
+    user: req.user._id,
+  }).populate({
+    path: "food",
+    populate: [
+      {
+        path: "restaurant",
+        select: "name",
+      },
+      {
+        path: "category",
+        select: "name",
+      },
+    ],
+  });
 
-    res.status(200).json({
-      success: true,
-      count: cart.length,
-      cart,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  res.status(200).json({
+    success: true,
+    count: cart.length,
+    cart,
+  });
+});
 
 // ============================
 // Update Quantity
 // ============================
-const updateCart = async (req, res) => {
-  try {
-    const cart = await Cart.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        returnDocument: "after",
-      }
-    );
-
-    if (!cart) {
-      return res.status(404).json({
-        success: false,
-        message: "Cart item not found.",
-      });
+const updateCart = asyncHandler(async (req, res) => {
+  const cart = await Cart.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      returnDocument: "after",
     }
+  );
 
-    res.status(200).json({
-      success: true,
-      message: "Cart updated.",
-      cart,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  if (!cart) {
+    throw new ErrorResponse("Cart item not found.", 404);
   }
-};
+
+  res.status(200).json({
+    success: true,
+    message: "Cart updated.",
+    cart,
+  });
+});
 
 // ============================
 // Remove Item
 // ============================
-const removeFromCart = async (req, res) => {
-  try {
-    const cart = await Cart.findByIdAndDelete(req.params.id);
+const removeFromCart = asyncHandler(async (req, res) => {
+  const cart = await Cart.findByIdAndDelete(req.params.id);
 
-    if (!cart) {
-      return res.status(404).json({
-        success: false,
-        message: "Item not found.",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Item removed.",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  if (!cart) {
+    throw new ErrorResponse("Item not found.", 404);
   }
-};
+
+  res.status(200).json({
+    success: true,
+    message: "Item removed.",
+  });
+});
 
 // ============================
 // Clear Cart
 // ============================
-const clearCart = async (req, res) => {
-  try {
-    await Cart.deleteMany({
-      user: req.user._id,
-    });
+const clearCart = asyncHandler(async (req, res) => {
+  await Cart.deleteMany({
+    user: req.user._id,
+  });
 
-    res.status(200).json({
-      success: true,
-      message: "Cart cleared.",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  res.status(200).json({
+    success: true,
+    message: "Cart cleared.",
+  });
+});
 
 module.exports = {
   addToCart,

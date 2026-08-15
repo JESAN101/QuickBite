@@ -11,6 +11,11 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+const { validate } = require("../middleware/validate");
+const {
+  placeOrderSchema,
+  updateOrderStatusSchema,
+} = require("../validators/orderValidator");
 
 const router = express.Router();
 
@@ -22,6 +27,7 @@ const router = express.Router();
 router.post(
   "/place",
   authMiddleware,
+  validate(placeOrderSchema),
   placeOrder
 );
 
@@ -49,6 +55,7 @@ router.put(
   "/update/:id",
   authMiddleware,
   adminMiddleware,
+  validate(updateOrderStatusSchema),
   updateOrderStatus
 );
 
