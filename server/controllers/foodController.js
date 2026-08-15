@@ -4,16 +4,41 @@ const asyncHandler = require("../utils/asyncHandler");
 const ErrorResponse = require("../utils/errorResponse");
 
 // ===================================
-// Get All Foods
+// Get All Foods (Paginated)
+// Supports ?page=1&limit=10&search=word
+// Without limit, returns everything
+// (backward compatible with the Home page).
 // ===================================
 const getAllFood = asyncHandler(async (req, res) => {
-  const foods = await Food.find()
-    .populate("category", "name")
-    .populate("restaurant", "name");
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || undefined;
+  const search = (req.query.search || "").trim();
+  const skip = limit ? (page - 1) * limit : 0;
+
+  const filter = search
+    ? {
+        name: new RegExp(
+          search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+          "i"
+        ),
+      }
+    : {};
+
+  const [total, foods] = await Promise.all([
+    Food.countDocuments(filter),
+    Food.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate("category", "name")
+      .populate("restaurant", "name"),
+  ]);
 
   res.status(200).json({
     success: true,
-    count: foods.length,
+    total,
+    page,
+    pages: limit ? Math.max(1, Math.ceil(total / limit)) : 1,
     foods,
   });
 });

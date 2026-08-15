@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import OrderTable from "../components/admin/OrderTable";
@@ -10,24 +10,31 @@ import {
   deleteOrder,
 } from "../services/orderService";
 
+const PAGE_SIZE = 10;
+
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [stats, setStats] = useState({});
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
 
-      const data = await getAllOrders();
+      const data = await getAllOrders({
+        page,
+        limit: PAGE_SIZE,
+        search,
+      });
 
       setOrders(data.orders || []);
+      setPages(data.pages || 1);
+      setStats(data.stats || {});
     } catch (error) {
       console.log(error);
 
@@ -38,24 +45,19 @@ const AdminOrders = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, search]);
 
-  const totalOrders = orders.length;
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
-const pendingOrders = orders.filter(
-  (order) => order.orderStatus === "Pending"
-).length;
+  const totalOrders = stats.totalOrders || 0;
 
-const deliveredOrders = orders.filter(
-  (order) => order.orderStatus === "Delivered"
-).length;
+const pendingOrders = stats.pendingOrders || 0;
 
-const totalRevenue = orders
-  .filter((order) => order.orderStatus === "Delivered")
-  .reduce(
-    (total, order) => total + order.totalPrice,
-    0
-  );
+const deliveredOrders = stats.deliveredOrders || 0;
+
+const totalRevenue = stats.totalRevenue || 0;
 
   const handleStatusChange = async (
   orderId,
@@ -106,19 +108,6 @@ const totalRevenue = orders
   setSelectedOrder(order);
 };
 
-  const filteredOrders = orders.filter((order) => {
-    const customer =
-      order.user?.name?.toLowerCase() || "";
-
-    const restaurant =
-      order.restaurant?.name?.toLowerCase() || "";
-
-    return (
-      customer.includes(search.toLowerCase()) ||
-      restaurant.includes(search.toLowerCase())
-    );
-  });
-
   return (
       <div className="space-y-8">
         <div>
@@ -136,9 +125,10 @@ const totalRevenue = orders
             type="text"
             placeholder="Search customer or restaurant..."
             value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             className="w-96 border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
         </div>
@@ -187,12 +177,38 @@ const totalRevenue = orders
           </div>
         ) : (
           <OrderTable
-  orders={filteredOrders}
+  orders={orders}
   onStatusChange={handleStatusChange}
   onDelete={handleDelete}
   onView={handleView}
 />
         )}
+
+        <div className="flex justify-between items-center">
+          <button
+            onClick={() =>
+              setPage((p) => Math.max(1, p - 1))
+            }
+            disabled={page <= 1}
+            className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
+          >
+            Previous
+          </button>
+
+          <span className="text-gray-600">
+            Page {page} of {pages}
+          </span>
+
+          <button
+            onClick={() =>
+              setPage((p) => Math.min(pages, p + 1))
+            }
+            disabled={page >= pages}
+            className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
+          >
+            Next
+          </button>
+        </div>
 
         {selectedOrder && (
   <OrderDetailsModal

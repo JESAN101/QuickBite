@@ -3,6 +3,12 @@ const Food = require("../models/Food");
 const Order = require("../models/Order");
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorResponse = require("../utils/errorResponse");
+const {
+  isRestaurantOpenNow,
+} = require("../utils/openingHours");
+const {
+  sendOrderStatusEmail,
+} = require("../utils/mailer");
 
 // =============================
 // Create Restaurant (Admin)
@@ -39,6 +45,11 @@ const getRestaurants = asyncHandler(async (req, res) => {
     "name email"
   );
 
+  // Reflect the current open/closed state based on hours
+  restaurants.forEach((restaurant) => {
+    restaurant.isOpen = isRestaurantOpenNow(restaurant);
+  });
+
   res.status(200).json({
     success: true,
     count: restaurants.length,
@@ -60,6 +71,9 @@ const getRestaurant = asyncHandler(async (req, res) => {
       404
     );
   }
+
+  // Reflect the current open/closed state based on hours
+  restaurant.isOpen = isRestaurantOpenNow(restaurant);
 
   res.status(200).json({
     success: true,
@@ -224,6 +238,14 @@ const updateMyOrderStatus = asyncHandler(
     order.orderStatus = orderStatus;
 
     await order.save();
+
+    // Fire-and-forget status-change email
+    sendOrderStatusEmail(order._id).catch((error) =>
+      console.error(
+        "[mailer] status-change email failed:",
+        error
+      )
+    );
 
     res.status(200).json({
       success: true,

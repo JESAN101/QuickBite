@@ -12,6 +12,7 @@ import Register from "../pages/Register";
 import Profile from "../pages/Profile";
 import Cart from "../pages/Cart";
 import Orders from "../pages/Orders";
+import OrderDetails from "../pages/OrderDetails";
 import Checkout from "../pages/Checkout";
 import Restaurant from "../pages/Restaurant";
 import FoodDetails from "../pages/FoodDetails";
@@ -116,6 +117,15 @@ const AppRoutes = () => {
         element={
           <MainLayout>
             <Orders />
+          </MainLayout>
+        }
+      />
+
+      <Route
+        path="/orders/:id"
+        element={
+          <MainLayout>
+            <OrderDetails />
           </MainLayout>
         }
       />

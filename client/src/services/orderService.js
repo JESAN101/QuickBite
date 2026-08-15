@@ -16,6 +16,12 @@ export const getMyOrders = async () => {
   return response.data;
 };
 
+// Cancel Own Order
+export const cancelOrder = async (id) => {
+  const response = await API.put(`/order/cancel/${id}`);
+  return response.data;
+};
+
 // Get Single Order
 export const getOrder = async (id) => {
   const response = await API.get(`/order/${id}`);
@@ -27,8 +33,14 @@ export const getOrder = async (id) => {
 // ==========================
 
 // Get All Orders
-export const getAllOrders = async () => {
-  const response = await API.get("/order/all");
+export const getAllOrders = async ({
+  page,
+  limit,
+  search,
+} = {}) => {
+  const response = await API.get("/order/all", {
+    params: { page, limit, search },
+  });
   return response.data;
 };
 

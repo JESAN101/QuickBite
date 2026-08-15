@@ -24,6 +24,7 @@ const Login = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -39,10 +40,38 @@ const Login = () => {
       ...form,
       [e.target.name]: e.target.value,
     });
+
+    // Clear the field error as soon as the user fixes it
+    setErrors((prev) => ({
+      ...prev,
+      [e.target.name]: "",
+    }));
+  };
+
+  const validate = () => {
+    const nextErrors = {};
+
+    if (!form.email.trim()) {
+      nextErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      nextErrors.email = "Please enter a valid email address.";
+    }
+
+    if (!form.password) {
+      nextErrors.password = "Password is required.";
+    }
+
+    return nextErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const nextErrors = validate();
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) return;
+
     setLoading(true);
 
     const loadingToast = toast.loading("Logging in...");
@@ -169,10 +198,18 @@ const Login = () => {
                     placeholder="you@example.com"
                     value={form.email}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-white/15 bg-white/10 p-3 pl-10 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30"
-                    required
+                    className={`w-full rounded-lg border bg-white/10 p-3 pl-10 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30 ${
+                      errors.email
+                        ? "border-[#ef4444]"
+                        : "border-white/15"
+                    }`}
                   />
                 </div>
+                {errors.email && (
+                  <p className="mt-1.5 text-xs font-medium text-[#ef4444]">
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               <div className="fade-up-3">
@@ -190,8 +227,11 @@ const Login = () => {
                     placeholder="Enter your password"
                     value={form.password}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-white/15 bg-white/10 p-3 pl-10 pr-11 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30"
-                    required
+                    className={`w-full rounded-lg border bg-white/10 p-3 pl-10 pr-11 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30 ${
+                      errors.password
+                        ? "border-[#ef4444]"
+                        : "border-white/15"
+                    }`}
                   />
                   <button
                     type="button"
@@ -206,13 +246,21 @@ const Login = () => {
                     )}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="mt-1.5 text-xs font-medium text-[#ef4444]">
+                    {errors.password}
+                  </p>
+                )}
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="fade-up-4 w-full rounded-lg bg-[#F0A438] py-3.5 text-lg font-semibold text-[#1D1512] transition hover:bg-[#F7ECD9] disabled:opacity-60"
+                className="fade-up-4 flex w-full items-center justify-center gap-2 rounded-lg bg-[#F0A438] py-3.5 text-lg font-semibold text-[#1D1512] transition hover:bg-[#F7ECD9] disabled:opacity-60"
               >
+                {loading && (
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#1D1512] border-t-transparent" />
+                )}
                 {loading ? "Logging in…" : "Login"}
               </button>
             </form>

@@ -17,6 +17,7 @@ const Checkout = () => {
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -104,10 +105,15 @@ const Checkout = () => {
       return;
     }
 
+    const nextErrors = {};
+
     if (!address.trim()) {
-      toast.error("Please enter your delivery address.");
-      return;
+      nextErrors.address = "Delivery address is required.";
     }
+
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) return;
 
     setLoading(true);
 
@@ -115,7 +121,7 @@ const Checkout = () => {
 
     try {
       const orderData = {
-        restaurant: cart[0].food.restaurant,
+        restaurant: cart[0].food.restaurant._id || cart[0].food.restaurant,
 
         foods: cart.map((item) => ({
           food: item.food._id,
@@ -320,10 +326,20 @@ const Checkout = () => {
           <textarea
             rows="4"
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              if (errors.address) setErrors((p) => ({ ...p, address: "" }));
+            }}
             placeholder="Enter complete delivery address..."
-            className="w-full rounded-lg border border-[#EADFC8] bg-white p-3 text-[#1D1512] outline-none transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/25"
+            className={`w-full rounded-lg border bg-white p-3 text-[#1D1512] outline-none transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/25 ${
+              errors.address ? "border-[#ef4444]" : "border-[#EADFC8]"
+            }`}
           />
+          {errors.address && (
+            <p className="mt-1.5 text-xs font-medium text-[#ef4444]">
+              {errors.address}
+            </p>
+          )}
         </div>
 
         {/* Payment */}
@@ -353,8 +369,11 @@ const Checkout = () => {
         <button
           onClick={handlePlaceOrder}
           disabled={loading}
-          className="mt-10 w-full rounded-lg bg-[#1D1512] py-3.5 text-lg font-semibold text-[#F7ECD9] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:opacity-60"
+          className="mt-10 flex w-full items-center justify-center gap-2 rounded-lg bg-[#1D1512] py-3.5 text-lg font-semibold text-[#F7ECD9] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:opacity-60"
         >
+          {loading && (
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#F7ECD9] border-t-transparent" />
+          )}
           {loading ? "Placing order…" : `Place order · Rs. ${total}`}
         </button>
       </div>

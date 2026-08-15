@@ -25,6 +25,7 @@ const Register = () => {
     address: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -40,10 +41,43 @@ const Register = () => {
       ...form,
       [e.target.name]: e.target.value,
     });
+
+    setErrors((prev) => ({
+      ...prev,
+      [e.target.name]: "",
+    }));
+  };
+
+  const validate = () => {
+    const nextErrors = {};
+
+    if (!form.name.trim()) {
+      nextErrors.name = "Full name is required.";
+    }
+
+    if (!form.email.trim()) {
+      nextErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      nextErrors.email = "Please enter a valid email address.";
+    }
+
+    if (!form.password) {
+      nextErrors.password = "Password is required.";
+    } else if (form.password.length < 6) {
+      nextErrors.password = "Password must be at least 6 characters.";
+    }
+
+    return nextErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const nextErrors = validate();
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) return;
+
     setLoading(true);
 
     const loadingToast = toast.loading("Creating your account...");
@@ -156,10 +190,16 @@ const Register = () => {
                     placeholder="Your full name"
                     value={form.name}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-white/15 bg-white/10 p-3 pl-10 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30"
-                    required
+                    className={`w-full rounded-lg border bg-white/10 p-3 pl-10 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30 ${
+                      errors.name ? "border-[#ef4444]" : "border-white/15"
+                    }`}
                   />
                 </div>
+                {errors.name && (
+                  <p className="mt-1.5 text-xs font-medium text-[#ef4444]">
+                    {errors.name}
+                  </p>
+                )}
               </div>
 
               <div className="fade-up-2">
@@ -177,10 +217,16 @@ const Register = () => {
                     placeholder="you@example.com"
                     value={form.email}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-white/15 bg-white/10 p-3 pl-10 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30"
-                    required
+                    className={`w-full rounded-lg border bg-white/10 p-3 pl-10 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30 ${
+                      errors.email ? "border-[#ef4444]" : "border-white/15"
+                    }`}
                   />
                 </div>
+                {errors.email && (
+                  <p className="mt-1.5 text-xs font-medium text-[#ef4444]">
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               <div className="fade-up-3">
@@ -198,8 +244,9 @@ const Register = () => {
                     placeholder="Create a password"
                     value={form.password}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-white/15 bg-white/10 p-3 pl-10 pr-11 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30"
-                    required
+                    className={`w-full rounded-lg border bg-white/10 p-3 pl-10 pr-11 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30 ${
+                      errors.password ? "border-[#ef4444]" : "border-white/15"
+                    }`}
                   />
                   <button
                     type="button"
@@ -212,8 +259,13 @@ const Register = () => {
                     ) : (
                       <FaEye size={14} />
                     )}
-                  </button>
+                    </button>
                 </div>
+                {errors.password && (
+                  <p className="mt-1.5 text-xs font-medium text-[#ef4444]">
+                    {errors.password}
+                  </p>
+                )}
               </div>
 
               <div className="fade-up-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -259,8 +311,11 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="fade-up-5 w-full rounded-lg bg-[#F0A438] py-3.5 text-lg font-semibold text-[#1D1512] transition hover:bg-[#F7ECD9] disabled:opacity-60"
+                className="fade-up-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#F0A438] py-3.5 text-lg font-semibold text-[#1D1512] transition hover:bg-[#F7ECD9] disabled:opacity-60"
               >
+                {loading && (
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#1D1512] border-t-transparent" />
+                )}
                 {loading ? "Creating account…" : "Register"}
               </button>
             </form>

@@ -1,4 +1,5 @@
 import AppRoutes from "./routes/AppRoutes";
+import PageTitle from "./routes/PageTitle";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         }}
       />
 
+      <PageTitle />
       <AppRoutes />
     </>
   );

@@ -1,7 +1,37 @@
 // Foods.jsx
+import { useEffect, useState } from "react";
+import { FaSearch, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import FoodCard from "./FoodCard";
 
-const Foods = ({ foods }) => {
+const PAGE_SIZE = 8;
+
+const Foods = ({ foods, loading, clearFilters }) => {
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.max(1, Math.ceil(foods.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const paginatedFoods = foods.slice(start, start + PAGE_SIZE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [foods]);
+
+  const FoodSkeleton = () => (
+    <div className="overflow-hidden rounded-2xl border border-[#EADFC8]/70 bg-[#FFFBF3] shadow-[0_8px_20px_-10px_rgba(29,21,18,0.2)]">
+      <div className="h-52 animate-pulse bg-[#EADFC8]" />
+      <div className="p-4">
+        <div className="h-5 w-2/3 animate-pulse rounded bg-[#EADFC8]" />
+        <div className="mt-2 h-3 w-full animate-pulse rounded bg-[#EADFC8]" />
+        <div className="mt-1.5 h-3 w-4/5 animate-pulse rounded bg-[#EADFC8]" />
+        <div className="mt-4 flex items-center justify-between">
+          <div className="h-6 w-16 animate-pulse rounded bg-[#EADFC8]" />
+          <div className="h-9 w-20 animate-pulse rounded-lg bg-[#EADFC8]" />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-16">
       <div className="mb-10">
@@ -13,21 +43,63 @@ const Foods = ({ foods }) => {
         </h2>
       </div>
 
-      {foods.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#EADFC8] bg-[#FFFBF3] py-24 text-center">
-          <p className="font-['Fraunces',serif] text-2xl italic text-[#1D1512]/70">
-            Nothing matches that search.
-          </p>
-          <p className="mt-2 text-sm text-[#3A2A20]/50">
-            Try a different keyword or clear your filters.
-          </p>
-        </div>
-      ) : (
+      {loading ? (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {foods.map((food) => (
-            <FoodCard key={food._id} food={food} />
+          {Array.from({ length: 8 }).map((_, i) => (
+            <FoodSkeleton key={i} />
           ))}
         </div>
+      ) : foods.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-[#EADFC8] bg-[#FFFBF3] py-24 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#D64933]/10">
+            <FaSearch className="text-2xl text-[#D64933]/60" />
+          </div>
+          <p className="mt-5 font-['Fraunces',serif] text-2xl italic text-[#1D1512]/70">
+            No foods found.
+          </p>
+          <p className="mt-2 text-sm text-[#3A2A20]/50">
+            Nothing matches that search — try a different keyword or clear your
+            filters.
+          </p>
+          <button
+            onClick={clearFilters}
+            className="mt-6 inline-block rounded-lg bg-[#1D1512] px-8 py-3 font-semibold text-[#F7ECD9] transition hover:bg-[#F0A438] hover:text-[#1D1512]"
+          >
+            Clear Filters
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {paginatedFoods.map((food) => (
+              <FoodCard key={food._id} food={food} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="mt-12 flex items-center justify-center gap-4">
+              <button
+                onClick={() => setPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="flex items-center gap-2 rounded-lg border border-[#EADFC8] bg-[#FFFBF3] px-4 py-2 text-sm font-semibold text-[#1D1512] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <FaChevronLeft className="text-xs" />
+                Previous
+              </button>
+              <span className="text-sm font-semibold text-[#3A2A20]/60">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => setPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-2 rounded-lg border border-[#EADFC8] bg-[#FFFBF3] px-4 py-2 text-sm font-semibold text-[#1D1512] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+                <FaChevronRight className="text-xs" />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </section>
   );

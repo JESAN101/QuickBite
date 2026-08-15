@@ -19,8 +19,14 @@ export const getDashboardAnalytics = async () => {
 // =========================
 // Get All Users
 // =========================
-export const getAllUsers = async () => {
-  const response = await API.get("/auth/users");
+export const getAllUsers = async ({
+  page,
+  limit,
+  search,
+} = {}) => {
+  const response = await API.get("/auth/users", {
+    params: { page, limit, search },
+  });
   return response.data;
 };
 

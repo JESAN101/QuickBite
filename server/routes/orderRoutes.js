@@ -4,6 +4,7 @@ const {
   placeOrder,
   getMyOrders,
   getOrder,
+  cancelOrder,
   getAllOrders,
   updateOrderStatus,
   deleteOrder,
@@ -36,6 +37,13 @@ router.get(
   "/my-orders",
   authMiddleware,
   getMyOrders
+);
+
+// Cancel Own Order (within cancellation window)
+router.put(
+  "/cancel/:id",
+  authMiddleware,
+  cancelOrder
 );
 
 // =====================================

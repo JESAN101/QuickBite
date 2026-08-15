@@ -17,6 +17,9 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
 
+  const [loadingFoods, setLoadingFoods] = useState(true);
+  const [loadingRestaurants, setLoadingRestaurants] = useState(true);
+
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedRestaurant, setSelectedRestaurant] = useState("all");
@@ -34,6 +37,8 @@ const Home = () => {
       setFoods(data.foods);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingFoods(false);
     }
   };
 
@@ -43,6 +48,8 @@ const Home = () => {
       setCategories(data.categories);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingCategories(false);
     }
   };
 
@@ -52,6 +59,8 @@ const Home = () => {
       setRestaurants(data.restaurants);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingRestaurants(false);
     }
   };
 
@@ -161,7 +170,11 @@ const filteredFoods = foods
           </div>
 
           <div className="mt-10">
-            <Foods foods={filteredFoods} />
+            <Foods
+              foods={filteredFoods}
+              loading={loadingFoods}
+              clearFilters={clearFilters}
+            />
           </div>
         </div>
       </section>
@@ -186,7 +199,7 @@ const filteredFoods = foods
           </p>
 
           <div className="mt-10">
-            <Restaurants />
+            <Restaurants loading={loadingRestaurants} />
           </div>
         </div>
       </section>

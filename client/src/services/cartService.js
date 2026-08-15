@@ -46,3 +46,23 @@ export const clearCart = async () => {
   const response = await API.delete("/cart/clear");
   return response.data;
 };
+
+// ==========================
+// Add Multiple Items To Cart
+// ==========================
+export const addItemsToCart = async (items) => {
+  await clearCart();
+
+  const responses = [];
+
+  for (const item of items) {
+    const response = await addToCart(item.food, item.quantity);
+    responses.push(response);
+  }
+
+  return {
+    success: true,
+    message: "Cart updated for reorder.",
+    responses,
+  };
+};

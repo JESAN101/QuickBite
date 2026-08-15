@@ -118,16 +118,38 @@ const updateProfile = asyncHandler(async (req, res) => {
 });
 
 // ============================
-// Get All Users (Admin)
+// Get All Users (Admin, Paginated)
+// Supports ?page=1&limit=10&search=word
 // ============================
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find()
-    .select("-password")
-    .sort({ createdAt: -1 });
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const search = (req.query.search || "").trim();
+  const skip = (page - 1) * limit;
+
+  const filter = search
+    ? {
+        $or: [
+          { name: new RegExp(search, "i") },
+          { email: new RegExp(search, "i") },
+        ],
+      }
+    : {};
+
+  const [total, users] = await Promise.all([
+    User.countDocuments(filter),
+    User.find(filter)
+      .select("-password")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit),
+  ]);
 
   res.status(200).json({
     success: true,
-    count: users.length,
+    total,
+    page,
+    pages: Math.max(1, Math.ceil(total / limit)),
     users,
   });
 });

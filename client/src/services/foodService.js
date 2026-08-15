@@ -9,8 +9,14 @@ export const getFoods = async () => {
   return response.data;
 };
 
-export const getAllFoods = async () => {
-  const response = await API.get("/food/all");
+export const getAllFoods = async ({
+  page,
+  limit,
+  search,
+} = {}) => {
+  const response = await API.get("/food/all", {
+    params: { page, limit, search },
+  });
   return response.data;
 };
 
