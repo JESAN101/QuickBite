@@ -118,7 +118,7 @@ const OrderDetails = () => {
       toast.dismiss(loadingToast);
       toast.success("Cart updated! Redirecting...");
       navigate("/cart");
-    } catch (error) {
+    } catch {
       toast.dismiss(loadingToast);
       toast.error("Failed to reorder items.");
     }

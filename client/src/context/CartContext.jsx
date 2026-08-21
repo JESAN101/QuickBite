@@ -1,24 +1,30 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getCart } from "../services/cartService";
+import { isLoggedIn } from "../utils/auth";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  useEffect(() => {
-    loadCart();
-  }, []);
-
   const loadCart = async () => {
+    if (!isLoggedIn()) {
+      setCart([]);
+      return;
+    }
+
     try {
       const data = await getCart();
       setCart(data.cart || []);
-    } catch (error) {
-      // Not logged in, or request failed — just show an empty cart
+    } catch {
+      // Request failed — just show an empty cart
       setCart([]);
     }
   };
+
+  useEffect(() => {
+    loadCart();
+  }, []);
 
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 

@@ -36,7 +36,7 @@ const CategoryForm = () => {
         description:
           data.category.description || "",
       });
-    } catch (error) {
+    } catch {
       toast.error("Failed to load category.");
     }
   };

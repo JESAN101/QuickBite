@@ -25,12 +25,6 @@ const Home = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
 
-  useEffect(() => {
-    fetchFoods();
-    fetchCategories();
-    fetchRestaurants();
-  }, []);
-
   const fetchFoods = async () => {
     try {
       const data = await getAllFoods();
@@ -48,8 +42,6 @@ const Home = () => {
       setCategories(data.categories);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoadingCategories(false);
     }
   };
 
@@ -63,6 +55,12 @@ const Home = () => {
       setLoadingRestaurants(false);
     }
   };
+
+  useEffect(() => {
+    fetchFoods();
+    fetchCategories();
+    fetchRestaurants();
+  }, []);
 
 const filteredFoods = foods
   .filter((food) => {
