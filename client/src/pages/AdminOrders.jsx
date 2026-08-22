@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 
 import OrderTable from "../components/admin/OrderTable";
 import OrderDetailsModal from "../components/admin/OrderDetailsModal";
+import Pagination from "../components/Pagination";
 
 import {
   getAllOrders,
@@ -184,31 +185,12 @@ const totalRevenue = stats.totalRevenue || 0;
 />
         )}
 
-        <div className="flex justify-between items-center">
-          <button
-            onClick={() =>
-              setPage((p) => Math.max(1, p - 1))
-            }
-            disabled={page <= 1}
-            className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
-          >
-            Previous
-          </button>
-
-          <span className="text-gray-600">
-            Page {page} of {pages}
-          </span>
-
-          <button
-            onClick={() =>
-              setPage((p) => Math.min(pages, p + 1))
-            }
-            disabled={page >= pages}
-            className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          page={page}
+          totalPages={pages}
+          onChange={setPage}
+          variant="admin"
+        />
 
         {selectedOrder && (
   <OrderDetailsModal

@@ -1,4 +1,5 @@
 import { FaTrash, FaEye } from "react-icons/fa";
+import { getStatusSolidClass } from "../../utils/orderStatus";
 
 const OrderTable = ({
   orders,
@@ -6,27 +7,7 @@ const OrderTable = ({
   onDelete,
   onView,
 }) => {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Pending":
-        return "bg-yellow-500";
-
-      case "Preparing":
-        return "bg-blue-500";
-
-      case "Out for Delivery":
-        return "bg-purple-500";
-
-      case "Delivered":
-        return "bg-green-500";
-
-      case "Cancelled":
-        return "bg-red-500";
-
-      default:
-        return "bg-gray-500";
-    }
-  };
+  const getStatusColor = (status) => getStatusSolidClass(status);
 
   return (
     <>

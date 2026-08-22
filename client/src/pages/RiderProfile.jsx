@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaUser, FaMotorcycle, FaBox, FaCheckCircle, FaClock, FaEnvelope, FaPhone } from "react-icons/fa";
 
-import { getUser } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 import { getRiderStats } from "../services/riderService";
 
 const RiderProfile = () => {
-  const user = getUser();
+  const { user } = useAuth();
 
   const [stats, setStats] = useState(null);
 

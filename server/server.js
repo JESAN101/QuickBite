@@ -7,6 +7,26 @@ const helmet = require("helmet");
 // Load environment variables
 dotenv.config();
 
+// =======================
+// Environment Validation
+// =======================
+const requiredEnvVars = ["PORT", "MONGO_URI", "JWT_SECRET"];
+const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
+
+if (missingEnvVars.length > 0) {
+  console.error(
+    `❌ Missing required environment variables: ${missingEnvVars.join(", ")}. Check your .env file.`
+  );
+  process.exit(1);
+}
+
+if (process.env.JWT_SECRET.length < 32) {
+  console.error(
+    "❌ JWT_SECRET must be at least 32 characters. Generate one with: node -e \"console.log(require('crypto').randomBytes(48).toString('hex'))\""
+  );
+  process.exit(1);
+}
+
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
@@ -26,6 +46,7 @@ const {
   notFound,
   errorHandler,
 } = require("./middleware/errorMiddleware");
+const { apiLimiter } = require("./middleware/rateLimiter");
 
 // Connect Database
 connectDB();
@@ -38,12 +59,16 @@ const app = express();
 // =======================
 app.use(helmet());
 
+// CORS must run BEFORE the rate limiter, otherwise 429 responses
+// are sent without CORS headers and browsers report them as CORS errors.
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
   })
 );
+
+app.use(apiLimiter);
 
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -82,6 +107,11 @@ app.use(errorHandler);
 // =======================
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const httpServer = require("http").createServer(app);
+const socket = require("./config/socket");
+
+socket.init(httpServer);
+
+httpServer.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });

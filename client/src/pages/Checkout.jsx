@@ -9,6 +9,7 @@ import {
   validateCoupon,
   getActiveCoupons,
 } from "../services/couponService";
+import { getDeliveryFee } from "../utils/pricing";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const Checkout = () => {
     0
   );
 
-  const deliveryFee = subtotal > 1000 ? 0 : 100;
+  const deliveryFee = getDeliveryFee(subtotal);
 
   const discount = appliedCoupon?.discount || 0;
 

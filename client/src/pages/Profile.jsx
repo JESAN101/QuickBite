@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { getProfile, updateProfile } from "../services/authService";
-
-const getInitials = (name = "") => {
-  const parts = name.trim().split(" ").filter(Boolean);
-  if (parts.length === 0) return "U";
-  if (parts.length === 1) return parts[0][0].toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-};
+import { getInitials } from "../utils/format";
 
 const Profile = () => {
   const [form, setForm] = useState({

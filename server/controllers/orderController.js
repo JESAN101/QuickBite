@@ -16,6 +16,7 @@ const {
   sendOrderPlacedEmail,
   sendOrderStatusEmail,
 } = require("../utils/mailer");
+const { parsePagination, escapeRegex } = require("../utils/pagination");
 
 // Time (in minutes) customers can cancel their own
 // order after placing it. Configurable via env.
@@ -261,6 +262,17 @@ const cancelOrder = asyncHandler(async (req, res) => {
   order.orderStatus = "Cancelled";
   await order.save();
 
+  // Emit real-time update to the customer's room
+  try {
+    const { getIO } = require("../config/socket");
+    getIO()
+      .to(order.user.toString())
+      .emit("order:status", {
+        orderId: order._id,
+        status: order.orderStatus,
+      });
+  } catch (_) {}
+
   // Fire-and-forget status-change email
   sendOrderStatusEmail(order._id).catch((error) =>
     console.error("[mailer] cancellation email failed:", error)
@@ -277,8 +289,12 @@ const cancelOrder = asyncHandler(async (req, res) => {
 // Get All Orders (Admin Only, Paginated)
 // ==========================================
 const getAllOrders = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || undefined;
+  const { page } = parsePagination(req.query);
+  const limitParam = req.query.limit;
+  const limit =
+    limitParam !== undefined
+      ? Math.max(1, Math.min(parseInt(limitParam, 10) || 10, 100))
+      : undefined;
   const search = (req.query.search || "").trim();
   const skip = limit ? (page - 1) * limit : 0;
 
@@ -287,7 +303,7 @@ const getAllOrders = asyncHandler(async (req, res) => {
   const filter = {};
 
   if (search) {
-    const regex = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    const regex = new RegExp(escapeRegex(search), "i");
 
     const [matchingUsers, matchingRestaurants] =
       await Promise.all([
@@ -366,9 +382,21 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     });
   }
 
+  const { getIO } = require("../config/socket");
+
   order.orderStatus = orderStatus;
 
   await order.save();
+
+  // Emit real-time update to the customer's room
+  try {
+    getIO()
+      .to(order.user.toString())
+      .emit("order:status", {
+        orderId: order._id,
+        status: order.orderStatus,
+      });
+  } catch (_) {}
 
   // Fire-and-forget status-change email
   sendOrderStatusEmail(order._id).catch((error) =>

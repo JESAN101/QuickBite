@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaMotorcycle, FaStore } from "react-icons/fa";
 
-import { isLoggedIn, getUser } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 import {
   applyForRole,
   getMyRoleRequests,
@@ -11,14 +11,12 @@ import {
 
 const ApplyRole = () => {
   const { role } = useParams();
+  const { user, isAuthenticated } = useAuth();
 
   const isRider = role === "rider";
   const isRestaurant = role === "restaurant";
 
-  const user = getUser();
-
-  // When logged out, we still show the form but require login to submit
-  const isLoggedOut = !isLoggedIn();
+  const isLoggedOut = !isAuthenticated;
 
   const [myRequest, setMyRequest] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,10 +68,10 @@ const ApplyRole = () => {
   };
 
   useEffect(() => {
-    if (isLoggedIn()) {
+    if (isAuthenticated) {
       fetchMyRequests();
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Invalid role
   if (!isRider && !isRestaurant) {

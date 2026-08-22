@@ -4,6 +4,13 @@ import API from "./api";
 // Public APIs
 // =========================
 
+export const getSuggestions = async (search) => {
+  const response = await API.get("/food/suggestions", {
+    params: { search },
+  });
+  return response.data;
+};
+
 export const getFoods = async () => {
   const response = await API.get("/food/all");
   return response.data;

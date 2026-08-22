@@ -8,8 +8,9 @@ import {
   FaStore,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { isLoggedIn, getUser, logout } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { getInitials } from "../utils/format";
 import Loader from "./Loader";
 
 const navLinks = [
@@ -35,17 +36,9 @@ const getRoleLinks = (role) => {
   return [];
 };
 
-const getInitials = (name = "") => {
-  const parts = name.trim().split(" ").filter(Boolean);
-  if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0][0].toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-};
-
-const Navbar = () => {
-  const navigate = useNavigate();
+const Navbar = () => {  const navigate = useNavigate();
   const location = useLocation();
-  const user = getUser();
+  const { user, isAuthenticated, logout } = useAuth();
   const links = [...navLinks, ...getRoleLinks(user?.role)];
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -56,7 +49,7 @@ const Navbar = () => {
     location.pathname === "/login" || location.pathname === "/register";
 
   // Customers (and logged-out visitors) can apply for a role
-  const canApply = !isLoggedIn() || user?.role === "customer";
+  const canApply = !isAuthenticated || user?.role === "customer";
 
   const applyLinks = [
     { to: "/apply/rider", label: "Become a Rider", icon: FaMotorcycle },
@@ -157,7 +150,7 @@ const Navbar = () => {
 
           {/* auth (desktop only) */}
           <div className="hidden items-center gap-5 md:flex">
-            {!isLoggedIn() ? (
+            {!isAuthenticated ? (
               <>
                 <Link
                   to="/login"
@@ -206,7 +199,7 @@ const Navbar = () => {
       {/* dropdown menu */}
       {menuOpen && (
         <div className="absolute right-6 top-20 z-[150] w-72 overflow-hidden rounded-2xl border border-[#EADFC8] bg-[#FFFBF3] shadow-2xl">
-          {isLoggedIn() && (
+          {isAuthenticated && (
             <div className="flex items-center gap-3 border-b border-[#EADFC8] bg-[#1D1512] px-5 py-4">
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F0A438] font-['Plus_Jakarta_Sans',sans-serif] text-sm font-bold text-[#1D1512]">
                 {getInitials(user?.name)}
@@ -283,7 +276,7 @@ const Navbar = () => {
             )}
 
             {/* logged in: profile + logout */}
-            {isLoggedIn() && (
+            {isAuthenticated && (
               <>
                 <div className="my-1 border-t border-[#EADFC8]" />
 
@@ -318,7 +311,7 @@ const Navbar = () => {
             )}
 
             {/* logged out: login + register */}
-            {!isLoggedIn() && (
+            {!isAuthenticated && (
               <>
                 <div className="my-1 border-t border-[#EADFC8]" />
 

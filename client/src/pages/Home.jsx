@@ -74,6 +74,7 @@ const filteredFoods = foods
 
     const matchesCategory =
       selectedCategory === "all" ||
+      food.categories?.some((c) => c._id === selectedCategory) ||
       food.category?._id === selectedCategory;
 
     const matchesRestaurant =

@@ -13,7 +13,7 @@ const FoodForm = ({
     name: "",
     description: "",
     price: "",
-    category: "",
+    categories: [],
     restaurant: fixedRestaurantId || "",
     preparationTime: 20,
     isAvailable: true,
@@ -28,7 +28,7 @@ const FoodForm = ({
         name: initialData.name || "",
         description: initialData.description || "",
         price: initialData.price || "",
-        category: initialData.category?._id || "",
+        categories: initialData.categories?.map((c) => c._id || c) || [],
         restaurant:
           fixedRestaurantId ||
           initialData.restaurant?._id ||
@@ -68,13 +68,29 @@ const FoodForm = ({
     setPreview(URL.createObjectURL(file));
   };
 
+  const toggleCategory = (catId) => {
+    setFormData((prev) => {
+      const exists = prev.categories.includes(catId);
+      return {
+        ...prev,
+        categories: exists
+          ? prev.categories.filter((c) => c !== catId)
+          : [...prev.categories, catId],
+      };
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const data = new FormData();
 
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      if (key === "categories") {
+        data.append("categories", formData.categories.join(","));
+      } else {
+        data.append(key, formData[key]);
+      }
     });
 
     if (image) {
@@ -161,26 +177,27 @@ const FoodForm = ({
 
           <div>
             <label className={labelClass}>
-              Category
+              Restaurant
             </label>
 
             <select
-              name="category"
-              value={formData.category}
+              name="restaurant"
+              value={formData.restaurant}
               onChange={handleChange}
               required
-              className={inputClass}
+              disabled={Boolean(fixedRestaurantId)}
+              className={`${inputClass} disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500`}
             >
               <option value="">
-                Select Category
+                Select Restaurant
               </option>
 
-              {categories.map((cat) => (
+              {restaurants.map((restaurant) => (
                 <option
-                  key={cat._id}
-                  value={cat._id}
+                  key={restaurant._id}
+                  value={restaurant._id}
                 >
-                  {cat.name}
+                  {restaurant.name}
                 </option>
               ))}
             </select>
@@ -189,30 +206,58 @@ const FoodForm = ({
 
         <div>
           <label className={labelClass}>
-            Restaurant
+            Categories
+            <span className="ml-1 font-normal text-gray-400">
+              (select one or more)
+            </span>
           </label>
 
-          <select
-            name="restaurant"
-            value={formData.restaurant}
-            onChange={handleChange}
-            required
-            disabled={Boolean(fixedRestaurantId)}
-            className={`${inputClass} disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500`}
-          >
-            <option value="">
-              Select Restaurant
-            </option>
+          <div className="min-h-[52px] rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm transition focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100">
+            {categories.length === 0 ? (
+              <p className="py-1 text-sm text-gray-400">
+                No categories available
+              </p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {categories.map((cat) => {
+                  const active = formData.categories.includes(cat._id);
+                  return (
+                    <button
+                      key={cat._id}
+                      type="button"
+                      onClick={() => toggleCategory(cat._id)}
+                      className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition ${
+                        active
+                          ? "border-orange-300 bg-orange-50 text-orange-700 shadow-sm"
+                          : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border transition ${
+                          active
+                            ? "border-orange-400 bg-orange-500"
+                            : "border-gray-300 bg-white"
+                        }`}
+                      >
+                        {active && (
+                          <svg className="h-3 w-3 text-white" viewBox="0 0 12 12" fill="none">
+                            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </span>
+                      {cat.name}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
-            {restaurants.map((restaurant) => (
-              <option
-                key={restaurant._id}
-                value={restaurant._id}
-              >
-                {restaurant.name}
-              </option>
-            ))}
-          </select>
+          {formData.categories.length > 0 && (
+            <p className="mt-1.5 text-xs text-gray-400">
+              {formData.categories.length} categor{formData.categories.length === 1 ? "y" : "ies"} selected
+            </p>
+          )}
         </div>
 
         <div>

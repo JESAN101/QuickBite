@@ -1,14 +1,14 @@
 import { Navigate } from "react-router-dom";
-import { isLoggedIn, getUser } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 // Protects restaurant-owner pages.
 // - Not logged in     -> redirect to /login
 // - Not a restaurant  -> redirect to home
 // - Restaurant owner  -> render the page
 const RestaurantRoute = ({ children }) => {
-  const user = getUser();
+  const { isAuthenticated, user } = useAuth();
 
-  if (!isLoggedIn()) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 

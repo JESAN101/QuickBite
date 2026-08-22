@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { getFoodById } from "../services/foodService";
 import { addToCart } from "../services/cartService";
 import { getImageUrl } from "../utils/image";
+import ReviewSection from "../components/ReviewSection";
 
 const FoodDetails = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const FoodDetails = () => {
   const [food, setFood] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchFood = async () => {
@@ -20,6 +22,7 @@ const FoodDetails = () => {
         setFood(data.food);
       } catch (error) {
         console.log(error);
+        setError(true);
       }
     };
 
@@ -50,6 +53,21 @@ const FoodDetails = () => {
       setAdding(false);
     }
   };
+
+  if (error) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center bg-[#FFFBF3]">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <p className="font-['Plus_Jakarta_Sans',sans-serif] text-2xl font-bold text-[#1D1512]">
+            Dish not found
+          </p>
+          <p className="text-sm text-[#3A2A20]/55">
+            Something went wrong while loading this dish.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!food) {
     return (
@@ -89,10 +107,17 @@ const FoodDetails = () => {
 
           {/* details */}
           <div>
-            {food.category?.name && (
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#D64933]/25 bg-[#D64933]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#D64933]">
-                {food.category.name}
-              </span>
+            {food.categories?.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {food.categories.map((cat) => (
+                  <span
+                    key={cat._id}
+                    className="inline-flex items-center gap-2 rounded-full border border-[#D64933]/25 bg-[#D64933]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#D64933]"
+                  >
+                    {cat.name}
+                  </span>
+                ))}
+              </div>
             )}
 
             <h1 className="mt-4 font-['Plus_Jakarta_Sans',sans-serif] text-4xl font-bold leading-tight text-[#1D1512] md:text-5xl">
@@ -129,10 +154,10 @@ const FoodDetails = () => {
 
               <div className="rounded-lg border border-[#EADFC8] bg-white p-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[#3A2A20]/45">
-                  Category
+                  Categories
                 </p>
                 <p className="mt-1 font-semibold text-[#1D1512]">
-                  {food.category?.name || "—"}
+                  {food.categories?.map((c) => c.name).join(", ") || "—"}
                 </p>
               </div>
             </div>
@@ -178,6 +203,11 @@ const FoodDetails = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Reviews */}
+      <div className="mx-auto max-w-6xl px-6">
+        <ReviewSection foodId={id} />
       </div>
     </div>
   );

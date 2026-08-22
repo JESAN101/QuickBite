@@ -23,12 +23,13 @@ const foodSchema = new mongoose.Schema(
       min: 0,
     },
 
-    // Category Reference
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
-    },
+    // Category References (supports multiple categories per dish)
+    categories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+      },
+    ],
 
     // Restaurant Reference
     restaurant: {
@@ -73,5 +74,14 @@ const foodSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Virtual: backward-compatible singular accessor.
+// Old code reading food.category gets the first category.
+foodSchema.virtual("category").get(function () {
+  return this.categories?.[0] || null;
+});
+
+foodSchema.set("toJSON", { virtuals: true });
+foodSchema.set("toObject", { virtuals: true });
 
 module.exports = mongoose.model("Food", foodSchema);

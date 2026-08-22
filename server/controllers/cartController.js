@@ -52,7 +52,7 @@ const getCart = asyncHandler(async (req, res) => {
         select: "name",
       },
       {
-        path: "category",
+        path: "categories",
         select: "name",
       },
     ],

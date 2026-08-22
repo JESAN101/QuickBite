@@ -1,6 +1,7 @@
 const express = require("express");
 
 const {
+  getSuggestions,
   getAllFood,
   getFoodById,
   updateFood,
@@ -21,6 +22,9 @@ const router = express.Router();
 // =============================
 // Public Routes
 // =============================
+
+// Get Search Suggestions (must be before /:id)
+router.get("/suggestions", getSuggestions);
 
 // Get All Foods
 router.get("/all", getAllFood);

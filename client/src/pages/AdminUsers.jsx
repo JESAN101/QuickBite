@@ -6,6 +6,7 @@ import {
   deleteUser,
   updateUserRole,
 } from "../services/adminService";
+import Pagination from "../components/Pagination";
 
 const PAGE_SIZE = 10;
 
@@ -298,31 +299,12 @@ const AdminUsers = () => {
 
       </div>
 
-      <div className="flex justify-between items-center mt-6">
-        <button
-          onClick={() =>
-            setPage((p) => Math.max(1, p - 1))
-          }
-          disabled={page <= 1}
-          className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
-        >
-          Previous
-        </button>
-
-        <span className="text-gray-600">
-          Page {page} of {pages}
-        </span>
-
-        <button
-          onClick={() =>
-            setPage((p) => Math.min(pages, p + 1))
-          }
-          disabled={page >= pages}
-          className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
-        >
-          Next
-        </button>
-      </div>
+      <Pagination
+        page={page}
+        totalPages={pages}
+        onChange={setPage}
+        variant="admin"
+      />
 
     </div>
   );

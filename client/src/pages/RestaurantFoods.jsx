@@ -153,7 +153,7 @@ const RestaurantFoods = () => {
                     </td>
 
                     <td className="px-6 py-4 text-gray-600">
-                      {food.category?.name || "—"}
+                      {food.categories?.map((c) => c.name).join(", ") || "—"}
                     </td>
 
                     <td className="px-6 py-4 text-center font-bold text-orange-600">

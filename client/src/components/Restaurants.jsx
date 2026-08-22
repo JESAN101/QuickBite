@@ -1,8 +1,8 @@
 // Restaurants.jsx
 import { useEffect, useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { getRestaurants } from "../services/restaurantService";
 import RestaurantCard from "./RestaurantCard";
+import Pagination from "./Pagination";
 
 const PAGE_SIZE = 6;
 
@@ -69,26 +69,12 @@ const Restaurants = ({ loading }) => {
           </div>
 
           {totalPages > 1 && (
-            <div className="mt-12 flex items-center justify-center gap-4">
-              <button
-                onClick={() => setPage(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="flex items-center gap-2 rounded-lg border border-[#EADFC8] bg-[#FFFBF3] px-4 py-2 text-sm font-semibold text-[#1D1512] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                <FaChevronLeft className="text-xs" />
-                Previous
-              </button>
-              <span className="text-sm font-semibold text-[#3A2A20]/60">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() => setPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="flex items-center gap-2 rounded-lg border border-[#EADFC8] bg-[#FFFBF3] px-4 py-2 text-sm font-semibold text-[#1D1512] transition hover:bg-[#F0A438] hover:text-[#1D1512] disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Next
-                <FaChevronRight className="text-xs" />
-              </button>
+            <div className="mt-12">
+              <Pagination
+                page={currentPage}
+                totalPages={totalPages}
+                onChange={setPage}
+              />
             </div>
           )}
         </>

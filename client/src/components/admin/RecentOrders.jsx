@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllOrders } from "../../services/orderService";
-
-const statusStyles = {
-  Pending: "bg-amber-100 text-amber-700",
-  Preparing: "bg-blue-100 text-blue-700",
-  "Out for Delivery": "bg-purple-100 text-purple-700",
-  Delivered: "bg-green-100 text-green-700",
-  Cancelled: "bg-red-100 text-red-600",
-};
+import { getStatusBadgeClass } from "../../utils/orderStatus";
 
 const RecentOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -82,9 +75,9 @@ const RecentOrders = () => {
 
                   <td className="px-6 py-4 text-center">
                     <span
-                      className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold ${
-                        statusStyles[order.orderStatus] || "bg-gray-100 text-gray-600"
-                      }`}
+                      className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold ${getStatusBadgeClass(
+                        order.orderStatus
+                      )}`}
                     >
                       {order.orderStatus}
                     </span>

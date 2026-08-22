@@ -11,25 +11,10 @@ import {
   getMyOrders,
   updateMyOrderStatus,
 } from "../services/restaurantService";
-
-const orderStatuses = [
-  "Pending",
-  "Preparing",
-  "Out for Delivery",
-  "Delivered",
-  "Cancelled",
-];
-
-const getStatusColor = (status) => {
-  const map = {
-    Pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
-    Preparing: "bg-blue-100 text-blue-700 border-blue-200",
-    "Out for Delivery": "bg-purple-100 text-purple-700 border-purple-200",
-    Delivered: "bg-green-100 text-green-700 border-green-200",
-    Cancelled: "bg-red-100 text-red-600 border-red-200",
-  };
-  return map[status] || "bg-gray-100 text-gray-600";
-};
+import {
+  ORDER_STATUSES,
+  getStatusBorderedClass,
+} from "../utils/orderStatus";
 
 const RestaurantOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -262,7 +247,7 @@ const RestaurantOrders = () => {
                       <td className="px-6 py-4">
                         <div className="flex flex-col items-center gap-2">
                           <span
-                            className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold ${getStatusColor(
+                            className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold ${getStatusBorderedClass(
                               order.orderStatus
                             )}`}
                           >
@@ -276,7 +261,7 @@ const RestaurantOrders = () => {
                             }
                             className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs font-medium text-gray-700 transition focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100"
                           >
-                            {orderStatuses.map((status) => (
+                            {ORDER_STATUSES.map((status) => (
                               <option key={status} value={status}>
                                 {status}
                               </option>

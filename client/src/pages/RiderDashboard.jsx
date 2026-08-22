@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { getRiderStats, getMyDeliveries } from "../services/riderService";
-
-const statusColors = {
-  "Out for Delivery": "bg-purple-100 text-purple-700",
-  Delivered: "bg-green-100 text-green-700",
-};
+import { getStatusBadgeClass } from "../utils/orderStatus";
 
 const statCards = (stats) => [
   {
@@ -42,6 +38,7 @@ const statCards = (stats) => [
 const RiderDashboard = () => {
   const [stats, setStats] = useState(null);
   const [recentDeliveries, setRecentDeliveries] = useState([]);
+  const [error, setError] = useState(false);
 
   const fetchDashboard = async () => {
     try {
@@ -54,6 +51,7 @@ const RiderDashboard = () => {
       setRecentDeliveries((deliveriesData.orders || []).slice(0, 5));
     } catch (error) {
       console.log(error);
+      setError(true);
       toast.error("Failed to load dashboard.");
     }
   };
@@ -61,6 +59,27 @@ const RiderDashboard = () => {
   useEffect(() => {
     fetchDashboard();
   }, []);
+
+  if (error && !stats) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <p className="text-xl font-bold text-gray-900">
+            Failed to load dashboard
+          </p>
+          <p className="text-sm text-gray-500">
+            Please try refreshing the page.
+          </p>
+          <button
+            onClick={fetchDashboard}
+            className="rounded-lg bg-gray-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-orange-500"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (!stats) {
     return (
@@ -170,10 +189,9 @@ const RiderDashboard = () => {
 
                     <td className="px-6 py-4 text-center">
                       <span
-                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${
-                          statusColors[order.orderStatus] ||
-                          "bg-gray-100 text-gray-600"
-                        }`}
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${getStatusBadgeClass(
+                          order.orderStatus
+                        )}`}
                       >
                         {order.orderStatus}
                       </span>

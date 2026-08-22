@@ -73,6 +73,18 @@ const acceptDelivery = asyncHandler(async (req, res) => {
 
   await order.save();
 
+  // Emit real-time update to the customer's room
+  try {
+    const { getIO } = require("../config/socket");
+    getIO()
+      .to(order.user.toString())
+      .emit("order:status", {
+        orderId: order._id,
+        status: order.orderStatus,
+        rider: { name: req.user.name },
+      });
+  } catch (_) {}
+
   res.status(200).json({
     success: true,
     message: "Delivery accepted. Collect the order and deliver it.",
@@ -104,6 +116,17 @@ const completeDelivery = asyncHandler(async (req, res) => {
   order.orderStatus = "Delivered";
 
   await order.save();
+
+  // Emit real-time update to the customer's room
+  try {
+    const { getIO } = require("../config/socket");
+    getIO()
+      .to(order.user.toString())
+      .emit("order:status", {
+        orderId: order._id,
+        status: order.orderStatus,
+      });
+  } catch (_) {}
 
   res.status(200).json({
     success: true,

@@ -12,10 +12,11 @@ import {
 } from "react-icons/fa";
 
 import { register } from "../services/authService";
-import { isLoggedIn } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const [form, setForm] = useState({
     name: "",
@@ -31,10 +32,10 @@ const Register = () => {
 
   // Already-logged-in users shouldn't see the registration form
   useEffect(() => {
-    if (isLoggedIn()) {
+    if (isAuthenticated) {
       navigate("/", { replace: true });
     }
-  }, [navigate]);
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     setForm({

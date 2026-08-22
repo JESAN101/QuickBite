@@ -4,7 +4,8 @@ import toast from "react-hot-toast";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { login } from "../services/authService";
-import { isLoggedIn, getUser } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
+import { requestNotificationPermission } from "../hooks/useOrderSocket";
 
 // Send each role to their own home page after login
 const getRoleHome = (role) => {
@@ -18,6 +19,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect");
+  const { isAuthenticated, user, login: loginToContext } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
@@ -28,12 +30,23 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Already-logged-in users shouldn't see the login form
+  // Single source of truth for post-login navigation.
+  // Runs on mount when already logged in AND right after
+  // login() updates the auth context.
   useEffect(() => {
-    if (isLoggedIn()) {
-      navigate(getRoleHome(getUser()?.role), { replace: true });
-    }
-  }, [navigate]);
+    if (!isAuthenticated) return;
+
+    const safeRedirect =
+      redirect &&
+      user?.role === "customer" &&
+      !redirect.startsWith("/login") &&
+      !redirect.startsWith("/register")
+        ? redirect
+        : getRoleHome(user?.role);
+
+    navigate(safeRedirect, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   const handleChange = (e) => {
     setForm({
@@ -79,25 +92,16 @@ const Login = () => {
     try {
       const data = await login(form);
 
-      // Save Token
-      localStorage.setItem("token", data.token);
-
-      // Save User
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // Sync the auth context — this triggers the redirect effect above.
+      loginToContext(data.user, data.token);
 
       toast.dismiss(loadingToast);
       toast.success(data.message);
 
-      // Customers who were on their way to apply get sent back there
-      const safeRedirect =
-        redirect &&
-        data.user.role === "customer" &&
-        !redirect.startsWith("/login") &&
-        !redirect.startsWith("/register")
-          ? redirect
-          : getRoleHome(data.user.role);
-
-      navigate(safeRedirect);
+      // Ask for browser notification permission (order updates)
+      if (data.user.role === "customer") {
+        requestNotificationPermission();
+      }
     } catch (error) {
       console.log(error);
 

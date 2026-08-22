@@ -10,6 +10,7 @@ const Restaurant = () => {
 
   const [restaurant, setRestaurant] = useState(null);
   const [foods, setFoods] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -18,6 +19,7 @@ const Restaurant = () => {
         setRestaurant(data.restaurant);
       } catch (error) {
         console.log(error);
+        setError(true);
       }
     };
 
@@ -33,6 +35,21 @@ const Restaurant = () => {
     fetchRestaurant();
     fetchFoods();
   }, [id]);
+
+  if (error) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center bg-[#FFFBF3]">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <p className="font-['Plus_Jakarta_Sans',sans-serif] text-2xl font-bold text-[#1D1512]">
+            Restaurant not found
+          </p>
+          <p className="text-sm text-[#3A2A20]/55">
+            Something went wrong while loading this restaurant.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!restaurant) {
     return (

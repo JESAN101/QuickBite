@@ -161,18 +161,28 @@ const updateMyRestaurant = asyncHandler(
       description,
       address,
       phone,
+      email,
+      cuisineType,
+      openingTime,
+      closingTime,
+      estimatedDeliveryTime,
+      licenseNumber,
       isOpen,
     } = req.body;
 
     const restaurant = req.restaurant;
 
-    restaurant.name = name || restaurant.name;
-    restaurant.description =
-      description || restaurant.description;
-    restaurant.address = address || restaurant.address;
-    restaurant.phone = phone || restaurant.phone;
-    restaurant.isOpen =
-      isOpen !== undefined ? isOpen : restaurant.isOpen;
+    if (name) restaurant.name = name;
+    if (description !== undefined) restaurant.description = description;
+    if (address) restaurant.address = address;
+    if (phone) restaurant.phone = phone;
+    if (email !== undefined) restaurant.email = email;
+    if (cuisineType !== undefined) restaurant.cuisineType = cuisineType;
+    if (openingTime !== undefined) restaurant.openingTime = openingTime;
+    if (closingTime !== undefined) restaurant.closingTime = closingTime;
+    if (estimatedDeliveryTime !== undefined) restaurant.estimatedDeliveryTime = estimatedDeliveryTime;
+    if (licenseNumber !== undefined) restaurant.licenseNumber = licenseNumber;
+    if (isOpen !== undefined) restaurant.isOpen = isOpen;
 
     if (req.file) {
       restaurant.image = req.file.path;
@@ -239,6 +249,17 @@ const updateMyOrderStatus = asyncHandler(
 
     await order.save();
 
+    // Emit real-time update to the customer's room
+    try {
+      const { getIO } = require("../config/socket");
+      getIO()
+        .to(order.user.toString())
+        .emit("order:status", {
+          orderId: order._id,
+          status: order.orderStatus,
+        });
+    } catch (_) {}
+
     // Fire-and-forget status-change email
     sendOrderStatusEmail(order._id).catch((error) =>
       console.error(
@@ -263,7 +284,7 @@ const getMyFoods = asyncHandler(async (req, res) => {
     restaurant: req.restaurant._id,
   })
     .sort({ createdAt: -1 })
-    .populate("category", "name");
+    .populate("categories", "name");
 
   res.status(200).json({
     success: true,
@@ -280,18 +301,23 @@ const createMyFood = asyncHandler(async (req, res) => {
     name,
     description,
     price,
-    category,
+    categories,
     preparationTime,
     isAvailable,
   } = req.body;
 
   const image = req.file ? req.file.path : "";
 
+  // Accept both comma-separated string (from FormData) and array
+  const categoryIds = typeof categories === "string"
+    ? categories.split(",").filter(Boolean)
+    : categories || [];
+
   const food = await Food.create({
     name,
     description,
     price,
-    category,
+    categories: categoryIds,
     restaurant: req.restaurant._id,
     image,
     isAvailable:
@@ -331,15 +357,20 @@ const updateMyFood = asyncHandler(async (req, res) => {
     name,
     description,
     price,
-    category,
+    categories,
     preparationTime,
     isAvailable,
   } = req.body;
 
+  // Accept both comma-separated string (from FormData) and array
+  const categoryIds = typeof categories === "string"
+    ? categories.split(",").filter(Boolean)
+    : categories;
+
   food.name = name || food.name;
   food.description = description || food.description;
   food.price = price !== undefined ? price : food.price;
-  food.category = category || food.category;
+  if (categoryIds !== undefined) food.categories = categoryIds;
   food.preparationTime =
     preparationTime || food.preparationTime;
   food.isAvailable =

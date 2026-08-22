@@ -2,6 +2,31 @@ const Food = require("../models/Food");
 const Category = require("../models/Category");
 const asyncHandler = require("../utils/asyncHandler");
 const ErrorResponse = require("../utils/errorResponse");
+const { parsePagination, escapeRegex } = require("../utils/pagination");
+
+// ===================================
+// Search Suggestions (Autocomplete)
+// Returns up to 8 food names for typeahead.
+// ===================================
+const getSuggestions = asyncHandler(async (req, res) => {
+  const search = (req.query.search || "").trim();
+
+  if (!search || search.length < 2) {
+    return res.status(200).json({ success: true, suggestions: [] });
+  }
+
+  const regex = new RegExp(escapeRegex(search), "i");
+
+  const foods = await Food.find({ name: regex, isAvailable: true })
+    .select("name _id")
+    .limit(8)
+    .lean();
+
+  res.status(200).json({
+    success: true,
+    suggestions: foods.map((f) => ({ id: f._id, name: f.name })),
+  });
+});
 
 // ===================================
 // Get All Foods (Paginated)
@@ -10,17 +35,19 @@ const ErrorResponse = require("../utils/errorResponse");
 // (backward compatible with the Home page).
 // ===================================
 const getAllFood = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || undefined;
-  const search = (req.query.search || "").trim();
+  const { page } = parsePagination(req.query);
+  // When ?limit is omitted the public storefront wants ALL foods.
+  const limitParam = req.query.limit;
+  const limit =
+    limitParam !== undefined
+      ? Math.max(1, Math.min(parseInt(limitParam, 10) || 10, 100))
+      : undefined;
   const skip = limit ? (page - 1) * limit : 0;
+  const search = (req.query.search || "").trim();
 
   const filter = search
     ? {
-        name: new RegExp(
-          search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-          "i"
-        ),
+        name: new RegExp(escapeRegex(search), "i"),
       }
     : {};
 
@@ -30,7 +57,7 @@ const getAllFood = asyncHandler(async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate("category", "name")
+      .populate("categories", "name")
       .populate("restaurant", "name"),
   ]);
 
@@ -48,7 +75,7 @@ const getAllFood = asyncHandler(async (req, res) => {
 // ===================================
 const getFoodById = asyncHandler(async (req, res) => {
   const food = await Food.findById(req.params.id)
-    .populate("category", "name")
+    .populate("categories", "name")
     .populate("restaurant", "name");
 
   if (!food) {
@@ -71,13 +98,16 @@ const updateFood = asyncHandler(async (req, res) => {
     throw new ErrorResponse("Food not found.", 404);
   }
 
-  if (req.body.category) {
-    const categoryExists = await Category.findById(
-      req.body.category
-    );
+  if (req.body.categories) {
+    const ids = Array.isArray(req.body.categories)
+      ? req.body.categories
+      : String(req.body.categories).split(",").map((s) => s.trim()).filter(Boolean);
 
-    if (!categoryExists) {
-      throw new ErrorResponse("Category not found.", 404);
+    for (const id of ids) {
+      const categoryExists = await Category.findById(id);
+      if (!categoryExists) {
+        throw new ErrorResponse(`Category ${id} not found.`, 404);
+      }
     }
   }
 
@@ -99,7 +129,7 @@ const updateFood = asyncHandler(async (req, res) => {
       runValidators: true,
     }
   )
-    .populate("category", "name")
+    .populate("categories", "name")
     .populate("restaurant", "name");
 
   res.status(200).json({
@@ -132,7 +162,7 @@ const getFoodsByRestaurant = asyncHandler(async (req, res) => {
   const foods = await Food.find({
     restaurant: req.params.restaurantId,
   })
-    .populate("category", "name")
+    .populate("categories", "name")
     .populate("restaurant", "name");
 
   res.status(200).json({
@@ -143,6 +173,7 @@ const getFoodsByRestaurant = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getSuggestions,
   getAllFood,
   getFoodById,
   updateFood,

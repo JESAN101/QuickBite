@@ -2,6 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("../utils/asyncHandler");
+const { parsePagination, escapeRegex } = require("../utils/pagination");
 
 const sanitizeUser = (user) => {
   const obj = user.toObject ? user.toObject() : { ...user };
@@ -122,16 +123,14 @@ const updateProfile = asyncHandler(async (req, res) => {
 // Supports ?page=1&limit=10&search=word
 // ============================
 const getAllUsers = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 10;
+  const { page, limit, skip } = parsePagination(req.query);
   const search = (req.query.search || "").trim();
-  const skip = (page - 1) * limit;
 
   const filter = search
     ? {
         $or: [
-          { name: new RegExp(search, "i") },
-          { email: new RegExp(search, "i") },
+          { name: new RegExp(escapeRegex(search), "i") },
+          { email: new RegExp(escapeRegex(search), "i") },
         ],
       }
     : {};

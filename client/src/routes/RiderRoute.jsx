@@ -1,14 +1,14 @@
 import { Navigate } from "react-router-dom";
-import { isLoggedIn, getUser } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 // Protects rider pages.
 // - Not logged in  -> redirect to /login
 // - Not a rider    -> redirect to home
 // - Rider          -> render the page
 const RiderRoute = ({ children }) => {
-  const user = getUser();
+  const { isAuthenticated, user } = useAuth();
 
-  if (!isLoggedIn()) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 

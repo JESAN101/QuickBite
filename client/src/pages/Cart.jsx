@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useCart } from "../context/CartContext";
@@ -11,6 +11,7 @@ import {
   clearCart,
 } from "../services/cartService";
 import { getImageUrl } from "../utils/image";
+import { getDeliveryFee } from "../utils/pricing";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -95,14 +96,14 @@ const Cart = () => {
     0
   );
 
-  const deliveryFee = subtotal >= 1000 ? 0 : 100;
+  const deliveryFee = getDeliveryFee(subtotal);
   const grandTotal = subtotal + deliveryFee;
 
   if (cart.length === 0) {
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <div className="rounded-2xl border border-[#EADFC8] bg-[#FFFBF3] p-12 text-center shadow-[0_10px_30px_-12px_rgba(29,21,18,0.15)]">
-        <div className="text-6xl">ðŸ›’</div>
+        <div className="text-6xl">🛒</div>
 
         <h1 className="mt-6 font-['Plus_Jakarta_Sans',sans-serif] text-3xl font-bold text-[#1D1512]">
           Your{" "}
@@ -181,7 +182,7 @@ return (
 
                   {item.food.restaurant && (
                     <p className="mt-3 text-sm text-[#3A2A20]/55">
-                      ðŸ´ {item.food.restaurant.name}
+                      🍴 {item.food.restaurant.name}
                     </p>
                   )}
 
@@ -199,7 +200,7 @@ return (
                     onClick={() => decreaseQuantity(item)}
                     className="bg-[#F7ECD9] px-4 py-2 text-lg font-bold transition hover:bg-[#F0A438]"
                   >
-                    âˆ’
+                    −
                   </button>
 
                   <div className="flex items-center justify-center border-x border-[#EADFC8] bg-white px-6 font-semibold">
@@ -282,7 +283,7 @@ return (
 
           {deliveryFee === 0 && (
             <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm font-medium text-green-700">
-              ðŸŽ‰ Congratulations! You qualified for FREE delivery.
+              🎉 Congratulations! You qualified for FREE delivery.
             </div>
           )}
 

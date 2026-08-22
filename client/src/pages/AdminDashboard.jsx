@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getDashboardStats, getDashboardAnalytics } from "../services/adminService";
+import { getOrderStatusChartColor } from "../utils/orderStatus";
 import DashboardCard from "../components/admin/DashboardCard";
 import RecentOrders from "../components/admin/RecentOrders";
 import {
@@ -32,6 +33,7 @@ ChartJS.register(
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [analytics, setAnalytics] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetchStats();
@@ -44,6 +46,7 @@ const AdminDashboard = () => {
       setStats(data.stats);
     } catch (error) {
       console.log(error);
+      setError(true);
     }
   };
 
@@ -53,8 +56,30 @@ const AdminDashboard = () => {
       setAnalytics(data.analytics);
     } catch (error) {
       console.log(error);
+      setError(true);
     }
   };
+
+  if (error && (!stats || !analytics)) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+        <p className="text-xl font-bold text-gray-900">
+          Failed to load dashboard
+        </p>
+        <p className="text-sm text-gray-500">Please try again.</p>
+        <button
+          onClick={() => {
+            setError(false);
+            fetchStats();
+            fetchAnalytics();
+          }}
+          className="rounded-lg bg-gray-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-orange-500"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   if (!stats || !analytics) {
     return (
@@ -93,17 +118,11 @@ const AdminDashboard = () => {
   };
 
   // Orders Status Chart Data (Doughnut)
-  const statusColors = {
-    "Delivered": "#15803d",
-    "Preparing": "#06b6d4",
-    "Pending": "#eab308",
-    "Out for Delivery": "#a855f7",
-    "Cancelled": "#ef4444",
-  };
-
   const statusLabels = analytics.ordersByStatus.map((item) => item.status);
   const statusData = analytics.ordersByStatus.map((item) => item.count);
-  const statusBgColors = statusLabels.map((lbl) => statusColors[lbl] || "#6b7280");
+  const statusBgColors = statusLabels.map((lbl) =>
+    getOrderStatusChartColor(lbl)
+  );
 
   const statusChartData = {
     labels: statusLabels,

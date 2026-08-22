@@ -19,6 +19,7 @@ import {
 
 import { getOrder, cancelOrder } from "../services/orderService";
 import { addItemsToCart } from "../services/cartService";
+import useOrderSocket from "../hooks/useOrderSocket";
 
 const TIMELINE_STEPS = [
   { label: "Placed", icon: FaClipboardCheck },
@@ -52,6 +53,17 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
   const [canCancel, setCanCancel] = useState(false);
+
+  // Live updates via Socket.IO
+  useOrderSocket({
+    onStatus: ({ orderId, status }) => {
+      if (orderId === id) {
+        setOrder((prev) =>
+          prev ? { ...prev, orderStatus: status } : prev
+        );
+      }
+    },
+  });
 
   useEffect(() => {
     fetchOrder();
