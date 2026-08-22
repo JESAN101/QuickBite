@@ -26,9 +26,7 @@ const errorHandler = (err, req, res, next) => {
   if (err.code === 11000) {
     statusCode = 400;
     const field = Object.keys(err.keyValue || {})[0];
-    message = field
-      ? `${field} already exists.`
-      : "Resource already exists.";
+    message = field ? `${field} already exists.` : "Resource already exists.";
   }
 
   if (err instanceof multer.MulterError) {

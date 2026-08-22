@@ -4,7 +4,6 @@ const User = require("../models/User");
 // Authentication Middleware
 const authMiddleware = async (req, res, next) => {
   try {
-
     // Get token from request header
     const authHeader = req.headers.authorization;
 
@@ -35,7 +34,6 @@ const authMiddleware = async (req, res, next) => {
     req.user = user;
 
     next();
-
   } catch (error) {
     return res.status(401).json({
       success: false,

@@ -125,7 +125,7 @@ const roleRequestSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("RoleRequest", roleRequestSchema);

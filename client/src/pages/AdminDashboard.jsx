@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getDashboardStats, getDashboardAnalytics } from "../services/adminService";
+import {
+  getDashboardStats,
+  getDashboardAnalytics,
+} from "../services/adminService";
 import { getOrderStatusChartColor } from "../utils/orderStatus";
 import DashboardCard from "../components/admin/DashboardCard";
 import RecentOrders from "../components/admin/RecentOrders";
@@ -27,7 +30,7 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const AdminDashboard = () => {
@@ -121,7 +124,7 @@ const AdminDashboard = () => {
   const statusLabels = analytics.ordersByStatus.map((item) => item.status);
   const statusData = analytics.ordersByStatus.map((item) => item.count);
   const statusBgColors = statusLabels.map((lbl) =>
-    getOrderStatusChartColor(lbl)
+    getOrderStatusChartColor(lbl),
   );
 
   const statusChartData = {
@@ -219,10 +222,11 @@ const AdminDashboard = () => {
 
       {/* Analytics Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
         {/* Revenue Trend */}
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-          <h3 className="mb-4 text-lg font-bold text-gray-900">📈 Revenue Trend (Last 7 Days)</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">
+            📈 Revenue Trend (Last 7 Days)
+          </h3>
           <div className="h-72">
             <Line
               data={revenueChartData}
@@ -241,7 +245,9 @@ const AdminDashboard = () => {
 
         {/* Order Count Trend */}
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-          <h3 className="mb-4 text-lg font-bold text-gray-900">📊 Daily Orders (Last 7 Days)</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">
+            📊 Daily Orders (Last 7 Days)
+          </h3>
           <div className="h-72">
             <Bar
               data={ordersChartData}
@@ -260,7 +266,9 @@ const AdminDashboard = () => {
 
         {/* Top Selling Foods */}
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-          <h3 className="mb-4 text-lg font-bold text-gray-900">🔥 Top Selling Dishes</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">
+            🔥 Top Selling Dishes
+          </h3>
           <div className="h-72">
             <Bar
               data={topFoodsChartData}
@@ -280,7 +288,9 @@ const AdminDashboard = () => {
 
         {/* Orders by Status */}
         <div className="flex flex-col justify-between rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-          <h3 className="mb-4 text-lg font-bold text-gray-900">🍕 Orders by Status</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">
+            🍕 Orders by Status
+          </h3>
           <div className="h-64 flex justify-center items-center">
             <Doughnut
               data={statusChartData}
@@ -292,7 +302,6 @@ const AdminDashboard = () => {
             />
           </div>
         </div>
-
       </div>
 
       <RecentOrders />

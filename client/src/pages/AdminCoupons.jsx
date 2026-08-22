@@ -5,10 +5,7 @@ import { FaPlus } from "react-icons/fa";
 
 import CouponTable from "../components/admin/CouponTable";
 
-import {
-  getAllCoupons,
-  deleteCoupon,
-} from "../services/couponService";
+import { getAllCoupons, deleteCoupon } from "../services/couponService";
 
 const AdminCoupons = () => {
   const navigate = useNavigate();
@@ -26,10 +23,7 @@ const AdminCoupons = () => {
       setCoupons(data.coupons || []);
     } catch (error) {
       console.log(error);
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to load coupons."
-      );
+      toast.error(error.response?.data?.message || "Failed to load coupons.");
     } finally {
       setLoading(false);
     }
@@ -40,9 +34,7 @@ const AdminCoupons = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Delete this coupon?"
-    );
+    const confirmDelete = window.confirm("Delete this coupon?");
 
     if (!confirmDelete) return;
 
@@ -53,25 +45,18 @@ const AdminCoupons = () => {
 
       fetchCoupons();
     } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to delete coupon."
-      );
+      toast.error(error.response?.data?.message || "Failed to delete coupon.");
     }
   };
 
   const filteredCoupons = coupons.filter((coupon) =>
-    coupon.code
-      .toLowerCase()
-      .includes(search.toLowerCase())
+    coupon.code.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold">
-          Coupon Management
-        </h1>
+        <h1 className="text-4xl font-bold">Coupon Management</h1>
 
         <p className="text-gray-500 mt-2">
           Create and manage promo codes for customers
@@ -92,21 +77,16 @@ const AdminCoupons = () => {
           className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg flex items-center gap-2"
         >
           <FaPlus />
-
           Add Coupon
         </button>
       </div>
 
       {loading ? (
-        <div className="text-center py-20 text-xl">
-          Loading Coupons...
-        </div>
+        <div className="text-center py-20 text-xl">Loading Coupons...</div>
       ) : (
         <CouponTable
           coupons={filteredCoupons}
-          onEdit={(id) =>
-            navigate(`/admin/coupons/edit/${id}`)
-          }
+          onEdit={(id) => navigate(`/admin/coupons/edit/${id}`)}
           onDelete={handleDelete}
         />
       )}

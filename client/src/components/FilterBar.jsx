@@ -18,7 +18,12 @@ const FilterBar = ({ sortBy, setSortBy, clearFilters, foodCount }) => {
             viewBox="0 0 12 8"
             fill="none"
           >
-            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <path
+              d="M1 1.5L6 6.5L11 1.5"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
           </svg>
         </div>
 

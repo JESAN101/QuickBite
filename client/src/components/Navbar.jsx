@@ -36,7 +36,8 @@ const getRoleLinks = (role) => {
   return [];
 };
 
-const Navbar = () => {  const navigate = useNavigate();
+const Navbar = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
   const links = [...navLinks, ...getRoleLinks(user?.role)];
@@ -114,7 +115,7 @@ const Navbar = () => {  const navigate = useNavigate();
               >
                 {link.label}
               </Link>
-            )
+            ),
           )}
         </div>
 
@@ -272,7 +273,7 @@ const Navbar = () => {  const navigate = useNavigate();
                 >
                   {link.label}
                 </Link>
-              )
+              ),
             )}
 
             {/* logged in: profile + logout */}
@@ -346,8 +347,7 @@ const Navbar = () => {  const navigate = useNavigate();
               Log out of QuickBite?
             </h3>
             <p className="mt-2 text-sm text-[#3A2A20]/60">
-              You'll need to log back in to place orders or view your
-              favorites.
+              You'll need to log back in to place orders or view your favorites.
             </p>
 
             <div className="mt-6 flex gap-3">

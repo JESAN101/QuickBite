@@ -37,7 +37,7 @@ router.post(
   "/validate",
   authMiddleware,
   validate(validateCouponSchema),
-  validateCoupon
+  validateCoupon,
 );
 
 // =====================================
@@ -50,7 +50,7 @@ router.post(
   authMiddleware,
   adminMiddleware,
   validate(createCouponSchema),
-  createCoupon
+  createCoupon,
 );
 
 // Get All Coupons
@@ -62,23 +62,13 @@ router.put(
   authMiddleware,
   adminMiddleware,
   validate(updateCouponSchema),
-  updateCoupon
+  updateCoupon,
 );
 
 // Delete Coupon
-router.delete(
-  "/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteCoupon
-);
+router.delete("/:id", authMiddleware, adminMiddleware, deleteCoupon);
 
 // Get Single Coupon (KEEP BEFORE catch-all order matters: "/active", "/all", "/validate" must come before "/:id")
-router.get(
-  "/:id",
-  authMiddleware,
-  adminMiddleware,
-  getCouponById
-);
+router.get("/:id", authMiddleware, adminMiddleware, getCouponById);
 
 module.exports = router;

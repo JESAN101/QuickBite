@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FaMotorcycle, FaBoxOpen, FaSearch, FaMapMarkerAlt, FaClock } from "react-icons/fa";
+import {
+  FaMotorcycle,
+  FaBoxOpen,
+  FaSearch,
+  FaMapMarkerAlt,
+  FaClock,
+} from "react-icons/fa";
 
 import {
   getAvailableOrders,
@@ -43,7 +49,9 @@ const RiderOrders = () => {
       toast.success(data.message);
       fetchData();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to accept delivery.");
+      toast.error(
+        error.response?.data?.message || "Failed to accept delivery.",
+      );
     }
   };
 
@@ -53,7 +61,9 @@ const RiderOrders = () => {
       toast.success(data.message);
       fetchData();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to complete delivery.");
+      toast.error(
+        error.response?.data?.message || "Failed to complete delivery.",
+      );
     }
   };
 
@@ -100,7 +110,9 @@ const RiderOrders = () => {
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span className="font-medium text-gray-700">{order.user?.name}</span>
+            <span className="font-medium text-gray-700">
+              {order.user?.name}
+            </span>
             <span className="text-gray-300">|</span>
             <span>{order.user?.phone}</span>
           </div>
@@ -207,7 +219,8 @@ const RiderOrders = () => {
               No orders waiting for pickup right now.
             </p>
             <p className="mt-1 text-sm text-gray-400">
-              New orders appear here as soon as restaurants mark them "Out for Delivery".
+              New orders appear here as soon as restaurants mark them "Out for
+              Delivery".
             </p>
           </div>
         ) : (
@@ -221,8 +234,8 @@ const RiderOrders = () => {
                 >
                   <FaMotorcycle />
                   Accept
-                </button>
-              )
+                </button>,
+              ),
             )}
           </div>
         )
@@ -249,8 +262,8 @@ const RiderOrders = () => {
                 >
                   Mark Delivered
                 </button>
-              )
-            )
+              ),
+            ),
           )}
         </div>
       )}

@@ -20,7 +20,7 @@ class ChunkErrorBoundary extends Component {
     if (
       error?.name === "ChunkLoadError" ||
       /Loading chunk|dynamically imported module|Failed to fetch/i.test(
-        error?.message || ""
+        error?.message || "",
       )
     ) {
       console.warn("Stale chunk detected — reloading app...");

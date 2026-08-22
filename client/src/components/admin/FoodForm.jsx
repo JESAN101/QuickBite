@@ -29,14 +29,9 @@ const FoodForm = ({
         description: initialData.description || "",
         price: initialData.price || "",
         categories: initialData.categories?.map((c) => c._id || c) || [],
-        restaurant:
-          fixedRestaurantId ||
-          initialData.restaurant?._id ||
-          "",
-        preparationTime:
-          initialData.preparationTime || 20,
-        isAvailable:
-          initialData.isAvailable ?? true,
+        restaurant: fixedRestaurantId || initialData.restaurant?._id || "",
+        preparationTime: initialData.preparationTime || 20,
+        isAvailable: initialData.isAvailable ?? true,
       });
 
       if (initialData.image) {
@@ -46,15 +41,11 @@ const FoodForm = ({
   }, [initialData]);
 
   const handleChange = (e) => {
-    const { name, value, checked, type } =
-      e.target;
+    const { name, value, checked, type } = e.target;
 
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -103,8 +94,7 @@ const FoodForm = ({
   const inputClass =
     "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100";
 
-  const labelClass =
-    "mb-1 block text-sm font-semibold text-gray-700";
+  const labelClass = "mb-1 block text-sm font-semibold text-gray-700";
 
   return (
     <form
@@ -114,9 +104,7 @@ const FoodForm = ({
       <div className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className={labelClass}>
-              Food Name
-            </label>
+            <label className={labelClass}>Food Name</label>
 
             <input
               type="text"
@@ -129,9 +117,7 @@ const FoodForm = ({
           </div>
 
           <div>
-            <label className={labelClass}>
-              Price (Rs.)
-            </label>
+            <label className={labelClass}>Price (Rs.)</label>
 
             <input
               type="number"
@@ -145,9 +131,7 @@ const FoodForm = ({
         </div>
 
         <div>
-          <label className={labelClass}>
-            Description
-          </label>
+          <label className={labelClass}>Description</label>
 
           <textarea
             rows="4"
@@ -161,9 +145,7 @@ const FoodForm = ({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className={labelClass}>
-              Preparation Time (min)
-            </label>
+            <label className={labelClass}>Preparation Time (min)</label>
 
             <input
               type="number"
@@ -176,9 +158,7 @@ const FoodForm = ({
           </div>
 
           <div>
-            <label className={labelClass}>
-              Restaurant
-            </label>
+            <label className={labelClass}>Restaurant</label>
 
             <select
               name="restaurant"
@@ -188,15 +168,10 @@ const FoodForm = ({
               disabled={Boolean(fixedRestaurantId)}
               className={`${inputClass} disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500`}
             >
-              <option value="">
-                Select Restaurant
-              </option>
+              <option value="">Select Restaurant</option>
 
               {restaurants.map((restaurant) => (
-                <option
-                  key={restaurant._id}
-                  value={restaurant._id}
-                >
+                <option key={restaurant._id} value={restaurant._id}>
                   {restaurant.name}
                 </option>
               ))}
@@ -240,8 +215,18 @@ const FoodForm = ({
                         }`}
                       >
                         {active && (
-                          <svg className="h-3 w-3 text-white" viewBox="0 0 12 12" fill="none">
-                            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <svg
+                            className="h-3 w-3 text-white"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                          >
+                            <path
+                              d="M2 6l3 3 5-5"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
                           </svg>
                         )}
                       </span>
@@ -255,15 +240,14 @@ const FoodForm = ({
 
           {formData.categories.length > 0 && (
             <p className="mt-1.5 text-xs text-gray-400">
-              {formData.categories.length} categor{formData.categories.length === 1 ? "y" : "ies"} selected
+              {formData.categories.length} categor
+              {formData.categories.length === 1 ? "y" : "ies"} selected
             </p>
           )}
         </div>
 
         <div>
-          <label className={labelClass}>
-            Food Image
-          </label>
+          <label className={labelClass}>Food Image</label>
 
           <input
             type="file"
@@ -299,9 +283,7 @@ const FoodForm = ({
           disabled={loading}
           className="rounded-xl bg-orange-500 px-8 py-3 text-sm font-bold text-white shadow-md shadow-orange-500/25 transition hover:bg-orange-600 disabled:opacity-60"
         >
-          {loading
-            ? "Saving..."
-            : "Save Food"}
+          {loading ? "Saving..." : "Save Food"}
         </button>
       </div>
     </form>

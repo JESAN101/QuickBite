@@ -11,10 +11,7 @@ import {
   getMyOrders,
   updateMyOrderStatus,
 } from "../services/restaurantService";
-import {
-  ORDER_STATUSES,
-  getStatusBorderedClass,
-} from "../utils/orderStatus";
+import { ORDER_STATUSES, getStatusBorderedClass } from "../utils/orderStatus";
 
 const RestaurantOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -45,9 +42,7 @@ const RestaurantOrders = () => {
       toast.success(data.message);
       fetchOrders();
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Failed to update order."
-      );
+      toast.error(error.response?.data?.message || "Failed to update order.");
     }
   };
 
@@ -63,9 +58,15 @@ const RestaurantOrders = () => {
   });
 
   const totalOrders = orders.length;
-  const pendingOrders = orders.filter((o) => o.orderStatus === "Pending").length;
-  const preparingOrders = orders.filter((o) => o.orderStatus === "Preparing").length;
-  const deliveredOrders = orders.filter((o) => o.orderStatus === "Delivered").length;
+  const pendingOrders = orders.filter(
+    (o) => o.orderStatus === "Pending",
+  ).length;
+  const preparingOrders = orders.filter(
+    (o) => o.orderStatus === "Preparing",
+  ).length;
+  const deliveredOrders = orders.filter(
+    (o) => o.orderStatus === "Delivered",
+  ).length;
 
   return (
     <div className="space-y-6">
@@ -87,8 +88,12 @@ const RestaurantOrders = () => {
               <FaClipboardList />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase text-gray-400">Total</p>
-              <p className="text-2xl font-extrabold text-gray-900">{totalOrders}</p>
+              <p className="text-xs font-semibold uppercase text-gray-400">
+                Total
+              </p>
+              <p className="text-2xl font-extrabold text-gray-900">
+                {totalOrders}
+              </p>
             </div>
           </div>
         </div>
@@ -99,8 +104,12 @@ const RestaurantOrders = () => {
               <FaClock />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase text-gray-400">Pending</p>
-              <p className="text-2xl font-extrabold text-gray-900">{pendingOrders}</p>
+              <p className="text-xs font-semibold uppercase text-gray-400">
+                Pending
+              </p>
+              <p className="text-2xl font-extrabold text-gray-900">
+                {pendingOrders}
+              </p>
             </div>
           </div>
         </div>
@@ -111,8 +120,12 @@ const RestaurantOrders = () => {
               <FaClock />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase text-gray-400">Preparing</p>
-              <p className="text-2xl font-extrabold text-gray-900">{preparingOrders}</p>
+              <p className="text-xs font-semibold uppercase text-gray-400">
+                Preparing
+              </p>
+              <p className="text-2xl font-extrabold text-gray-900">
+                {preparingOrders}
+              </p>
             </div>
           </div>
         </div>
@@ -123,8 +136,12 @@ const RestaurantOrders = () => {
               <FaCheckCircle />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase text-gray-400">Delivered</p>
-              <p className="text-2xl font-extrabold text-gray-900">{deliveredOrders}</p>
+              <p className="text-xs font-semibold uppercase text-gray-400">
+                Delivered
+              </p>
+              <p className="text-2xl font-extrabold text-gray-900">
+                {deliveredOrders}
+              </p>
             </div>
           </div>
         </div>
@@ -132,26 +149,31 @@ const RestaurantOrders = () => {
 
       {/* Status Tabs */}
       <div className="flex flex-wrap gap-2">
-        {["All", "Pending", "Preparing", "Out for Delivery", "Delivered", "Cancelled"].map(
-          (tab) => (
-            <button
-              key={tab}
-              onClick={() => setStatusFilter(tab)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                statusFilter === tab
-                  ? "bg-orange-500 text-white shadow-md shadow-orange-500/25"
-                  : "bg-white text-gray-600 ring-1 ring-gray-200 hover:bg-gray-50"
-              }`}
-            >
-              {tab}
-              {tab !== "All" && (
-                <span className="ml-1">
-                  ({orders.filter((o) => o.orderStatus === tab).length})
-                </span>
-              )}
-            </button>
-          )
-        )}
+        {[
+          "All",
+          "Pending",
+          "Preparing",
+          "Out for Delivery",
+          "Delivered",
+          "Cancelled",
+        ].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setStatusFilter(tab)}
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              statusFilter === tab
+                ? "bg-orange-500 text-white shadow-md shadow-orange-500/25"
+                : "bg-white text-gray-600 ring-1 ring-gray-200 hover:bg-gray-50"
+            }`}
+          >
+            {tab}
+            {tab !== "All" && (
+              <span className="ml-1">
+                ({orders.filter((o) => o.orderStatus === tab).length})
+              </span>
+            )}
+          </button>
+        ))}
       </div>
 
       {/* Search */}
@@ -180,35 +202,62 @@ const RestaurantOrders = () => {
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50/80">
-                  <th className="px-6 py-4 font-semibold text-gray-500">Customer</th>
-                  <th className="px-6 py-4 font-semibold text-gray-500">Items</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Total</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Payment</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Address</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Date</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Status</th>
+                  <th className="px-6 py-4 font-semibold text-gray-500">
+                    Customer
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-gray-500">
+                    Items
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Total
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Payment
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Address
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Date
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Status
+                  </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-gray-50">
                 {filteredOrders.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="px-6 py-16 text-center text-gray-400">
+                    <td
+                      colSpan="7"
+                      className="px-6 py-16 text-center text-gray-400"
+                    >
                       No orders match your search.
                     </td>
                   </tr>
                 ) : (
                   filteredOrders.map((order) => (
-                    <tr key={order._id} className="transition hover:bg-orange-50/30">
+                    <tr
+                      key={order._id}
+                      className="transition hover:bg-orange-50/30"
+                    >
                       <td className="px-6 py-4">
-                        <p className="font-semibold text-gray-900">{order.user?.name}</p>
-                        <p className="text-xs text-gray-400">{order.user?.phone}</p>
+                        <p className="font-semibold text-gray-900">
+                          {order.user?.name}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {order.user?.phone}
+                        </p>
                       </td>
 
                       <td className="px-6 py-4">
                         <div className="space-y-1">
                           {order.foods.map((item) => (
-                            <div key={item._id} className="text-sm text-gray-600">
+                            <div
+                              key={item._id}
+                              className="text-sm text-gray-600"
+                            >
                               {item.food?.name} × {item.quantity}
                             </div>
                           ))}
@@ -232,11 +281,18 @@ const RestaurantOrders = () => {
                       </td>
 
                       <td className="px-6 py-4 text-center">
-                        <span className="text-sm font-medium text-gray-700">{order.paymentMethod}</span>
-                        <div className="text-xs text-gray-400">{order.paymentStatus}</div>
+                        <span className="text-sm font-medium text-gray-700">
+                          {order.paymentMethod}
+                        </span>
+                        <div className="text-xs text-gray-400">
+                          {order.paymentStatus}
+                        </div>
                       </td>
 
-                      <td className="max-w-[160px] truncate px-6 py-4 text-center text-sm text-gray-600" title={order.deliveryAddress}>
+                      <td
+                        className="max-w-[160px] truncate px-6 py-4 text-center text-sm text-gray-600"
+                        title={order.deliveryAddress}
+                      >
                         {order.deliveryAddress}
                       </td>
 
@@ -248,7 +304,7 @@ const RestaurantOrders = () => {
                         <div className="flex flex-col items-center gap-2">
                           <span
                             className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold ${getStatusBorderedClass(
-                              order.orderStatus
+                              order.orderStatus,
                             )}`}
                           >
                             {order.orderStatus}

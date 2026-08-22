@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FaUser, FaMotorcycle, FaBox, FaCheckCircle, FaClock, FaEnvelope, FaPhone } from "react-icons/fa";
+import {
+  FaUser,
+  FaMotorcycle,
+  FaBox,
+  FaCheckCircle,
+  FaClock,
+  FaEnvelope,
+  FaPhone,
+} from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
 import { getRiderStats } from "../services/riderService";

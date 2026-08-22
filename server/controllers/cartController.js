@@ -69,13 +69,9 @@ const getCart = asyncHandler(async (req, res) => {
 // Update Quantity
 // ============================
 const updateCart = asyncHandler(async (req, res) => {
-  const cart = await Cart.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      returnDocument: "after",
-    }
-  );
+  const cart = await Cart.findByIdAndUpdate(req.params.id, req.body, {
+    returnDocument: "after",
+  });
 
   if (!cart) {
     throw new ErrorResponse("Cart item not found.", 404);

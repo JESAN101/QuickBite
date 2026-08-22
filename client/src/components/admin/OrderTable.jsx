@@ -1,12 +1,7 @@
 import { FaTrash, FaEye } from "react-icons/fa";
 import { getStatusSolidClass } from "../../utils/orderStatus";
 
-const OrderTable = ({
-  orders,
-  onStatusChange,
-  onDelete,
-  onView,
-}) => {
+const OrderTable = ({ orders, onStatusChange, onDelete, onView }) => {
   const getStatusColor = (status) => getStatusSolidClass(status);
 
   return (
@@ -29,31 +24,21 @@ const OrderTable = ({
           <tbody>
             {orders.length === 0 ? (
               <tr>
-                <td
-                  colSpan="8"
-                  className="text-center py-10 text-gray-500"
-                >
+                <td colSpan="8" className="text-center py-10 text-gray-500">
                   No Orders Found
                 </td>
               </tr>
             ) : (
               orders.map((order) => (
-                <tr
-                  key={order._id}
-                  className="border-b hover:bg-gray-50"
-                >
-                  <td className="p-4">
-                    {order.user?.name}
-                  </td>
+                <tr key={order._id} className="border-b hover:bg-gray-50">
+                  <td className="p-4">{order.user?.name}</td>
 
-                  <td className="p-4">
-                    {order.restaurant?.name}
-                  </td>
+                  <td className="p-4">{order.restaurant?.name}</td>
 
                   <td className="p-4 text-center">
                     {order.foods.reduce(
                       (total, item) => total + item.quantity,
-                      0
+                      0,
                     )}
                   </td>
 
@@ -81,7 +66,7 @@ const OrderTable = ({
                     <div className="space-y-2">
                       <span
                         className={`inline-block w-full text-center px-3 py-2 rounded-full text-white text-sm font-semibold ${getStatusColor(
-                          order.orderStatus
+                          order.orderStatus,
                         )}`}
                       >
                         {order.orderStatus}
@@ -90,25 +75,23 @@ const OrderTable = ({
                       <select
                         value={order.orderStatus}
                         onChange={(e) =>
-                          onStatusChange(
-                            order._id,
-                            e.target.value
-                          )
+                          onStatusChange(order._id, e.target.value)
                         }
                         className="border rounded-lg p-2 w-full"
                       >
                         <option value="Pending">Pending</option>
-<option value="Preparing">Preparing</option>
-<option value="Out for Delivery">Out for Delivery</option>
-<option value="Delivered">Delivered</option>
-<option value="Cancelled">Cancelled</option>
+                        <option value="Preparing">Preparing</option>
+                        <option value="Out for Delivery">
+                          Out for Delivery
+                        </option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
                       </select>
                     </div>
                   </td>
 
                   <td className="p-4">
                     <div className="flex justify-center gap-2">
-
                       <button
                         onClick={() => onView(order)}
                         className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
@@ -122,7 +105,6 @@ const OrderTable = ({
                       >
                         <FaTrash />
                       </button>
-
                     </div>
                   </td>
                 </tr>
@@ -139,24 +121,17 @@ const OrderTable = ({
           </div>
         ) : (
           orders.map((order) => (
-            <div
-              key={order._id}
-              className="bg-white rounded-xl shadow-lg p-4"
-            >
+            <div key={order._id} className="bg-white rounded-xl shadow-lg p-4">
               <div className="flex justify-between items-start gap-2">
                 <div>
-                  <p className="font-semibold">
-                    {order.user?.name}
-                  </p>
+                  <p className="font-semibold">{order.user?.name}</p>
                   <p className="text-sm text-gray-500">
                     {order.restaurant?.name}
                   </p>
                 </div>
 
                 <div className="text-right shrink-0">
-                  <p className="font-semibold">
-                    Rs. {order.totalPrice}
-                  </p>
+                  <p className="font-semibold">Rs. {order.totalPrice}</p>
                   <p className="text-sm text-gray-500">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </p>
@@ -168,7 +143,7 @@ const OrderTable = ({
                   Items:{" "}
                   {order.foods.reduce(
                     (total, item) => total + item.quantity,
-                    0
+                    0,
                   )}
                 </span>
 
@@ -186,7 +161,7 @@ const OrderTable = ({
               <div className="mt-3 space-y-2">
                 <span
                   className={`inline-block w-full text-center px-3 py-2 rounded-full text-white text-sm font-semibold ${getStatusColor(
-                    order.orderStatus
+                    order.orderStatus,
                   )}`}
                 >
                   {order.orderStatus}
@@ -194,24 +169,18 @@ const OrderTable = ({
 
                 <select
                   value={order.orderStatus}
-                  onChange={(e) =>
-                    onStatusChange(
-                      order._id,
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => onStatusChange(order._id, e.target.value)}
                   className="border rounded-lg p-2 w-full"
                 >
                   <option value="Pending">Pending</option>
-<option value="Preparing">Preparing</option>
-<option value="Out for Delivery">Out for Delivery</option>
-<option value="Delivered">Delivered</option>
-<option value="Cancelled">Cancelled</option>
+                  <option value="Preparing">Preparing</option>
+                  <option value="Out for Delivery">Out for Delivery</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Cancelled">Cancelled</option>
                 </select>
               </div>
 
               <div className="mt-3 flex justify-end gap-2">
-
                 <button
                   onClick={() => onView(order)}
                   className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
@@ -225,7 +194,6 @@ const OrderTable = ({
                 >
                   <FaTrash />
                 </button>
-
               </div>
             </div>
           ))

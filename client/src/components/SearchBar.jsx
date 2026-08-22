@@ -64,7 +64,7 @@ const SearchBar = ({ search, setSearch }) => {
       e.preventDefault();
       selectSuggestion(
         suggestions[activeIndex].name,
-        suggestions[activeIndex].id
+        suggestions[activeIndex].id,
       );
     } else if (e.key === "Escape") {
       setShowDropdown(false);
@@ -72,7 +72,10 @@ const SearchBar = ({ search, setSearch }) => {
   };
 
   return (
-    <section ref={wrapperRef} className="relative z-10 mx-auto -mt-8 max-w-3xl px-4">
+    <section
+      ref={wrapperRef}
+      className="relative z-10 mx-auto -mt-8 max-w-3xl px-4"
+    >
       <div className="flex items-center gap-3 rounded-2xl border border-[#EADFC8] bg-[#FFFBF3] p-2 pl-5 shadow-[0_12px_30px_-8px_rgba(29,21,18,0.25)] transition-shadow focus-within:shadow-[0_12px_34px_-6px_rgba(240,164,56,0.35)]">
         <FaSearch className="shrink-0 text-lg text-[#D64933]" />
 

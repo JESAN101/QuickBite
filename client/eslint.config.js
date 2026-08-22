@@ -1,13 +1,13 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(["dist"]),
   {
-    files: ['**/*.{js,jsx}'],
+    files: ["**/*.{js,jsx}"],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -20,15 +20,15 @@ export default defineConfig([
     rules: {
       // Fetch-on-mount is the established data-loading pattern across this
       // codebase; these new experimental v7 rules flag every occurrence.
-      'react-hooks/set-state-in-effect': 'off',
-      'react-hooks/immutability': 'off',
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/immutability": "off",
     },
   },
   {
     // Contexts legitimately export a Provider component plus a useX hook.
-    files: ['src/context/**/*.{js,jsx}'],
+    files: ["src/context/**/*.{js,jsx}"],
     rules: {
-      'react-refresh/only-export-components': 'off',
+      "react-refresh/only-export-components": "off",
     },
   },
-])
+]);

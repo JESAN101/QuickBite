@@ -35,7 +35,7 @@ router.post(
   authMiddleware,
   adminMiddleware,
   validate(createCategorySchema),
-  createCategory
+  createCategory,
 );
 
 router.put(
@@ -43,14 +43,9 @@ router.put(
   authMiddleware,
   adminMiddleware,
   validate(updateCategorySchema),
-  updateCategory
+  updateCategory,
 );
 
-router.delete(
-  "/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteCategory
-);
+router.delete("/:id", authMiddleware, adminMiddleware, deleteCategory);
 
 module.exports = router;

@@ -10,39 +10,35 @@ const Order = require("../models/Order");
 // are silently skipped (dev convenience).
 // =============================================
 
-const BREVO_API_URL =
-  "https://api.brevo.com/v3/smtp/email";
+const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
 const escapeHtml = (value = "") =>
-  String(value).replace(/[&<>"']/g, (char) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  }[char]));
+  String(value).replace(
+    /[&<>"']/g,
+    (char) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[char],
+  );
 
 // Raw HTTP call — the transport layer used by every email
-const sendBrevoEmail = async ({
-  to,
-  subject,
-  html,
-  toName,
-}) => {
+const sendBrevoEmail = async ({ to, subject, html, toName }) => {
   const apiKey = process.env.BREVO_API_KEY;
 
   if (!apiKey) {
     console.log(
-      `[mailer] skipped "${subject}" -> ${to} (BREVO_API_KEY not configured)`
+      `[mailer] skipped "${subject}" -> ${to} (BREVO_API_KEY not configured)`,
     );
     return;
   }
 
-  const senderName =
-    process.env.BREVO_SENDER_NAME || "QuickBite";
+  const senderName = process.env.BREVO_SENDER_NAME || "QuickBite";
   const senderEmail =
-    process.env.BREVO_SENDER_EMAIL ||
-    "no-reply@quickbite.app";
+    process.env.BREVO_SENDER_EMAIL || "no-reply@quickbite.app";
 
   const response = await fetch(BREVO_API_URL, {
     method: "POST",
@@ -56,9 +52,7 @@ const sendBrevoEmail = async ({
         name: senderName,
         email: senderEmail,
       },
-      to: toName
-        ? [{ email: to, name: toName }]
-        : [{ email: to }],
+      to: toName ? [{ email: to, name: toName }] : [{ email: to }],
       subject,
       htmlContent: html,
     }),
@@ -66,9 +60,7 @@ const sendBrevoEmail = async ({
 
   if (!response.ok) {
     const errorBody = await response.text();
-    throw new Error(
-      `Brevo send failed (${response.status}): ${errorBody}`
-    );
+    throw new Error(`Brevo send failed (${response.status}): ${errorBody}`);
   }
 
   return response.json();
@@ -169,12 +161,10 @@ const orderSummaryHtml = (order, statusText) => {
       ${
         statusText
           ? `Your QuickBite order has been updated to <strong style="color:${statusColor(
-              order.orderStatus
-            )};">${escapeHtml(
-              order.orderStatus
-            )}</strong>.`
+              order.orderStatus,
+            )};">${escapeHtml(order.orderStatus)}</strong>.`
           : `Thanks for ordering from <strong>${escapeHtml(
-              restaurantName
+              restaurantName,
             )}</strong>. We've received your order and the kitchen is on it!`
       }
     </p>
@@ -207,19 +197,19 @@ const orderSummaryHtml = (order, statusText) => {
       <tr>
         <td style="padding:4px 0;"><strong>Delivery to:</strong></td>
         <td style="padding:4px 0;text-align:right;">${escapeHtml(
-          order.deliveryAddress
+          order.deliveryAddress,
         )}</td>
       </tr>
       <tr>
         <td style="padding:4px 0;"><strong>Payment:</strong></td>
         <td style="padding:4px 0;text-align:right;">${escapeHtml(
-          order.paymentMethod
+          order.paymentMethod,
         )} · ${escapeHtml(order.paymentStatus)}</td>
       </tr>
       <tr>
         <td style="padding:4px 0;"><strong>Placed on:</strong></td>
         <td style="padding:4px 0;text-align:right;">${new Date(
-          order.createdAt
+          order.createdAt,
         ).toLocaleString()}</td>
       </tr>
     </table>

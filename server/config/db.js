@@ -8,7 +8,7 @@ const connectDB = async (retries = 5, delay = 5000) => {
       return;
     } catch (error) {
       console.error(
-        `❌ MongoDB Connection Attempt ${attempt}/${retries} Failed: ${error.message}`
+        `❌ MongoDB Connection Attempt ${attempt}/${retries} Failed: ${error.message}`,
       );
       if (attempt < retries) {
         console.log(`Retrying in ${delay / 1000}s...`);

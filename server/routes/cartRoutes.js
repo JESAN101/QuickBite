@@ -17,12 +17,7 @@ const {
 
 const router = express.Router();
 
-router.post(
-  "/add",
-  authMiddleware,
-  validate(addToCartSchema),
-  addToCart
-);
+router.post("/add", authMiddleware, validate(addToCartSchema), addToCart);
 
 router.get("/", authMiddleware, getCart);
 
@@ -30,7 +25,7 @@ router.put(
   "/update/:id",
   authMiddleware,
   validate(updateCartSchema),
-  updateCart
+  updateCart,
 );
 
 router.delete("/delete/:id", authMiddleware, removeFromCart);

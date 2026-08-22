@@ -16,11 +16,7 @@ export const getFoods = async () => {
   return response.data;
 };
 
-export const getAllFoods = async ({
-  page,
-  limit,
-  search,
-} = {}) => {
+export const getAllFoods = async ({ page, limit, search } = {}) => {
   const response = await API.get("/food/all", {
     params: { page, limit, search },
   });
@@ -28,9 +24,7 @@ export const getAllFoods = async ({
 };
 
 export const getFoodsByRestaurant = async (restaurantId) => {
-  const response = await API.get(
-    `/food/restaurant/${restaurantId}`
-  );
+  const response = await API.get(`/food/restaurant/${restaurantId}`);
 
   return response.data;
 };
@@ -46,24 +40,18 @@ export const getFoodById = async (id) => {
 
 // Update Food
 export const updateFood = async (id, formData) => {
-  const response = await API.put(
-    `/food/${id}`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await API.put(`/food/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };
 
 // Delete Food
 export const deleteFood = async (id) => {
-  const response = await API.delete(
-    `/food/${id}`
-  );
+  const response = await API.delete(`/food/${id}`);
 
   return response.data;
 };

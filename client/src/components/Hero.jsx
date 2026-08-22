@@ -51,18 +51,30 @@ const Hero = () => {
           {/* trust row — quiet, small caps, no icons overload */}
           <div className="mt-12 flex items-center justify-center gap-8 lg:justify-start">
             <div>
-              <p className="font-['Fraunces',serif] text-2xl text-[#F7ECD9]">200+</p>
-              <p className="text-xs uppercase tracking-wide text-[#C9B8A3]/70">Restaurants</p>
+              <p className="font-['Fraunces',serif] text-2xl text-[#F7ECD9]">
+                200+
+              </p>
+              <p className="text-xs uppercase tracking-wide text-[#C9B8A3]/70">
+                Restaurants
+              </p>
             </div>
             <div className="h-8 w-px bg-[#C9B8A3]/20" />
             <div>
-              <p className="font-['Fraunces',serif] text-2xl text-[#F7ECD9]">25–30 min</p>
-              <p className="text-xs uppercase tracking-wide text-[#C9B8A3]/70">Avg. delivery</p>
+              <p className="font-['Fraunces',serif] text-2xl text-[#F7ECD9]">
+                25–30 min
+              </p>
+              <p className="text-xs uppercase tracking-wide text-[#C9B8A3]/70">
+                Avg. delivery
+              </p>
             </div>
             <div className="h-8 w-px bg-[#C9B8A3]/20" />
             <div>
-              <p className="font-['Fraunces',serif] text-2xl text-[#F7ECD9]">4.7★</p>
-              <p className="text-xs uppercase tracking-wide text-[#C9B8A3]/70">Avg. rating</p>
+              <p className="font-['Fraunces',serif] text-2xl text-[#F7ECD9]">
+                4.7★
+              </p>
+              <p className="text-xs uppercase tracking-wide text-[#C9B8A3]/70">
+                Avg. rating
+              </p>
             </div>
           </div>
         </div>
@@ -82,9 +94,15 @@ const Hero = () => {
 
           {/* signature: rotating stamp badge */}
           <div className="absolute bottom-2 left-1/2 flex h-28 w-28 -translate-x-1/2 items-center justify-center">
-            <svg viewBox="0 0 100 100" className="absolute h-28 w-28 animate-[spin_14s_linear_infinite] text-[#F7ECD9]/80">
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute h-28 w-28 animate-[spin_14s_linear_infinite] text-[#F7ECD9]/80"
+            >
               <defs>
-                <path id="stampCircle" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
+                <path
+                  id="stampCircle"
+                  d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"
+                />
               </defs>
               <text fontSize="9" letterSpacing="3" fill="currentColor">
                 <textPath href="#stampCircle">FRESH • HOT • FAST •</textPath>

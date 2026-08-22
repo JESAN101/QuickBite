@@ -31,22 +31,16 @@ export const FavoritesProvider = ({ children }) => {
   }, []);
 
   const isFavorite = (foodId) => {
-    return favorites.some(
-      (item) => item.food._id === foodId
-    );
+    return favorites.some((item) => item.food._id === foodId);
   };
 
   const toggleFavorite = async (foodId) => {
-    const existing = favorites.find(
-      (item) => item.food._id === foodId
-    );
+    const existing = favorites.find((item) => item.food._id === foodId);
 
     if (existing) {
       await removeFavorite(existing._id);
 
-      setFavorites((prev) =>
-        prev.filter((item) => item._id !== existing._id)
-      );
+      setFavorites((prev) => prev.filter((item) => item._id !== existing._id));
     } else {
       await addFavorite(foodId);
 

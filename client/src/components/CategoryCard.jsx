@@ -14,7 +14,9 @@ const CategoryCard = ({ category, selectedCategory, setSelectedCategory }) => {
     >
       <span
         className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-          active ? "bg-[#F0A438] text-[#1D1512]" : "bg-[#F0A438]/15 text-[#D64933]"
+          active
+            ? "bg-[#F0A438] text-[#1D1512]"
+            : "bg-[#F0A438]/15 text-[#D64933]"
         }`}
       >
         {initial}

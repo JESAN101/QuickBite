@@ -35,8 +35,8 @@ const Footer = () => {
               </span>
             </div>
             <p className="mt-4 max-w-sm text-sm text-[#F7ECD9]/50">
-              Real food from real kitchens across Kathmandu, ordered in
-              seconds and delivered while it's still hot.
+              Real food from real kitchens across Kathmandu, ordered in seconds
+              and delivered while it's still hot.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ const Footer = () => {
                   >
                     {link.label}
                   </Link>
-                )
+                ),
               )}
             </div>
           </div>
@@ -105,7 +105,9 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[#F7ECD9]/10 pt-6 text-xs text-[#F7ECD9]/40 md:flex-row">
-          <span>© {new Date().getFullYear()} QuickBite. All rights reserved.</span>
+          <span>
+            © {new Date().getFullYear()} QuickBite. All rights reserved.
+          </span>
           <span>Made in Kathmandu.</span>
         </div>
       </div>

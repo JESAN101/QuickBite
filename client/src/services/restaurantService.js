@@ -13,40 +13,27 @@ export const getRestaurantById = async (id) => {
 
 // Admin
 export const createRestaurant = async (formData) => {
-  const response = await API.post(
-    "/restaurant/create",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await API.post("/restaurant/create", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };
 
-export const updateRestaurant = async (
-  id,
-  formData
-) => {
-  const response = await API.put(
-    `/restaurant/update/${id}`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+export const updateRestaurant = async (id, formData) => {
+  const response = await API.put(`/restaurant/update/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };
 
 export const deleteRestaurant = async (id) => {
-  const response = await API.delete(
-    `/restaurant/delete/${id}`
-  );
+  const response = await API.delete(`/restaurant/delete/${id}`);
 
   return response.data;
 };
@@ -63,15 +50,11 @@ export const getMyRestaurant = async () => {
 
 // Update My Restaurant
 export const updateMyRestaurant = async (formData) => {
-  const response = await API.put(
-    "/restaurant/owner/update",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await API.put("/restaurant/owner/update", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };
@@ -90,10 +73,9 @@ export const getMyOrders = async () => {
 
 // Update My Order Status
 export const updateMyOrderStatus = async (id, orderStatus) => {
-  const response = await API.put(
-    `/restaurant/owner/orders/${id}`,
-    { orderStatus }
-  );
+  const response = await API.put(`/restaurant/owner/orders/${id}`, {
+    orderStatus,
+  });
 
   return response.data;
 };
@@ -106,39 +88,29 @@ export const getMyFoods = async () => {
 
 // Create Food For My Restaurant
 export const createMyFood = async (formData) => {
-  const response = await API.post(
-    "/restaurant/owner/foods",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await API.post("/restaurant/owner/foods", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };
 
 // Update My Food
 export const updateMyFood = async (id, formData) => {
-  const response = await API.put(
-    `/restaurant/owner/foods/${id}`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await API.put(`/restaurant/owner/foods/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };
 
 // Delete My Food
 export const deleteMyFood = async (id) => {
-  const response = await API.delete(
-    `/restaurant/owner/foods/${id}`
-  );
+  const response = await API.delete(`/restaurant/owner/foods/${id}`);
 
   return response.data;
 };

@@ -31,9 +31,7 @@ const {
   createFoodSchema,
   updateFoodSchema,
 } = require("../validators/foodValidator");
-const {
-  updateOrderStatusSchema,
-} = require("../validators/orderValidator");
+const { updateOrderStatusSchema } = require("../validators/orderValidator");
 
 const router = express.Router();
 
@@ -46,7 +44,7 @@ router.get(
   "/owner/mine",
   authMiddleware,
   restaurantMiddleware,
-  getMyRestaurant
+  getMyRestaurant,
 );
 
 router.put(
@@ -55,37 +53,22 @@ router.put(
   restaurantMiddleware,
   upload.single("image"),
   validate(updateRestaurantSchema),
-  updateMyRestaurant
+  updateMyRestaurant,
 );
 
-router.get(
-  "/owner/stats",
-  authMiddleware,
-  restaurantMiddleware,
-  getMyStats
-);
+router.get("/owner/stats", authMiddleware, restaurantMiddleware, getMyStats);
 
-router.get(
-  "/owner/orders",
-  authMiddleware,
-  restaurantMiddleware,
-  getMyOrders
-);
+router.get("/owner/orders", authMiddleware, restaurantMiddleware, getMyOrders);
 
 router.put(
   "/owner/orders/:id",
   authMiddleware,
   restaurantMiddleware,
   validate(updateOrderStatusSchema),
-  updateMyOrderStatus
+  updateMyOrderStatus,
 );
 
-router.get(
-  "/owner/foods",
-  authMiddleware,
-  restaurantMiddleware,
-  getMyFoods
-);
+router.get("/owner/foods", authMiddleware, restaurantMiddleware, getMyFoods);
 
 router.post(
   "/owner/foods",
@@ -93,7 +76,7 @@ router.post(
   restaurantMiddleware,
   upload.single("image"),
   validate(createFoodSchema),
-  createMyFood
+  createMyFood,
 );
 
 router.put(
@@ -102,14 +85,14 @@ router.put(
   restaurantMiddleware,
   upload.single("image"),
   validate(updateFoodSchema),
-  updateMyFood
+  updateMyFood,
 );
 
 router.delete(
   "/owner/foods/:id",
   authMiddleware,
   restaurantMiddleware,
-  deleteMyFood
+  deleteMyFood,
 );
 
 // ===========================
@@ -130,7 +113,7 @@ router.post(
   adminMiddleware,
   upload.single("image"),
   validate(createRestaurantSchema),
-  createRestaurant
+  createRestaurant,
 );
 
 router.put(
@@ -139,14 +122,9 @@ router.put(
   adminMiddleware,
   upload.single("image"),
   validate(updateRestaurantSchema),
-  updateRestaurant
+  updateRestaurant,
 );
 
-router.delete(
-  "/delete/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteRestaurant
-);
+router.delete("/delete/:id", authMiddleware, adminMiddleware, deleteRestaurant);
 
 module.exports = router;

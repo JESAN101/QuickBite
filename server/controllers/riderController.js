@@ -56,16 +56,13 @@ const acceptDelivery = asyncHandler(async (req, res) => {
   }
 
   if (order.orderStatus !== "Out for Delivery") {
-    throw new ErrorResponse(
-      "This order is not ready for pickup.",
-      400
-    );
+    throw new ErrorResponse("This order is not ready for pickup.", 400);
   }
 
   if (order.rider) {
     throw new ErrorResponse(
       "This order has already been taken by another rider.",
-      400
+      400,
     );
   }
 
@@ -103,14 +100,8 @@ const completeDelivery = asyncHandler(async (req, res) => {
   }
 
   // Only the assigned rider can complete this delivery
-  if (
-    !order.rider ||
-    order.rider.toString() !== req.user._id.toString()
-  ) {
-    throw new ErrorResponse(
-      "This delivery is not assigned to you.",
-      403
-    );
+  if (!order.rider || order.rider.toString() !== req.user._id.toString()) {
+    throw new ErrorResponse("This delivery is not assigned to you.", 403);
   }
 
   order.orderStatus = "Delivered";
@@ -120,12 +111,10 @@ const completeDelivery = asyncHandler(async (req, res) => {
   // Emit real-time update to the customer's room
   try {
     const { getIO } = require("../config/socket");
-    getIO()
-      .to(order.user.toString())
-      .emit("order:status", {
-        orderId: order._id,
-        status: order.orderStatus,
-      });
+    getIO().to(order.user.toString()).emit("order:status", {
+      orderId: order._id,
+      status: order.orderStatus,
+    });
   } catch (_) {}
 
   res.status(200).json({
@@ -144,30 +133,26 @@ const getRiderStats = asyncHandler(async (req, res) => {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
-  const [
-    totalDeliveries,
-    activeDeliveries,
-    todayDeliveries,
-    availableCount,
-  ] = await Promise.all([
-    Order.countDocuments({
-      rider: myId,
-      orderStatus: "Delivered",
-    }),
-    Order.countDocuments({
-      rider: myId,
-      orderStatus: "Out for Delivery",
-    }),
-    Order.countDocuments({
-      rider: myId,
-      orderStatus: "Delivered",
-      createdAt: { $gte: startOfDay },
-    }),
-    Order.countDocuments({
-      orderStatus: "Out for Delivery",
-      rider: null,
-    }),
-  ]);
+  const [totalDeliveries, activeDeliveries, todayDeliveries, availableCount] =
+    await Promise.all([
+      Order.countDocuments({
+        rider: myId,
+        orderStatus: "Delivered",
+      }),
+      Order.countDocuments({
+        rider: myId,
+        orderStatus: "Out for Delivery",
+      }),
+      Order.countDocuments({
+        rider: myId,
+        orderStatus: "Delivered",
+        createdAt: { $gte: startOfDay },
+      }),
+      Order.countDocuments({
+        orderStatus: "Out for Delivery",
+        rider: null,
+      }),
+    ]);
 
   res.status(200).json({
     success: true,

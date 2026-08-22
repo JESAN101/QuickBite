@@ -72,7 +72,7 @@ const updateCategory = asyncHandler(async (req, res) => {
     {
       returnDocument: "after",
       runValidators: true,
-    }
+    },
   );
 
   res.status(200).json({

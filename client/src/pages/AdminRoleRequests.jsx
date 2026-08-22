@@ -24,7 +24,9 @@ const AdminRoleRequests = ({ roleToFilter }) => {
       setLoading(true);
       const data = await getAllRoleRequests();
       // Filter by requested role passed as prop
-      setRequests((data.requests || []).filter(r => r.requestedRole === roleToFilter));
+      setRequests(
+        (data.requests || []).filter((r) => r.requestedRole === roleToFilter),
+      );
     } catch (error) {
       console.log(error);
       toast.error("Failed to load requests.");
@@ -43,7 +45,7 @@ const AdminRoleRequests = ({ roleToFilter }) => {
     const confirmAction = window.confirm(
       status === "Approved"
         ? `Approve ${request.user?.name}'s application to become a ${request.requestedRole}?`
-        : `Reject ${request.user?.name}'s application to become a ${request.requestedRole}?`
+        : `Reject ${request.user?.name}'s application to become a ${request.requestedRole}?`,
     );
 
     if (!confirmAction) return;
@@ -54,13 +56,13 @@ const AdminRoleRequests = ({ roleToFilter }) => {
       fetchRequests();
     } catch (error) {
       toast.error(
-        error.response?.data?.message || `Failed to ${action} request.`
+        error.response?.data?.message || `Failed to ${action} request.`,
       );
     }
   };
 
   const filteredRequests = requests.filter((request) =>
-    filter === "All" ? true : request.status === filter
+    filter === "All" ? true : request.status === filter,
   );
 
   const pendingCount = requests.filter((r) => r.status === "Pending").length;
@@ -69,10 +71,18 @@ const AdminRoleRequests = ({ roleToFilter }) => {
     if (request.requestedRole === "rider") {
       return (
         <div className="text-sm">
-          <p><strong>Vehicle:</strong> {request.vehicleType}</p>
-          <p><strong>Vehicle No:</strong> {request.vehicleNumber}</p>
-          <p><strong>License:</strong> {request.licenseNumber}</p>
-          <p><strong>Experience:</strong> {request.experienceYears || 0} yrs</p>
+          <p>
+            <strong>Vehicle:</strong> {request.vehicleType}
+          </p>
+          <p>
+            <strong>Vehicle No:</strong> {request.vehicleNumber}
+          </p>
+          <p>
+            <strong>License:</strong> {request.licenseNumber}
+          </p>
+          <p>
+            <strong>Experience:</strong> {request.experienceYears || 0} yrs
+          </p>
         </div>
       );
     }
@@ -86,20 +96,50 @@ const AdminRoleRequests = ({ roleToFilter }) => {
             className="w-16 h-16 object-cover rounded-lg mb-2"
           />
         )}
-        <p><strong>Restaurant:</strong> {request.restaurantName}</p>
-        <p><strong>Cuisine:</strong> {request.cuisineType}</p>
-        <p><strong>Address:</strong> {request.restaurantAddress}</p>
-        <p><strong>Phone:</strong> {request.restaurantPhone}</p>
-        <p><strong>Email:</strong> {request.restaurantEmail}</p>
-        <p><strong>Hours:</strong> {request.openingTime && request.closingTime ? `${request.openingTime} – ${request.closingTime}` : "—"}</p>
-        <p><strong>Est. Delivery:</strong> {request.estimatedDeliveryTime ? `${request.estimatedDeliveryTime} min` : "—"}</p>
-        <p><strong>License:</strong> {request.licenseNumber || "—"}</p>
+        <p>
+          <strong>Restaurant:</strong> {request.restaurantName}
+        </p>
+        <p>
+          <strong>Cuisine:</strong> {request.cuisineType}
+        </p>
+        <p>
+          <strong>Address:</strong> {request.restaurantAddress}
+        </p>
+        <p>
+          <strong>Phone:</strong> {request.restaurantPhone}
+        </p>
+        <p>
+          <strong>Email:</strong> {request.restaurantEmail}
+        </p>
+        <p>
+          <strong>Hours:</strong>{" "}
+          {request.openingTime && request.closingTime
+            ? `${request.openingTime} – ${request.closingTime}`
+            : "—"}
+        </p>
+        <p>
+          <strong>Est. Delivery:</strong>{" "}
+          {request.estimatedDeliveryTime
+            ? `${request.estimatedDeliveryTime} min`
+            : "—"}
+        </p>
+        <p>
+          <strong>License:</strong> {request.licenseNumber || "—"}
+        </p>
         <div className="mt-1 pt-1 border-t border-gray-200">
-          <p><strong>Owner:</strong> {request.ownerName}</p>
-          <p><strong>Owner Phone:</strong> {request.ownerPhone}</p>
-          <p><strong>Owner Email:</strong> {request.ownerEmail}</p>
+          <p>
+            <strong>Owner:</strong> {request.ownerName}
+          </p>
+          <p>
+            <strong>Owner Phone:</strong> {request.ownerPhone}
+          </p>
+          <p>
+            <strong>Owner Email:</strong> {request.ownerEmail}
+          </p>
         </div>
-        <p className="text-gray-600 mt-1 max-w-xs line-clamp-2">{request.restaurantDescription}</p>
+        <p className="text-gray-600 mt-1 max-w-xs line-clamp-2">
+          {request.restaurantDescription}
+        </p>
       </div>
     );
   };
@@ -107,8 +147,12 @@ const AdminRoleRequests = ({ roleToFilter }) => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold capitalize">{roleToFilter} Requests</h1>
-        <p className="text-gray-500 mt-2">Approve or reject {roleToFilter} applications</p>
+        <h1 className="text-4xl font-bold capitalize">
+          {roleToFilter} Requests
+        </h1>
+        <p className="text-gray-500 mt-2">
+          Approve or reject {roleToFilter} applications
+        </p>
       </div>
 
       <div className="flex gap-2">
@@ -117,7 +161,9 @@ const AdminRoleRequests = ({ roleToFilter }) => {
             key={tab}
             onClick={() => setFilter(tab)}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-              filter === tab ? "bg-orange-500 text-white" : "bg-white text-gray-600 hover:bg-gray-100"
+              filter === tab
+                ? "bg-orange-500 text-white"
+                : "bg-white text-gray-600 hover:bg-gray-100"
             }`}
           >
             {tab}
@@ -153,7 +199,9 @@ const AdminRoleRequests = ({ roleToFilter }) => {
                   <tr key={request._id} className="border-b hover:bg-gray-50">
                     <td className="p-4">
                       <p className="font-semibold">{request.user?.name}</p>
-                      <p className="text-sm text-gray-500">{request.user?.email}</p>
+                      <p className="text-sm text-gray-500">
+                        {request.user?.email}
+                      </p>
                     </td>
 
                     <td className="p-4">{renderDetails(request)}</td>
@@ -163,7 +211,9 @@ const AdminRoleRequests = ({ roleToFilter }) => {
                     </td>
 
                     <td className="p-4 text-center">
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${statusStyles[request.status]}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-semibold ${statusStyles[request.status]}`}
+                      >
                         {request.status}
                       </span>
                     </td>
@@ -171,10 +221,16 @@ const AdminRoleRequests = ({ roleToFilter }) => {
                     <td className="p-4">
                       {request.status === "Pending" ? (
                         <div className="flex justify-center gap-2">
-                          <button onClick={() => handleReview(request, "Approved")} className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-1">
+                          <button
+                            onClick={() => handleReview(request, "Approved")}
+                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-1"
+                          >
                             <FaCheck /> Approve
                           </button>
-                          <button onClick={() => handleReview(request, "Rejected")} className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-1">
+                          <button
+                            onClick={() => handleReview(request, "Rejected")}
+                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-1"
+                          >
                             <FaTimes /> Reject
                           </button>
                         </div>

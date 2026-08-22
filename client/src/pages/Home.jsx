@@ -62,56 +62,45 @@ const Home = () => {
     fetchRestaurants();
   }, []);
 
-const filteredFoods = foods
-  .filter((food) => {
-    const matchesSearch =
-      food.name
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      food.description
-        .toLowerCase()
-        .includes(search.toLowerCase());
+  const filteredFoods = foods
+    .filter((food) => {
+      const matchesSearch =
+        food.name.toLowerCase().includes(search.toLowerCase()) ||
+        food.description.toLowerCase().includes(search.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === "all" ||
-      food.categories?.some((c) => c._id === selectedCategory) ||
-      food.category?._id === selectedCategory;
+      const matchesCategory =
+        selectedCategory === "all" ||
+        food.categories?.some((c) => c._id === selectedCategory) ||
+        food.category?._id === selectedCategory;
 
-    const matchesRestaurant =
-      selectedRestaurant === "all" ||
-      food.restaurant?._id === selectedRestaurant;
+      const matchesRestaurant =
+        selectedRestaurant === "all" ||
+        food.restaurant?._id === selectedRestaurant;
 
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesRestaurant
-    );
-  })
-  .sort((a, b) => {
-    switch (sortBy) {
-      case "priceLow":
-        return a.price - b.price;
+      return matchesSearch && matchesCategory && matchesRestaurant;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "priceLow":
+          return a.price - b.price;
 
-      case "priceHigh":
-        return b.price - a.price;
+        case "priceHigh":
+          return b.price - a.price;
 
-      case "name":
-        return a.name.localeCompare(b.name);
+        case "name":
+          return a.name.localeCompare(b.name);
 
-      case "newest":
-      default:
-        return (
-          new Date(b.createdAt) -
-          new Date(a.createdAt)
-        );
-    }
-  });
+        case "newest":
+        default:
+          return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+    });
   const clearFilters = () => {
-  setSearch("");
-  setSelectedCategory("all");
-  setSelectedRestaurant("all");
-  setSortBy("newest");
-};
+    setSearch("");
+    setSelectedCategory("all");
+    setSelectedRestaurant("all");
+    setSortBy("newest");
+  };
 
   return (
     <>
@@ -137,10 +126,7 @@ const filteredFoods = foods
       </section>
 
       {/* ---------- foods ---------- */}
-      <section
-        id="foods-section"
-        className="scroll-mt-24 bg-[#FFFBF3] py-16"
-      >
+      <section id="foods-section" className="scroll-mt-24 bg-[#FFFBF3] py-16">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>

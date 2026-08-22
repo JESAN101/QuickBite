@@ -13,32 +13,36 @@ const FoodCard = ({ food }) => {
   const favorited = isFavorite(food._id);
 
   const handleAddToCart = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await addToCart(food._id, 1);
-    toast.success(response.message);
-    loadCart();
-  } catch (error) {
-    console.log(error);
-    if (error.response?.status === 401) {
-      toast.error("Please login first.");
-    } else {
-      toast.error("Failed to add to cart.");
-    }
-  }
-};
-
-  const handleFavorite = async (e) => {
     e.preventDefault();
     try {
-      await toggleFavorite(food._id);
-      toast.success(favorited ? "Removed from favorites" : "Added to favorites");
+      const response = await addToCart(food._id, 1);
+      toast.success(response.message);
+      loadCart();
     } catch (error) {
       console.log(error);
       if (error.response?.status === 401) {
         toast.error("Please login first.");
       } else {
-        toast.error(error.response?.data?.message || "Failed to update favorites.");
+        toast.error("Failed to add to cart.");
+      }
+    }
+  };
+
+  const handleFavorite = async (e) => {
+    e.preventDefault();
+    try {
+      await toggleFavorite(food._id);
+      toast.success(
+        favorited ? "Removed from favorites" : "Added to favorites",
+      );
+    } catch (error) {
+      console.log(error);
+      if (error.response?.status === 401) {
+        toast.error("Please login first.");
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update favorites.",
+        );
       }
     }
   };

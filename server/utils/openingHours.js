@@ -10,14 +10,10 @@ const parseTime = (value) => {
   if (!str) return null;
 
   // 12-hour clock with AM/PM
-  const match12 = str.match(
-    /^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i
-  );
+  const match12 = str.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i);
   if (match12) {
     let hours = parseInt(match12[1], 10);
-    const minutes = match12[2]
-      ? parseInt(match12[2], 10)
-      : 0;
+    const minutes = match12[2] ? parseInt(match12[2], 10) : 0;
     const meridiem = match12[3].toLowerCase();
 
     if (hours > 12) return null;
@@ -32,9 +28,7 @@ const parseTime = (value) => {
   const match24 = str.match(/^(\d{1,2})(?::(\d{2}))?$/);
   if (match24) {
     const hours = parseInt(match24[1], 10);
-    const minutes = match24[2]
-      ? parseInt(match24[2], 10)
-      : 0;
+    const minutes = match24[2] ? parseInt(match24[2], 10) : 0;
 
     if (hours > 23 || minutes > 59) return null;
 
@@ -62,8 +56,7 @@ const isRestaurantOpenNow = (restaurant) => {
   }
 
   const now = new Date();
-  const nowMinutes =
-    now.getHours() * 60 + now.getMinutes();
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
   // Standard daytime window
   if (open < close) {

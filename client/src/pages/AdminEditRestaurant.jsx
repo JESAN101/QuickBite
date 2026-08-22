@@ -38,9 +38,7 @@ const AdminEditRestaurant = () => {
       const data = await getAllUsers();
 
       setOwners(
-        (data.users || []).filter(
-          (user) => user.role === "restaurant"
-        )
+        (data.users || []).filter((user) => user.role === "restaurant"),
       );
     } catch (error) {
       console.log(error);
@@ -56,11 +54,9 @@ const AdminEditRestaurant = () => {
       toast.success(data.message);
 
       navigate("/admin/restaurants");
-
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-        "Failed to update restaurant."
+        error.response?.data?.message || "Failed to update restaurant.",
       );
     } finally {
       setLoading(false);
@@ -77,9 +73,7 @@ const AdminEditRestaurant = () => {
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-8">
-        ✏ Edit Restaurant
-      </h1>
+      <h1 className="text-4xl font-bold mb-8">✏ Edit Restaurant</h1>
 
       <RestaurantForm
         initialData={restaurant}

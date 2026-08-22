@@ -44,7 +44,7 @@ const ApplyRole = () => {
           closingTime: "",
           estimatedDeliveryTime: "",
           licenseNumber: "",
-        }
+        },
   );
 
   const [image, setImage] = useState(null);
@@ -56,7 +56,7 @@ const ApplyRole = () => {
       const data = await getMyRoleRequests();
 
       const existing = (data.requests || []).find(
-        (request) => request.requestedRole === role
+        (request) => request.requestedRole === role,
       );
 
       setMyRequest(existing || null);
@@ -113,8 +113,7 @@ const ApplyRole = () => {
       fetchMyRequests();
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-          "Failed to submit application."
+        error.response?.data?.message || "Failed to submit application.",
       );
     } finally {
       setSubmitting(false);
@@ -131,19 +130,17 @@ const ApplyRole = () => {
           </p>
 
           <p className="mt-3 text-sm text-[#3A2A20]/50">
-            Your account is already registered as a{" "}
-            <strong>{user.role}</strong>.
+            Your account is already registered as a <strong>{user.role}</strong>
+            .
           </p>
         </div>
       </div>
     );
   }
 
-  const inputClass =
-    "w-full border rounded-lg p-3 mt-2";
+  const inputClass = "w-full border rounded-lg p-3 mt-2";
 
-  const labelClass =
-    "font-semibold";
+  const labelClass = "font-semibold";
 
   const heading = isRider ? "Become a Rider" : "Register Your Restaurant";
   const icon = isRider ? FaMotorcycle : FaStore;
@@ -192,9 +189,8 @@ const ApplyRole = () => {
             </p>
 
             <p className="mt-2 text-sm text-[#3A2A20]/60">
-              You already submitted an application for this role. The admin
-              is reviewing it — you'll get the {heading} panel once it's
-              approved.
+              You already submitted an application for this role. The admin is
+              reviewing it — you'll get the {heading} panel once it's approved.
             </p>
           </div>
         )}
@@ -257,9 +253,7 @@ const ApplyRole = () => {
             {isRider ? (
               <>
                 <div>
-                  <label className={labelClass}>
-                    Vehicle Type
-                  </label>
+                  <label className={labelClass}>Vehicle Type</label>
 
                   <select
                     name="vehicleType"
@@ -268,28 +262,16 @@ const ApplyRole = () => {
                     required
                     className={inputClass}
                   >
-                    <option value="">
-                      Select your vehicle
-                    </option>
-                    <option value="Motorcycle">
-                      Motorcycle
-                    </option>
-                    <option value="Scooter">
-                      Scooter
-                    </option>
-                    <option value="Bicycle">
-                      Bicycle
-                    </option>
-                    <option value="Car">
-                      Car
-                    </option>
+                    <option value="">Select your vehicle</option>
+                    <option value="Motorcycle">Motorcycle</option>
+                    <option value="Scooter">Scooter</option>
+                    <option value="Bicycle">Bicycle</option>
+                    <option value="Car">Car</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Vehicle Number
-                  </label>
+                  <label className={labelClass}>Vehicle Number</label>
 
                   <input
                     type="text"
@@ -303,9 +285,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    License Number
-                  </label>
+                  <label className={labelClass}>License Number</label>
 
                   <input
                     type="text"
@@ -338,9 +318,7 @@ const ApplyRole = () => {
               <>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className={labelClass}>
-                      Owner Name
-                    </label>
+                    <label className={labelClass}>Owner Name</label>
 
                     <input
                       type="text"
@@ -354,9 +332,7 @@ const ApplyRole = () => {
                   </div>
 
                   <div>
-                    <label className={labelClass}>
-                      Owner Phone
-                    </label>
+                    <label className={labelClass}>Owner Phone</label>
 
                     <input
                       type="text"
@@ -371,9 +347,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Owner Email
-                  </label>
+                  <label className={labelClass}>Owner Email</label>
 
                   <input
                     type="email"
@@ -387,9 +361,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Restaurant Name
-                  </label>
+                  <label className={labelClass}>Restaurant Name</label>
 
                   <input
                     type="text"
@@ -403,9 +375,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Restaurant Description
-                  </label>
+                  <label className={labelClass}>Restaurant Description</label>
 
                   <textarea
                     rows="3"
@@ -419,9 +389,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Restaurant Address
-                  </label>
+                  <label className={labelClass}>Restaurant Address</label>
 
                   <input
                     type="text"
@@ -435,9 +403,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Restaurant Phone
-                  </label>
+                  <label className={labelClass}>Restaurant Phone</label>
 
                   <input
                     type="text"
@@ -451,9 +417,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Restaurant Email
-                  </label>
+                  <label className={labelClass}>Restaurant Email</label>
 
                   <input
                     type="email"
@@ -467,9 +431,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Cuisine Type
-                  </label>
+                  <label className={labelClass}>Cuisine Type</label>
 
                   <input
                     type="text"
@@ -484,9 +446,7 @@ const ApplyRole = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className={labelClass}>
-                      Opening Time
-                    </label>
+                    <label className={labelClass}>Opening Time</label>
 
                     <input
                       type="time"
@@ -499,9 +459,7 @@ const ApplyRole = () => {
                   </div>
 
                   <div>
-                    <label className={labelClass}>
-                      Closing Time
-                    </label>
+                    <label className={labelClass}>Closing Time</label>
 
                     <input
                       type="time"
@@ -533,7 +491,10 @@ const ApplyRole = () => {
 
                 <div>
                   <label className={labelClass}>
-                    License Number <span className="text-gray-400 font-normal">(optional)</span>
+                    License Number{" "}
+                    <span className="text-gray-400 font-normal">
+                      (optional)
+                    </span>
                   </label>
 
                   <input
@@ -547,9 +508,7 @@ const ApplyRole = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>
-                    Restaurant Image
-                  </label>
+                  <label className={labelClass}>Restaurant Image</label>
 
                   <input
                     type="file"
@@ -585,14 +544,14 @@ const ApplyRole = () => {
                 {submitting
                   ? "Submitting..."
                   : isRider
-                  ? "Submit Rider Application"
-                  : "Submit Restaurant Application"}
+                    ? "Submit Rider Application"
+                    : "Submit Restaurant Application"}
               </button>
             )}
 
             <p className="text-center text-xs text-[#3A2A20]/50">
-              Your application will be reviewed by the admin before your
-              role is activated.
+              Your application will be reviewed by the admin before your role is
+              activated.
             </p>
           </form>
         ) : null}

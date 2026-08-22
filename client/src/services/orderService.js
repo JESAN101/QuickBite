@@ -33,11 +33,7 @@ export const getOrder = async (id) => {
 // ==========================
 
 // Get All Orders
-export const getAllOrders = async ({
-  page,
-  limit,
-  search,
-} = {}) => {
+export const getAllOrders = async ({ page, limit, search } = {}) => {
   const response = await API.get("/order/all", {
     params: { page, limit, search },
   });

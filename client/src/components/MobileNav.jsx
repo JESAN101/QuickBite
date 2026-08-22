@@ -25,7 +25,9 @@ const MobileNav = ({ links, onClose }) => {
       <div className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-[#111827] p-5 text-white shadow-2xl transition-transform duration-300 lg:hidden">
         <div className="flex items-center justify-between">
           <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-            <h1 className="text-xl font-extrabold text-orange-400">QuickBite</h1>
+            <h1 className="text-xl font-extrabold text-orange-400">
+              QuickBite
+            </h1>
           </div>
 
           <button

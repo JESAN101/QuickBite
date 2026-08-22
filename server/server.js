@@ -15,14 +15,14 @@ const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
 
 if (missingEnvVars.length > 0) {
   console.error(
-    `❌ Missing required environment variables: ${missingEnvVars.join(", ")}. Check your .env file.`
+    `❌ Missing required environment variables: ${missingEnvVars.join(", ")}. Check your .env file.`,
   );
   process.exit(1);
 }
 
 if (process.env.JWT_SECRET.length < 32) {
   console.error(
-    "❌ JWT_SECRET must be at least 32 characters. Generate one with: node -e \"console.log(require('crypto').randomBytes(48).toString('hex'))\""
+    "❌ JWT_SECRET must be at least 32 characters. Generate one with: node -e \"console.log(require('crypto').randomBytes(48).toString('hex'))\"",
   );
   process.exit(1);
 }
@@ -42,10 +42,7 @@ const riderRoutes = require("./routes/riderRoutes");
 const roleRequestRoutes = require("./routes/roleRequestRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 
-const {
-  notFound,
-  errorHandler,
-} = require("./middleware/errorMiddleware");
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const { apiLimiter } = require("./middleware/rateLimiter");
 
 // Connect Database
@@ -65,7 +62,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
 
 app.use(apiLimiter);

@@ -17,9 +17,7 @@ const AdminSidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm(
-      "Are you sure you want to logout?"
-    );
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
 
     if (!confirmLogout) return;
 
@@ -39,12 +37,8 @@ const AdminSidebar = () => {
   return (
     <aside className="sticky top-0 hidden h-screen w-72 shrink-0 flex-col bg-[#111827] p-5 text-white shadow-xl lg:flex">
       <div className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
-        <h1 className="text-2xl font-extrabold text-orange-400">
-          QuickBite
-        </h1>
-        <p className="mt-1 text-sm text-gray-400">
-          Admin Control Center
-        </p>
+        <h1 className="text-2xl font-extrabold text-orange-400">QuickBite</h1>
+        <p className="mt-1 text-sm text-gray-400">Admin Control Center</p>
       </div>
 
       <nav className="mt-6 flex flex-1 flex-col gap-2 overflow-y-auto">

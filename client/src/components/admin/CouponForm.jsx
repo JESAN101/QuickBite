@@ -40,9 +40,7 @@ const CouponForm = () => {
         maxDiscount: coupon.maxDiscount || "",
         usageLimit: coupon.usageLimit || "",
         isActive: coupon.isActive,
-        expiresAt: coupon.expiresAt
-          ? coupon.expiresAt.slice(0, 10)
-          : "",
+        expiresAt: coupon.expiresAt ? coupon.expiresAt.slice(0, 10) : "",
       });
     } catch (error) {
       console.log(error);
@@ -92,9 +90,7 @@ const CouponForm = () => {
 
       navigate("/admin/coupons");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Something went wrong."
-      );
+      toast.error(error.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -112,9 +108,7 @@ const CouponForm = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block mb-2 font-medium">
-              Coupon Code
-            </label>
+            <label className="block mb-2 font-medium">Coupon Code</label>
 
             <input
               type="text"
@@ -128,9 +122,7 @@ const CouponForm = () => {
           </div>
 
           <div>
-            <label className="block mb-2 font-medium">
-              Discount Type
-            </label>
+            <label className="block mb-2 font-medium">Discount Type</label>
 
             <select
               name="type"
@@ -138,13 +130,9 @@ const CouponForm = () => {
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="percentage">
-                Percentage (%)
-              </option>
+              <option value="percentage">Percentage (%)</option>
 
-              <option value="flat">
-                Flat Amount (Rs.)
-              </option>
+              <option value="flat">Flat Amount (Rs.)</option>
             </select>
           </div>
 
@@ -202,9 +190,7 @@ const CouponForm = () => {
           )}
 
           <div>
-            <label className="block mb-2 font-medium">
-              Usage Limit
-            </label>
+            <label className="block mb-2 font-medium">Usage Limit</label>
 
             <input
               type="number"
@@ -241,9 +227,7 @@ const CouponForm = () => {
             className="w-5 h-5 accent-orange-500"
           />
 
-          <span className="font-medium">
-            Active (can be used by customers)
-          </span>
+          <span className="font-medium">Active (can be used by customers)</span>
         </label>
 
         <button
@@ -254,8 +238,8 @@ const CouponForm = () => {
           {loading
             ? "Saving..."
             : isEditing
-            ? "Update Coupon"
-            : "Create Coupon"}
+              ? "Update Coupon"
+              : "Create Coupon"}
         </button>
       </form>
     </div>

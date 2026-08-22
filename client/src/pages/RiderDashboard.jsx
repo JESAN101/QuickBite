@@ -190,7 +190,7 @@ const RiderDashboard = () => {
                     <td className="px-6 py-4 text-center">
                       <span
                         className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${getStatusBadgeClass(
-                          order.orderStatus
+                          order.orderStatus,
                         )}`}
                       >
                         {order.orderStatus}
@@ -198,9 +198,7 @@ const RiderDashboard = () => {
                     </td>
 
                     <td className="px-6 py-4 text-center text-gray-500">
-                      {new Date(
-                        order.createdAt
-                      ).toLocaleDateString()}
+                      {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                   </tr>
                 ))

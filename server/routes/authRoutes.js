@@ -24,20 +24,10 @@ const {
 const router = express.Router();
 
 // Register
-router.post(
-  "/register",
-  authLimiter,
-  validate(registerSchema),
-  registerUser
-);
+router.post("/register", authLimiter, validate(registerSchema), registerUser);
 
 // Login
-router.post(
-  "/login",
-  authLimiter,
-  validate(loginSchema),
-  loginUser
-);
+router.post("/login", authLimiter, validate(loginSchema), loginUser);
 
 // Protected Profile Route
 router.get("/profile", authMiddleware, getProfile);
@@ -47,29 +37,19 @@ router.put(
   "/profile",
   authMiddleware,
   validate(updateProfileSchema),
-  updateProfile
+  updateProfile,
 );
 
-router.get(
-  "/users",
-  authMiddleware,
-  adminMiddleware,
-  getAllUsers
-);
+router.get("/users", authMiddleware, adminMiddleware, getAllUsers);
 
-router.delete(
-  "/users/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteUser
-);
+router.delete("/users/:id", authMiddleware, adminMiddleware, deleteUser);
 
 router.put(
   "/users/:id/role",
   authMiddleware,
   adminMiddleware,
   validate(updateRoleSchema),
-  updateUserRole
+  updateUserRole,
 );
 
 module.exports = router;

@@ -38,11 +38,7 @@ export const getAllRoleRequests = async () => {
 };
 
 // Approve / reject an application (admin)
-export const updateRoleRequestStatus = async (
-  id,
-  status,
-  adminNote
-) => {
+export const updateRoleRequestStatus = async (id, status, adminNote) => {
   const response = await API.put(`/role-request/${id}`, {
     status,
     adminNote,

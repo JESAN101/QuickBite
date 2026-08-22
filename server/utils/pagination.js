@@ -24,7 +24,6 @@ const parsePagination = (query = {}) => {
 /**
  * Escape a user-supplied string so it is safe to use inside new RegExp(s, "i").
  */
-const escapeRegex = (str) =>
-  str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 module.exports = { parsePagination, escapeRegex };

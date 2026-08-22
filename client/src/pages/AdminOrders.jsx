@@ -39,10 +39,7 @@ const AdminOrders = () => {
     } catch (error) {
       console.log(error);
 
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to load orders."
-      );
+      toast.error(error.response?.data?.message || "Failed to load orders.");
     } finally {
       setLoading(false);
     }
@@ -54,40 +51,26 @@ const AdminOrders = () => {
 
   const totalOrders = stats.totalOrders || 0;
 
-const pendingOrders = stats.pendingOrders || 0;
+  const pendingOrders = stats.pendingOrders || 0;
 
-const deliveredOrders = stats.deliveredOrders || 0;
+  const deliveredOrders = stats.deliveredOrders || 0;
 
-const totalRevenue = stats.totalRevenue || 0;
+  const totalRevenue = stats.totalRevenue || 0;
 
-  const handleStatusChange = async (
-  orderId,
-  orderStatus
-) => {
-  try {
-    const data = await updateOrderStatus(
-      orderId,
-      orderStatus
-    );
+  const handleStatusChange = async (orderId, orderStatus) => {
+    try {
+      const data = await updateOrderStatus(orderId, orderStatus);
 
-    toast.success(data.message);
+      toast.success(data.message);
 
-    fetchOrders();
-
-  } catch (error) {
-
-    toast.error(
-      error.response?.data?.message ||
-      "Failed to update order."
-    );
-
-  }
-};
+      fetchOrders();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update order.");
+    }
+  };
 
   const handleDelete = async (orderId) => {
-    const confirmDelete = window.confirm(
-      "Delete this order?"
-    );
+    const confirmDelete = window.confirm("Delete this order?");
 
     if (!confirmDelete) return;
 
@@ -98,108 +81,86 @@ const totalRevenue = stats.totalRevenue || 0;
 
       fetchOrders();
     } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to delete order."
-      );
+      toast.error(error.response?.data?.message || "Failed to delete order.");
     }
   };
 
   const handleView = (order) => {
-  setSelectedOrder(order);
-};
+    setSelectedOrder(order);
+  };
 
   return (
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-4xl font-bold">
-            Order Management
-          </h1>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold">Order Management</h1>
 
-          <p className="text-gray-500 mt-2">
-            Manage customer orders
-          </p>
-        </div>
-
-        <div className="flex justify-between items-center">
-          <input
-            type="text"
-            placeholder="Search customer or restaurant..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="w-96 border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
-  <div className="bg-white rounded-xl shadow-lg p-6">
-    <h3 className="text-gray-500">
-      Total Orders
-    </h3>
-
-    <h2 className="text-3xl font-bold mt-2">
-      {totalOrders}
-    </h2>
-  </div>
-
-  <div className="bg-yellow-500 text-white rounded-xl shadow-lg p-6">
-    <h3>Pending</h3>
-
-    <h2 className="text-3xl font-bold mt-2">
-      {pendingOrders}
-    </h2>
-  </div>
-
-  <div className="bg-green-500 text-white rounded-xl shadow-lg p-6">
-    <h3>Delivered</h3>
-
-    <h2 className="text-3xl font-bold mt-2">
-      {deliveredOrders}
-    </h2>
-  </div>
-
-  <div className="bg-orange-500 text-white rounded-xl shadow-lg p-6">
-    <h3>Total Revenue</h3>
-
-    <h2 className="text-3xl font-bold mt-2">
-      Rs. {totalRevenue}
-    </h2>
-  </div>
-
-</div>
-
-        {loading ? (
-          <div className="text-center py-20 text-xl">
-            Loading Orders...
-          </div>
-        ) : (
-          <OrderTable
-  orders={orders}
-  onStatusChange={handleStatusChange}
-  onDelete={handleDelete}
-  onView={handleView}
-/>
-        )}
-
-        <Pagination
-          page={page}
-          totalPages={pages}
-          onChange={setPage}
-          variant="admin"
-        />
-
-        {selectedOrder && (
-  <OrderDetailsModal
-    order={selectedOrder}
-    onClose={() => setSelectedOrder(null)}
-  />
-)}
-
+        <p className="text-gray-500 mt-2">Manage customer orders</p>
       </div>
+
+      <div className="flex justify-between items-center">
+        <input
+          type="text"
+          placeholder="Search customer or restaurant..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          className="w-96 border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h3 className="text-gray-500">Total Orders</h3>
+
+          <h2 className="text-3xl font-bold mt-2">{totalOrders}</h2>
+        </div>
+
+        <div className="bg-yellow-500 text-white rounded-xl shadow-lg p-6">
+          <h3>Pending</h3>
+
+          <h2 className="text-3xl font-bold mt-2">{pendingOrders}</h2>
+        </div>
+
+        <div className="bg-green-500 text-white rounded-xl shadow-lg p-6">
+          <h3>Delivered</h3>
+
+          <h2 className="text-3xl font-bold mt-2">{deliveredOrders}</h2>
+        </div>
+
+        <div className="bg-orange-500 text-white rounded-xl shadow-lg p-6">
+          <h3>Total Revenue</h3>
+
+          <h2 className="text-3xl font-bold mt-2">Rs. {totalRevenue}</h2>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="text-center py-20 text-xl">Loading Orders...</div>
+      ) : (
+        <OrderTable
+          orders={orders}
+          onStatusChange={handleStatusChange}
+          onDelete={handleDelete}
+          onView={handleView}
+        />
+      )}
+
+      <Pagination
+        page={page}
+        totalPages={pages}
+        onChange={setPage}
+        variant="admin"
+      />
+
+      {selectedOrder && (
+        <OrderDetailsModal
+          order={selectedOrder}
+          onClose={() => setSelectedOrder(null)}
+        />
+      )}
+    </div>
   );
 };
 

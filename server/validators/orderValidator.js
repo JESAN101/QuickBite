@@ -8,7 +8,7 @@ const placeOrderSchema = Joi.object({
       Joi.object({
         food: objectId.required(),
         quantity: Joi.number().integer().min(1).required(),
-      })
+      }),
     )
     .min(1)
     .required(),
@@ -20,13 +20,7 @@ const placeOrderSchema = Joi.object({
 
 const updateOrderStatusSchema = Joi.object({
   orderStatus: Joi.string()
-    .valid(
-      "Pending",
-      "Preparing",
-      "Out for Delivery",
-      "Delivered",
-      "Cancelled"
-    )
+    .valid("Pending", "Preparing", "Out for Delivery", "Delivered", "Cancelled")
     .required(),
 });
 

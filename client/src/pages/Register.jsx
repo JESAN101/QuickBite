@@ -148,8 +148,8 @@ const Register = () => {
               Join the table. Your city's kitchens, in one place.
             </h2>
             <p className="mt-4 max-w-sm font-['Plus_Jakarta_Sans',sans-serif] text-sm text-[#F7ECD9]/70">
-              Create an account to save your addresses, track every order,
-              and get food to your door faster next time.
+              Create an account to save your addresses, track every order, and
+              get food to your door faster next time.
             </p>
           </div>
         </div>
@@ -253,14 +253,16 @@ const Register = () => {
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#F7ECD9]/40 transition hover:text-[#F7ECD9]"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? (
                       <FaEyeSlash size={14} />
                     ) : (
                       <FaEye size={14} />
                     )}
-                    </button>
+                  </button>
                 </div>
                 {errors.password && (
                   <p className="mt-1.5 text-xs font-medium text-[#ef4444]">

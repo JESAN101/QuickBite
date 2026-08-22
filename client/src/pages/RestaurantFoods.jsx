@@ -60,7 +60,7 @@ const RestaurantFoods = () => {
   };
 
   const filteredFoods = foods.filter((food) =>
-    food.name.toLowerCase().includes(search.toLowerCase())
+    food.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   const availableCount = foods.filter((f) => f.isAvailable).length;
@@ -75,7 +75,8 @@ const RestaurantFoods = () => {
             Menu
           </h1>
           <p className="mt-1 text-gray-500">
-            {foods.length} items · {availableCount} available · {unavailableCount} unavailable
+            {foods.length} items · {availableCount} available ·{" "}
+            {unavailableCount} unavailable
           </p>
         </div>
 
@@ -112,7 +113,9 @@ const RestaurantFoods = () => {
         <div className="rounded-2xl bg-white p-16 text-center shadow-sm ring-1 ring-gray-100">
           <FaUtensils className="mx-auto text-5xl text-gray-300" />
           <p className="mt-4 font-medium text-gray-500">
-            {search ? "No foods match your search." : "Your menu is empty. Add your first dish!"}
+            {search
+              ? "No foods match your search."
+              : "Your menu is empty. Add your first dish!"}
           </p>
         </div>
       ) : (
@@ -121,19 +124,36 @@ const RestaurantFoods = () => {
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50/80">
-                  <th className="px-6 py-4 font-semibold text-gray-500">Image</th>
-                  <th className="px-6 py-4 font-semibold text-gray-500">Name</th>
-                  <th className="px-6 py-4 font-semibold text-gray-500">Category</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Price</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Prep (min)</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Status</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-500">Actions</th>
+                  <th className="px-6 py-4 font-semibold text-gray-500">
+                    Image
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-gray-500">
+                    Name
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-gray-500">
+                    Category
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Price
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Prep (min)
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-500">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-gray-50">
                 {filteredFoods.map((food) => (
-                  <tr key={food._id} className="transition hover:bg-orange-50/30">
+                  <tr
+                    key={food._id}
+                    className="transition hover:bg-orange-50/30"
+                  >
                     <td className="px-6 py-4">
                       {food.image ? (
                         <img
@@ -180,7 +200,9 @@ const RestaurantFoods = () => {
                     <td className="px-6 py-4">
                       <div className="flex justify-center gap-2">
                         <button
-                          onClick={() => navigate(`/restaurant/foods/edit/${food._id}`)}
+                          onClick={() =>
+                            navigate(`/restaurant/foods/edit/${food._id}`)
+                          }
                           className="rounded-lg bg-blue-500 p-2.5 text-white transition hover:bg-blue-600"
                           title="Edit"
                         >

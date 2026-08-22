@@ -39,7 +39,9 @@ const AddEditCategory = lazy(() => import("../pages/AddEditCategory"));
 const AdminCoupons = lazy(() => import("../pages/AdminCoupons"));
 const AddEditCoupon = lazy(() => import("../pages/AddEditCoupon"));
 const AdminRiderRequests = lazy(() => import("../pages/AdminRiderRequests"));
-const AdminRestaurantRequests = lazy(() => import("../pages/AdminRestaurantRequests"));
+const AdminRestaurantRequests = lazy(
+  () => import("../pages/AdminRestaurantRequests"),
+);
 
 // Restaurant owner
 const RestaurantDashboard = lazy(() => import("../pages/RestaurantDashboard"));
@@ -69,436 +71,434 @@ const AppRoutes = () => {
   return (
     <ChunkErrorBoundary>
       <SuspenseWrapper>
-      <Routes>
+        <Routes>
+          {/* ================= Public Routes ================= */}
 
-        {/* ================= Public Routes ================= */}
+          <Route
+            path="/"
+            element={
+              <MainLayout>
+                <Home />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/"
-          element={
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/restaurant/:id"
+            element={
+              <MainLayout>
+                <Restaurant />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/restaurant/:id"
-          element={
-            <MainLayout>
-              <Restaurant />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/food/:id"
+            element={
+              <MainLayout>
+                <FoodDetails />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/food/:id"
-          element={
-            <MainLayout>
-              <FoodDetails />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/login"
+            element={
+              <MainLayout>
+                <Login />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/login"
-          element={
-            <MainLayout>
-              <Login />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/register"
+            element={
+              <MainLayout>
+                <Register />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/register"
-          element={
-            <MainLayout>
-              <Register />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/profile"
+            element={
+              <MainLayout>
+                <Profile />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/profile"
-          element={
-            <MainLayout>
-              <Profile />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/cart"
+            element={
+              <MainLayout>
+                <Cart />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/cart"
-          element={
-            <MainLayout>
-              <Cart />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/orders"
+            element={
+              <MainLayout>
+                <Orders />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/orders"
-          element={
-            <MainLayout>
-              <Orders />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/orders/:id"
+            element={
+              <MainLayout>
+                <OrderDetails />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/orders/:id"
-          element={
-            <MainLayout>
-              <OrderDetails />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/checkout"
+            element={
+              <MainLayout>
+                <Checkout />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/checkout"
-          element={
-            <MainLayout>
-              <Checkout />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/order-success"
+            element={
+              <MainLayout>
+                <OrderSuccess />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/order-success"
-          element={
-            <MainLayout>
-              <OrderSuccess />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/favorites"
+            element={
+              <MainLayout>
+                <Favorites />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/favorites"
-          element={
-            <MainLayout>
-              <Favorites />
-            </MainLayout>
-          }
-        />
+          <Route
+            path="/apply/:role"
+            element={
+              <MainLayout>
+                <ApplyRole />
+              </MainLayout>
+            }
+          />
 
-        <Route
-          path="/apply/:role"
-          element={
-            <MainLayout>
-              <ApplyRole />
-            </MainLayout>
-          }
-        />
+          {/* ================= Admin Routes ================= */}
 
-        {/* ================= Admin Routes ================= */}
+          {/* Visiting /admin lands on the dashboard */}
+          <Route
+            path="/admin"
+            element={<Navigate to="/admin/dashboard" replace />}
+          />
 
-        {/* Visiting /admin lands on the dashboard */}
-        <Route
-          path="/admin"
-          element={<Navigate to="/admin/dashboard" replace />}
-        />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/dashboard"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminDashboard />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminUsers />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/users"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminUsers />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/foods"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminFoods />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/foods"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminFoods />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/foods/edit/:id"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminEditFood />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/foods/edit/:id"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminEditFood />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/restaurants"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminRestaurants />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/restaurants"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminRestaurants />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/restaurants/add"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminAddRestaurant />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/restaurants/add"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminAddRestaurant />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/restaurants/edit/:id"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminEditRestaurant />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/restaurants/edit/:id"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminEditRestaurant />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/orders"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminOrders />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/orders"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminOrders />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/categories"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminCategories />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/categories"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminCategories />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/categories/add"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AddEditCategory />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/categories/add"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AddEditCategory />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/categories/edit/:id"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AddEditCategory />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/categories/edit/:id"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AddEditCategory />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/coupons"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminCoupons />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/coupons"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminCoupons />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/coupons/add"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AddEditCoupon />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/coupons/add"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AddEditCoupon />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/coupons/edit/:id"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AddEditCoupon />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/coupons/edit/:id"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AddEditCoupon />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/requests/rider"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminRiderRequests />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/requests/rider"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminRiderRequests />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin/requests/restaurant"
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminRestaurantRequests />
+                </AdminLayout>
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/admin/requests/restaurant"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <AdminRestaurantRequests />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+          {/* ================= Restaurant Owner Routes ================= */}
 
-        {/* ================= Restaurant Owner Routes ================= */}
+          <Route
+            path="/restaurant"
+            element={<Navigate to="/restaurant/dashboard" replace />}
+          />
 
-        <Route
-          path="/restaurant"
-          element={<Navigate to="/restaurant/dashboard" replace />}
-        />
+          <Route
+            path="/restaurant/dashboard"
+            element={
+              <RestaurantRoute>
+                <RestaurantLayout>
+                  <RestaurantDashboard />
+                </RestaurantLayout>
+              </RestaurantRoute>
+            }
+          />
 
-        <Route
-          path="/restaurant/dashboard"
-          element={
-            <RestaurantRoute>
-              <RestaurantLayout>
-                <RestaurantDashboard />
-              </RestaurantLayout>
-            </RestaurantRoute>
-          }
-        />
+          <Route
+            path="/restaurant/orders"
+            element={
+              <RestaurantRoute>
+                <RestaurantLayout>
+                  <RestaurantOrders />
+                </RestaurantLayout>
+              </RestaurantRoute>
+            }
+          />
 
-        <Route
-          path="/restaurant/orders"
-          element={
-            <RestaurantRoute>
-              <RestaurantLayout>
-                <RestaurantOrders />
-              </RestaurantLayout>
-            </RestaurantRoute>
-          }
-        />
+          <Route
+            path="/restaurant/foods"
+            element={
+              <RestaurantRoute>
+                <RestaurantLayout>
+                  <RestaurantFoods />
+                </RestaurantLayout>
+              </RestaurantRoute>
+            }
+          />
 
-        <Route
-          path="/restaurant/foods"
-          element={
-            <RestaurantRoute>
-              <RestaurantLayout>
-                <RestaurantFoods />
-              </RestaurantLayout>
-            </RestaurantRoute>
-          }
-        />
+          <Route
+            path="/restaurant/foods/add"
+            element={
+              <RestaurantRoute>
+                <RestaurantLayout>
+                  <RestaurantFoodForm />
+                </RestaurantLayout>
+              </RestaurantRoute>
+            }
+          />
 
-        <Route
-          path="/restaurant/foods/add"
-          element={
-            <RestaurantRoute>
-              <RestaurantLayout>
-                <RestaurantFoodForm />
-              </RestaurantLayout>
-            </RestaurantRoute>
-          }
-        />
+          <Route
+            path="/restaurant/foods/edit/:id"
+            element={
+              <RestaurantRoute>
+                <RestaurantLayout>
+                  <RestaurantFoodForm />
+                </RestaurantLayout>
+              </RestaurantRoute>
+            }
+          />
 
-        <Route
-          path="/restaurant/foods/edit/:id"
-          element={
-            <RestaurantRoute>
-              <RestaurantLayout>
-                <RestaurantFoodForm />
-              </RestaurantLayout>
-            </RestaurantRoute>
-          }
-        />
+          <Route
+            path="/restaurant/profile"
+            element={
+              <RestaurantRoute>
+                <RestaurantLayout>
+                  <RestaurantProfile />
+                </RestaurantLayout>
+              </RestaurantRoute>
+            }
+          />
 
-        <Route
-          path="/restaurant/profile"
-          element={
-            <RestaurantRoute>
-              <RestaurantLayout>
-                <RestaurantProfile />
-              </RestaurantLayout>
-            </RestaurantRoute>
-          }
-        />
+          {/* ================= Rider Routes ================= */}
 
-        {/* ================= Rider Routes ================= */}
+          <Route
+            path="/rider"
+            element={<Navigate to="/rider/dashboard" replace />}
+          />
 
-        <Route
-          path="/rider"
-          element={<Navigate to="/rider/dashboard" replace />}
-        />
+          <Route
+            path="/rider/dashboard"
+            element={
+              <RiderRoute>
+                <RiderLayout>
+                  <RiderDashboard />
+                </RiderLayout>
+              </RiderRoute>
+            }
+          />
 
-        <Route
-          path="/rider/dashboard"
-          element={
-            <RiderRoute>
-              <RiderLayout>
-                <RiderDashboard />
-              </RiderLayout>
-            </RiderRoute>
-          }
-        />
+          <Route
+            path="/rider/orders"
+            element={
+              <RiderRoute>
+                <RiderLayout>
+                  <RiderOrders />
+                </RiderLayout>
+              </RiderRoute>
+            }
+          />
 
-        <Route
-          path="/rider/orders"
-          element={
-            <RiderRoute>
-              <RiderLayout>
-                <RiderOrders />
-              </RiderLayout>
-            </RiderRoute>
-          }
-        />
+          <Route
+            path="/rider/profile"
+            element={
+              <RiderRoute>
+                <RiderLayout>
+                  <RiderProfile />
+                </RiderLayout>
+              </RiderRoute>
+            }
+          />
 
-        <Route
-          path="/rider/profile"
-          element={
-            <RiderRoute>
-              <RiderLayout>
-                <RiderProfile />
-              </RiderLayout>
-            </RiderRoute>
-          }
-        />
+          {/* ================= 404 ================= */}
 
-        {/* ================= 404 ================= */}
-
-        <Route
-          path="*"
-          element={
-            <MainLayout>
-              <NotFound />
-            </MainLayout>
-          }
-        />
-
-      </Routes>
+          <Route
+            path="*"
+            element={
+              <MainLayout>
+                <NotFound />
+              </MainLayout>
+            }
+          />
+        </Routes>
       </SuspenseWrapper>
     </ChunkErrorBoundary>
   );

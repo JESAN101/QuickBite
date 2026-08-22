@@ -4,9 +4,7 @@ import Pagination from "../components/Pagination";
 
 describe("Pagination", () => {
   it("renders page indicator", () => {
-    render(
-      <Pagination page={2} totalPages={5} onChange={() => {}} />
-    );
+    render(<Pagination page={2} totalPages={5} onChange={() => {}} />);
     expect(screen.getByText(/page 2 of 5/i)).toBeInTheDocument();
   });
 
@@ -37,7 +35,7 @@ describe("Pagination", () => {
     // Consumers hide the component when totalPages <= 1;
     // this test documents that contract.
     const { container } = render(
-      <Pagination page={1} totalPages={1} onChange={() => {}} />
+      <Pagination page={1} totalPages={1} onChange={() => {}} />,
     );
     // Component still renders but both buttons are disabled
     expect(screen.getByText(/previous/i)).toBeDisabled();

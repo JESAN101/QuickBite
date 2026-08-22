@@ -138,9 +138,7 @@ const RestaurantDashboard = () => {
       {/* Recent Orders Table */}
       <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
-          <h2 className="text-lg font-bold text-gray-900">
-            Recent Orders
-          </h2>
+          <h2 className="text-lg font-bold text-gray-900">Recent Orders</h2>
         </div>
 
         <div className="overflow-x-auto">
@@ -190,7 +188,7 @@ const RestaurantDashboard = () => {
                     <td className="px-6 py-4 text-center text-gray-600">
                       {order.foods.reduce(
                         (sum, item) => sum + item.quantity,
-                        0
+                        0,
                       )}{" "}
                       items
                     </td>
@@ -202,7 +200,7 @@ const RestaurantDashboard = () => {
                     <td className="px-6 py-4 text-center">
                       <span
                         className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${getStatusBadgeClass(
-                          order.orderStatus
+                          order.orderStatus,
                         )}`}
                       >
                         {order.orderStatus}
@@ -210,9 +208,7 @@ const RestaurantDashboard = () => {
                     </td>
 
                     <td className="px-6 py-4 text-center text-gray-500">
-                      {new Date(
-                        order.createdAt
-                      ).toLocaleDateString()}
+                      {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                   </tr>
                 ))

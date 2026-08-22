@@ -24,19 +24,14 @@ router.post(
   authMiddleware,
   upload.single("image"),
   validate(applyForRoleSchema),
-  applyForRole
+  applyForRole,
 );
 
 // My applications (customer)
 router.get("/my", authMiddleware, getMyRoleRequests);
 
 // All applications (admin)
-router.get(
-  "/all",
-  authMiddleware,
-  adminMiddleware,
-  getAllRoleRequests
-);
+router.get("/all", authMiddleware, adminMiddleware, getAllRoleRequests);
 
 // Approve / reject an application (admin)
 router.put(
@@ -44,7 +39,7 @@ router.put(
   authMiddleware,
   adminMiddleware,
   validate(updateRoleRequestStatusSchema),
-  updateRoleRequestStatus
+  updateRoleRequestStatus,
 );
 
 module.exports = router;

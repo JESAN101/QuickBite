@@ -19,11 +19,7 @@ export const getDashboardAnalytics = async () => {
 // =========================
 // Get All Users
 // =========================
-export const getAllUsers = async ({
-  page,
-  limit,
-  search,
-} = {}) => {
+export const getAllUsers = async ({ page, limit, search } = {}) => {
   const response = await API.get("/auth/users", {
     params: { page, limit, search },
   });
@@ -42,10 +38,7 @@ export const deleteUser = async (id) => {
 // Update User Role
 // =========================
 export const updateUserRole = async (id, role) => {
-  const response = await API.put(
-    `/auth/users/${id}/role`,
-    { role }
-  );
+  const response = await API.put(`/auth/users/${id}/role`, { role });
 
   return response.data;
 };

@@ -13,37 +13,30 @@ const getDashboardStats = asyncHandler(async (req, res) => {
 
   const totalFoods = await Food.countDocuments();
 
-  const totalRestaurants =
-    await Restaurant.countDocuments();
+  const totalRestaurants = await Restaurant.countDocuments();
 
-  const totalOrders =
-    await Order.countDocuments();
+  const totalOrders = await Order.countDocuments();
 
   // Order status counts
-  const pendingOrders =
-    await Order.countDocuments({
-      orderStatus: "Pending",
-    });
+  const pendingOrders = await Order.countDocuments({
+    orderStatus: "Pending",
+  });
 
-  const preparingOrders =
-    await Order.countDocuments({
-      orderStatus: "Preparing",
-    });
+  const preparingOrders = await Order.countDocuments({
+    orderStatus: "Preparing",
+  });
 
-  const outForDeliveryOrders =
-    await Order.countDocuments({
-      orderStatus: "Out for Delivery",
-    });
+  const outForDeliveryOrders = await Order.countDocuments({
+    orderStatus: "Out for Delivery",
+  });
 
-  const completedOrders =
-    await Order.countDocuments({
-      orderStatus: "Delivered",
-    });
+  const completedOrders = await Order.countDocuments({
+    orderStatus: "Delivered",
+  });
 
-  const cancelledOrders =
-    await Order.countDocuments({
-      orderStatus: "Cancelled",
-    });
+  const cancelledOrders = await Order.countDocuments({
+    orderStatus: "Cancelled",
+  });
 
   // Total Revenue
   const revenue = await Order.aggregate([
@@ -62,10 +55,7 @@ const getDashboardStats = asyncHandler(async (req, res) => {
     },
   ]);
 
-  const totalRevenue =
-    revenue.length > 0
-      ? revenue[0].totalRevenue
-      : 0;
+  const totalRevenue = revenue.length > 0 ? revenue[0].totalRevenue : 0;
 
   res.status(200).json({
     success: true,

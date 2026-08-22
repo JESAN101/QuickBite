@@ -58,9 +58,7 @@ const OrderDetails = () => {
   useOrderSocket({
     onStatus: ({ orderId, status }) => {
       if (orderId === id) {
-        setOrder((prev) =>
-          prev ? { ...prev, orderStatus: status } : prev
-        );
+        setOrder((prev) => (prev ? { ...prev, orderStatus: status } : prev));
       }
     },
   });
@@ -88,9 +86,7 @@ const OrderDetails = () => {
         setCanCancel(false);
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Failed to load order."
-      );
+      toast.error(error.response?.data?.message || "Failed to load order.");
       navigate("/orders");
     } finally {
       setLoading(false);
@@ -99,7 +95,7 @@ const OrderDetails = () => {
 
   const handleCancel = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to cancel this order?"
+      "Are you sure you want to cancel this order?",
     );
 
     if (!confirmed) return;
@@ -111,9 +107,7 @@ const OrderDetails = () => {
       toast.success(data.message);
       fetchOrder();
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Failed to cancel order."
-      );
+      toast.error(error.response?.data?.message || "Failed to cancel order.");
     } finally {
       setCancelling(false);
     }
@@ -153,7 +147,7 @@ const OrderDetails = () => {
   const currentStep =
     order.orderStatus === "Cancelled"
       ? -1
-      : statusToStepIndex[order.orderStatus] ?? 0;
+      : (statusToStepIndex[order.orderStatus] ?? 0);
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-14">
@@ -333,7 +327,8 @@ const OrderDetails = () => {
             <div className="flex justify-between">
               <span>Subtotal</span>
               <span className="font-semibold">
-                Rs. {order.foods.reduce((s, f) => s + f.food.price * f.quantity, 0)}
+                Rs.{" "}
+                {order.foods.reduce((s, f) => s + f.food.price * f.quantity, 0)}
               </span>
             </div>
             {order.discount > 0 && (

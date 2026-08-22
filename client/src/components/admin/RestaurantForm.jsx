@@ -84,9 +84,7 @@ const RestaurantForm = ({
       className="bg-white rounded-xl shadow-lg p-8 space-y-6"
     >
       <div>
-        <label className="font-semibold">
-          Restaurant Name
-        </label>
+        <label className="font-semibold">Restaurant Name</label>
 
         <input
           type="text"
@@ -99,9 +97,7 @@ const RestaurantForm = ({
       </div>
 
       <div>
-        <label className="font-semibold">
-          Description
-        </label>
+        <label className="font-semibold">Description</label>
 
         <textarea
           rows="4"
@@ -114,9 +110,7 @@ const RestaurantForm = ({
       </div>
 
       <div>
-        <label className="font-semibold">
-          Address
-        </label>
+        <label className="font-semibold">Address</label>
 
         <input
           type="text"
@@ -129,9 +123,7 @@ const RestaurantForm = ({
       </div>
 
       <div>
-        <label className="font-semibold">
-          Phone
-        </label>
+        <label className="font-semibold">Phone</label>
 
         <input
           type="text"
@@ -161,10 +153,7 @@ const RestaurantForm = ({
           </option>
 
           {owners.map((owner) => (
-            <option
-              key={owner._id}
-              value={owner._id}
-            >
+            <option key={owner._id} value={owner._id}>
               {owner.name} ({owner.email})
             </option>
           ))}
@@ -177,9 +166,7 @@ const RestaurantForm = ({
       </div>
 
       <div>
-        <label className="font-semibold">
-          Restaurant Image
-        </label>
+        <label className="font-semibold">Restaurant Image</label>
 
         <input
           type="file"
@@ -201,9 +188,7 @@ const RestaurantForm = ({
         disabled={loading}
         className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg"
       >
-        {loading
-          ? "Saving..."
-          : "Save Restaurant"}
+        {loading ? "Saving..." : "Save Restaurant"}
       </button>
     </form>
   );

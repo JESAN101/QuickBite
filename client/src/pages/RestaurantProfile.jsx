@@ -95,7 +95,7 @@ const RestaurantProfile = () => {
       fetchRestaurant();
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to update restaurant."
+        error.response?.data?.message || "Failed to update restaurant.",
       );
     } finally {
       setLoading(false);
@@ -117,7 +117,7 @@ const RestaurantProfile = () => {
       toast.success(
         response.restaurant.isOpen
           ? "Restaurant is now open."
-          : "Restaurant is now closed."
+          : "Restaurant is now closed.",
       );
     } catch (error) {
       console.log(error);
@@ -163,7 +163,9 @@ const RestaurantProfile = () => {
             </div>
             <div>
               <h3 className="font-bold text-gray-900">
-                {formData.isOpen ? "Restaurant is Open" : "Restaurant is Closed"}
+                {formData.isOpen
+                  ? "Restaurant is Open"
+                  : "Restaurant is Closed"}
               </h3>
               <p className="text-sm text-gray-500">
                 Customers can only see your restaurant when it's open.

@@ -6,7 +6,15 @@ import { addItemsToCart } from "../services/cartService";
 import { getStatusStorefrontClass } from "../utils/orderStatus";
 import Pagination from "../components/Pagination";
 import useOrderSocket from "../hooks/useOrderSocket";
-import { FaStore, FaCalendarAlt, FaMapMarkerAlt, FaMoneyBillWave, FaTag, FaMotorcycle, FaRedo } from "react-icons/fa";
+import {
+  FaStore,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaMoneyBillWave,
+  FaTag,
+  FaMotorcycle,
+  FaRedo,
+} from "react-icons/fa";
 
 const PAGE_SIZE = 5;
 
@@ -21,8 +29,8 @@ const Orders = () => {
     onStatus: ({ orderId, status }) => {
       setOrders((prev) =>
         prev.map((o) =>
-          o._id === orderId ? { ...o, orderStatus: status } : o
-        )
+          o._id === orderId ? { ...o, orderStatus: status } : o,
+        ),
       );
     },
   });
@@ -184,7 +192,7 @@ const Orders = () => {
 
                 <span
                   className={`mt-2 inline-block rounded-full px-3.5 py-1 text-xs font-semibold ${getStatusStorefrontClass(
-                    order.orderStatus
+                    order.orderStatus,
                   )}`}
                 >
                   {order.orderStatus}

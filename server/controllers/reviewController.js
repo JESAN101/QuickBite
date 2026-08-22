@@ -36,10 +36,7 @@ const addReview = asyncHandler(async (req, res) => {
   });
 
   if (alreadyReviewed) {
-    throw new ErrorResponse(
-      "You already reviewed this food.",
-      400
-    );
+    throw new ErrorResponse("You already reviewed this food.", 400);
   }
 
   const review = await Review.create({
@@ -85,9 +82,7 @@ const deleteReview = asyncHandler(async (req, res) => {
     throw new ErrorResponse("Review not found.", 404);
   }
 
-  if (
-    review.user.toString() !== req.user._id.toString()
-  ) {
+  if (review.user.toString() !== req.user._id.toString()) {
     throw new ErrorResponse("Not authorized.", 403);
   }
 

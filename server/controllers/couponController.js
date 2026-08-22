@@ -40,10 +40,7 @@ const validateCouponLogic = (coupon, subtotal) => {
     return { valid: false, message: "This coupon has expired." };
   }
 
-  if (
-    coupon.usageLimit > 0 &&
-    coupon.usedCount >= coupon.usageLimit
-  ) {
+  if (coupon.usageLimit > 0 && coupon.usedCount >= coupon.usageLimit) {
     return {
       valid: false,
       message: "This coupon has reached its usage limit.",
@@ -126,15 +123,10 @@ const getAllCoupons = asyncHandler(async (req, res) => {
 const getActiveCoupons = asyncHandler(async (req, res) => {
   const coupons = await Coupon.find({
     isActive: true,
-    $or: [
-      { expiresAt: { $eq: null } },
-      { expiresAt: { $gt: new Date() } },
-    ],
+    $or: [{ expiresAt: { $eq: null } }, { expiresAt: { $gt: new Date() } }],
   })
     .sort({ createdAt: -1 })
-    .select(
-      "code type value minOrderAmount maxDiscount expiresAt"
-    );
+    .select("code type value minOrderAmount maxDiscount expiresAt");
 
   res.status(200).json({
     success: true,
@@ -209,8 +201,7 @@ const updateCoupon = asyncHandler(async (req, res) => {
   coupon.code = code ? code.toUpperCase().trim() : coupon.code;
   coupon.type = type || coupon.type;
   coupon.value = value ?? coupon.value;
-  coupon.minOrderAmount =
-    minOrderAmount ?? coupon.minOrderAmount;
+  coupon.minOrderAmount = minOrderAmount ?? coupon.minOrderAmount;
   coupon.maxDiscount = maxDiscount ?? coupon.maxDiscount;
   coupon.usageLimit = usageLimit ?? coupon.usageLimit;
   coupon.isActive = isActive ?? coupon.isActive;

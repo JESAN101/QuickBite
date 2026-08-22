@@ -31,39 +31,30 @@ const CouponTable = ({ coupons, onEdit, onDelete }) => {
         <tbody>
           {coupons.length === 0 ? (
             <tr>
-              <td
-                colSpan="7"
-                className="text-center py-10 text-gray-500"
-              >
+              <td colSpan="7" className="text-center py-10 text-gray-500">
                 No Coupons Found
               </td>
             </tr>
           ) : (
             coupons.map((coupon) => {
               const isExpired =
-                coupon.expiresAt &&
-                new Date(coupon.expiresAt) < new Date();
+                coupon.expiresAt && new Date(coupon.expiresAt) < new Date();
 
               const statusText = !coupon.isActive
                 ? "Inactive"
                 : isExpired
-                ? "Expired"
-                : "Active";
+                  ? "Expired"
+                  : "Active";
 
               const statusClass = !coupon.isActive
                 ? "bg-gray-500"
                 : isExpired
-                ? "bg-red-500"
-                : "bg-green-500";
+                  ? "bg-red-500"
+                  : "bg-green-500";
 
               return (
-                <tr
-                  key={coupon._id}
-                  className="border-b hover:bg-gray-50"
-                >
-                  <td className="p-4 font-bold uppercase">
-                    {coupon.code}
-                  </td>
+                <tr key={coupon._id} className="border-b hover:bg-gray-50">
+                  <td className="p-4 font-bold uppercase">{coupon.code}</td>
 
                   <td className="p-4 font-semibold text-orange-600">
                     {formatDiscount(coupon)}
@@ -77,16 +68,12 @@ const CouponTable = ({ coupons, onEdit, onDelete }) => {
 
                   <td className="p-4 text-center">
                     {coupon.usedCount}
-                    {coupon.usageLimit > 0
-                      ? ` / ${coupon.usageLimit}`
-                      : " (∞)"}
+                    {coupon.usageLimit > 0 ? ` / ${coupon.usageLimit}` : " (∞)"}
                   </td>
 
                   <td className="p-4 text-center">
                     {coupon.expiresAt
-                      ? new Date(
-                          coupon.expiresAt
-                        ).toLocaleDateString()
+                      ? new Date(coupon.expiresAt).toLocaleDateString()
                       : "Never"}
                   </td>
 

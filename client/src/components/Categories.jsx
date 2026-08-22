@@ -1,11 +1,7 @@
 // Categories.jsx
 import CategoryCard from "./CategoryCard";
 
-const Categories = ({
-  categories,
-  selectedCategory,
-  setSelectedCategory,
-}) => {
+const Categories = ({ categories, selectedCategory, setSelectedCategory }) => {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
       <div className="mb-10 flex items-end justify-between">

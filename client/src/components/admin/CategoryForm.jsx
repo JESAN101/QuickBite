@@ -33,8 +33,7 @@ const CategoryForm = () => {
 
       setFormData({
         name: data.category.name,
-        description:
-          data.category.description || "",
+        description: data.category.description || "",
       });
     } catch {
       toast.error("Failed to load category.");
@@ -44,8 +43,7 @@ const CategoryForm = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -56,28 +54,18 @@ const CategoryForm = () => {
       setLoading(true);
 
       if (isEditing) {
-        const data =
-          await updateCategory(
-            id,
-            formData
-          );
+        const data = await updateCategory(id, formData);
 
         toast.success(data.message);
       } else {
-        const data =
-          await createCategory(
-            formData
-          );
+        const data = await createCategory(formData);
 
         toast.success(data.message);
       }
 
       navigate("/admin/categories");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Something went wrong."
-      );
+      toast.error(error.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -85,25 +73,13 @@ const CategoryForm = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-8">
-
       <h2 className="text-2xl font-bold mb-6">
-
-        {isEditing
-          ? "Edit Category"
-          : "Add Category"}
-
+        {isEditing ? "Edit Category" : "Add Category"}
       </h2>
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6"
-      >
-
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-
-          <label className="block mb-2 font-medium">
-            Category Name
-          </label>
+          <label className="block mb-2 font-medium">Category Name</label>
 
           <input
             type="text"
@@ -113,14 +89,10 @@ const CategoryForm = () => {
             required
             className="w-full border rounded-lg px-4 py-3"
           />
-
         </div>
 
         <div>
-
-          <label className="block mb-2 font-medium">
-            Description
-          </label>
+          <label className="block mb-2 font-medium">Description</label>
 
           <textarea
             rows="4"
@@ -129,7 +101,6 @@ const CategoryForm = () => {
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-3"
           />
-
         </div>
 
         <button
@@ -140,12 +111,10 @@ const CategoryForm = () => {
           {loading
             ? "Saving..."
             : isEditing
-            ? "Update Category"
-            : "Create Category"}
+              ? "Update Category"
+              : "Create Category"}
         </button>
-
       </form>
-
     </div>
   );
 };

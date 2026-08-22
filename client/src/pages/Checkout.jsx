@@ -5,10 +5,7 @@ import { FaTag, FaTimes } from "react-icons/fa";
 
 import { getCart, clearCart } from "../services/cartService";
 import { placeOrder } from "../services/orderService";
-import {
-  validateCoupon,
-  getActiveCoupons,
-} from "../services/couponService";
+import { validateCoupon, getActiveCoupons } from "../services/couponService";
 import { getDeliveryFee } from "../utils/pricing";
 
 const Checkout = () => {
@@ -51,7 +48,7 @@ const Checkout = () => {
 
   const subtotal = cart.reduce(
     (sum, item) => sum + item.food.price * item.quantity,
-    0
+    0,
   );
 
   const deliveryFee = getDeliveryFee(subtotal);
@@ -87,9 +84,7 @@ const Checkout = () => {
     } catch (error) {
       setAppliedCoupon(null);
 
-      toast.error(
-        error.response?.data?.message || "Invalid coupon code."
-      );
+      toast.error(error.response?.data?.message || "Invalid coupon code.");
     } finally {
       setApplyingCoupon(false);
     }
@@ -152,9 +147,7 @@ const Checkout = () => {
 
       toast.dismiss(loadingToast);
 
-      toast.error(
-        error.response?.data?.message || "Failed to place order."
-      );
+      toast.error(error.response?.data?.message || "Failed to place order.");
     } finally {
       setLoading(false);
     }
@@ -230,9 +223,7 @@ const Checkout = () => {
 
             <div className="flex justify-between text-sm text-[#3A2A20]/70">
               <span>Delivery Fee</span>
-              <span>
-                {deliveryFee === 0 ? "FREE" : `Rs. ${deliveryFee}`}
-              </span>
+              <span>{deliveryFee === 0 ? "FREE" : `Rs. ${deliveryFee}`}</span>
             </div>
 
             {appliedCoupon && (

@@ -4,10 +4,7 @@ import toast from "react-hot-toast";
 
 import FoodForm from "../components/admin/FoodForm";
 
-import {
-  getFoodById,
-  updateFood,
-} from "../services/foodService";
+import { getFoodById, updateFood } from "../services/foodService";
 
 import { getAllCategories } from "../services/categoryService";
 import { getRestaurants } from "../services/restaurantService";
@@ -63,34 +60,20 @@ const AdminEditFood = () => {
       toast.success(data.message);
 
       navigate("/admin/foods");
-
     } catch (error) {
-
-      toast.error(
-        error.response?.data?.message ||
-        "Failed to update food."
-      );
-
+      toast.error(error.response?.data?.message || "Failed to update food.");
     } finally {
-
       setLoading(false);
-
     }
   };
 
   if (!food._id) {
-    return (
-      <div className="text-center py-20 text-xl">
-        Loading Food...
-      </div>
-    );
+    return <div className="text-center py-20 text-xl">Loading Food...</div>;
   }
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-8">
-        ✏ Edit Food
-      </h1>
+      <h1 className="text-4xl font-bold mb-8">✏ Edit Food</h1>
 
       <FoodForm
         initialData={food}

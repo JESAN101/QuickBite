@@ -21,18 +21,16 @@ describe("orderStatus utils", () => {
 
   it("returns badge class for a known status", () => {
     expect(getStatusBadgeClass("Pending")).toBe(
-      "bg-yellow-100 text-yellow-700"
+      "bg-yellow-100 text-yellow-700",
     );
   });
 
   it("falls back for unknown status", () => {
     expect(getStatusBadgeClass("Unknown")).toBe("bg-gray-100 text-gray-600");
     expect(getStatusSolidClass("Unknown")).toBe("bg-gray-500");
-    expect(getStatusBorderedClass("Unknown")).toBe(
-      "bg-gray-100 text-gray-600"
-    );
+    expect(getStatusBorderedClass("Unknown")).toBe("bg-gray-100 text-gray-600");
     expect(getStatusStorefrontClass("Unknown")).toBe(
-      "bg-[#EADFC8] text-[#1D1512]"
+      "bg-[#EADFC8] text-[#1D1512]",
     );
     expect(getOrderStatusChartColor("Unknown")).toBe("#6b7280");
   });

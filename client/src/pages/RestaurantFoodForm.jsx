@@ -60,10 +60,7 @@ const RestaurantFoodForm = () => {
 
       navigate("/restaurant/foods");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to save food."
-      );
+      toast.error(error.response?.data?.message || "Failed to save food.");
     } finally {
       setLoading(false);
     }

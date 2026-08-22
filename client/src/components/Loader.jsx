@@ -1,4 +1,4 @@
- const Loader = ({ fullScreen = false, label = "Loading" }) => {
+const Loader = ({ fullScreen = false, label = "Loading" }) => {
   const spinner = (
     <div className="flex flex-col items-center gap-3">
       <div className="relative h-10 w-10">

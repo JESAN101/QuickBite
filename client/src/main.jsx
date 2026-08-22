@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </FavoritesProvider>
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

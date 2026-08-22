@@ -25,38 +25,20 @@ const router = express.Router();
 // =====================================
 
 // Place Order
-router.post(
-  "/place",
-  authMiddleware,
-  validate(placeOrderSchema),
-  placeOrder
-);
+router.post("/place", authMiddleware, validate(placeOrderSchema), placeOrder);
 
 // Logged-in User Orders
-router.get(
-  "/my-orders",
-  authMiddleware,
-  getMyOrders
-);
+router.get("/my-orders", authMiddleware, getMyOrders);
 
 // Cancel Own Order (within cancellation window)
-router.put(
-  "/cancel/:id",
-  authMiddleware,
-  cancelOrder
-);
+router.put("/cancel/:id", authMiddleware, cancelOrder);
 
 // =====================================
 // Admin Routes
 // =====================================
 
 // Get All Orders
-router.get(
-  "/all",
-  authMiddleware,
-  adminMiddleware,
-  getAllOrders
-);
+router.get("/all", authMiddleware, adminMiddleware, getAllOrders);
 
 // Update Order Status
 router.put(
@@ -64,25 +46,16 @@ router.put(
   authMiddleware,
   adminMiddleware,
   validate(updateOrderStatusSchema),
-  updateOrderStatus
+  updateOrderStatus,
 );
 
 // Delete Order
-router.delete(
-  "/delete/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteOrder
-);
+router.delete("/delete/:id", authMiddleware, adminMiddleware, deleteOrder);
 
 // =====================================
 // Single Order (KEEP THIS LAST)
 // =====================================
 
-router.get(
-  "/:id",
-  authMiddleware,
-  getOrder
-);
+router.get("/:id", authMiddleware, getOrder);
 
 module.exports = router;

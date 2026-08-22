@@ -66,13 +66,9 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   }
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 
   res.status(200).json({
     success: true,
@@ -108,7 +104,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     {
       returnDocument: "after",
       runValidators: true,
-    }
+    },
   );
 
   res.status(200).json({

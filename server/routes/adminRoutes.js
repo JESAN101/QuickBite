@@ -13,21 +13,11 @@ const router = express.Router();
 // ===============================
 // Admin Dashboard Statistics
 // ===============================
-router.get(
-  "/dashboard",
-  authMiddleware,
-  adminMiddleware,
-  getDashboardStats
-);
+router.get("/dashboard", authMiddleware, adminMiddleware, getDashboardStats);
 
 // ===============================
 // Admin Analytics (Charts)
 // ===============================
-router.get(
-  "/analytics",
-  authMiddleware,
-  adminMiddleware,
-  getAnalytics
-);
+router.get("/analytics", authMiddleware, adminMiddleware, getAnalytics);
 
 module.exports = router;

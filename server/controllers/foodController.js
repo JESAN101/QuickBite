@@ -101,7 +101,10 @@ const updateFood = asyncHandler(async (req, res) => {
   if (req.body.categories) {
     const ids = Array.isArray(req.body.categories)
       ? req.body.categories
-      : String(req.body.categories).split(",").map((s) => s.trim()).filter(Boolean);
+      : String(req.body.categories)
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
 
     for (const id of ids) {
       const categoryExists = await Category.findById(id);
@@ -121,14 +124,10 @@ const updateFood = asyncHandler(async (req, res) => {
     updateData.image = req.file.path;
   }
 
-  const updatedFood = await Food.findByIdAndUpdate(
-    req.params.id,
-    updateData,
-    {
-      returnDocument: "after",
-      runValidators: true,
-    }
-  )
+  const updatedFood = await Food.findByIdAndUpdate(req.params.id, updateData, {
+    returnDocument: "after",
+    runValidators: true,
+  })
     .populate("categories", "name")
     .populate("restaurant", "name");
 

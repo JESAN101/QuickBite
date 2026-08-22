@@ -4,7 +4,6 @@ const OrderSuccess = () => {
   return (
     <div className="flex min-h-[80vh] items-center justify-center bg-[#FFFBF3] px-6">
       <div className="w-full max-w-xl rounded-2xl border border-[#EADFC8] bg-white p-10 text-center shadow-[0_20px_40px_-16px_rgba(29,21,18,0.25)]">
-
         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#2E7D4F]/10">
           <span className="text-5xl">🎉</span>
         </div>
@@ -26,7 +25,6 @@ const OrderSuccess = () => {
         </p>
 
         <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-
           <Link
             to="/orders"
             className="rounded-lg bg-[#1D1512] px-6 py-3 text-center font-semibold text-[#F7ECD9] transition hover:bg-[#F0A438] hover:text-[#1D1512]"
@@ -40,9 +38,7 @@ const OrderSuccess = () => {
           >
             Continue Shopping
           </Link>
-
         </div>
-
       </div>
     </div>
   );

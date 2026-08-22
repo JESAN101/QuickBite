@@ -203,9 +203,7 @@ const Login = () => {
                     value={form.email}
                     onChange={handleChange}
                     className={`w-full rounded-lg border bg-white/10 p-3 pl-10 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30 ${
-                      errors.email
-                        ? "border-[#ef4444]"
-                        : "border-white/15"
+                      errors.email ? "border-[#ef4444]" : "border-white/15"
                     }`}
                   />
                 </div>
@@ -232,16 +230,16 @@ const Login = () => {
                     value={form.password}
                     onChange={handleChange}
                     className={`w-full rounded-lg border bg-white/10 p-3 pl-10 pr-11 text-[#F7ECD9] placeholder-[#F7ECD9]/35 outline-none backdrop-blur-sm transition focus:border-[#F0A438] focus:ring-2 focus:ring-[#F0A438]/30 ${
-                      errors.password
-                        ? "border-[#ef4444]"
-                        : "border-white/15"
+                      errors.password ? "border-[#ef4444]" : "border-white/15"
                     }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#F7ECD9]/40 transition hover:text-[#F7ECD9]"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? (
                       <FaEyeSlash size={14} />

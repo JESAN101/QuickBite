@@ -46,7 +46,7 @@ const FoodDetails = () => {
         toast.error("Please login first.");
       } else {
         toast.error(
-          error.response?.data?.message || "Failed to add item to cart."
+          error.response?.data?.message || "Failed to add item to cart.",
         );
       }
     } finally {
@@ -198,8 +198,8 @@ const FoodDetails = () => {
               {!food.isAvailable
                 ? "Currently unavailable"
                 : adding
-                ? "Adding…"
-                : `Add to cart · Rs. ${food.price * quantity}`}
+                  ? "Adding…"
+                  : `Add to cart · Rs. ${food.price * quantity}`}
             </button>
           </div>
         </div>

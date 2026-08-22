@@ -13,9 +13,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const upload = require("../middleware/upload");
 const { validate } = require("../middleware/validate");
-const {
-  updateFoodSchema,
-} = require("../validators/foodValidator");
+const { updateFoodSchema } = require("../validators/foodValidator");
 
 const router = express.Router();
 
@@ -30,10 +28,7 @@ router.get("/suggestions", getSuggestions);
 router.get("/all", getAllFood);
 
 // Get Foods By Restaurant
-router.get(
-  "/restaurant/:restaurantId",
-  getFoodsByRestaurant
-);
+router.get("/restaurant/:restaurantId", getFoodsByRestaurant);
 
 // Get Food By ID
 router.get("/:id", getFoodById);
@@ -49,15 +44,10 @@ router.put(
   adminMiddleware,
   upload.single("image"),
   validate(updateFoodSchema),
-  updateFood
+  updateFood,
 );
 
 // Delete Food
-router.delete(
-  "/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteFood
-);
+router.delete("/:id", authMiddleware, adminMiddleware, deleteFood);
 
 module.exports = router;

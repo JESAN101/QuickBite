@@ -21,9 +21,7 @@ const AdminAddRestaurant = () => {
       const data = await getAllUsers();
 
       setOwners(
-        (data.users || []).filter(
-          (user) => user.role === "restaurant"
-        )
+        (data.users || []).filter((user) => user.role === "restaurant"),
       );
     } catch (error) {
       console.log(error);
@@ -41,8 +39,7 @@ const AdminAddRestaurant = () => {
       navigate("/admin/restaurants");
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-          "Failed to create restaurant."
+        error.response?.data?.message || "Failed to create restaurant.",
       );
     } finally {
       setLoading(false);
@@ -51,9 +48,7 @@ const AdminAddRestaurant = () => {
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-8">
-        ➕ Add Restaurant
-      </h1>
+      <h1 className="text-4xl font-bold mb-8">➕ Add Restaurant</h1>
 
       <RestaurantForm
         owners={owners}

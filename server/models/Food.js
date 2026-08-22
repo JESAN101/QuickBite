@@ -72,7 +72,7 @@ const foodSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Virtual: backward-compatible singular accessor.

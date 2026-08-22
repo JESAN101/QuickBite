@@ -12,7 +12,11 @@ const mobileLinks = [
   { to: "/admin/categories", label: "Categories", icon: "🏷️" },
   { to: "/admin/users", label: "Users", icon: "👥" },
   { to: "/admin/coupons", label: "Coupons", icon: "🎟️" },
-  { to: "/admin/requests/restaurant", label: "Restaurant Requests", icon: "🏪" },
+  {
+    to: "/admin/requests/restaurant",
+    label: "Restaurant Requests",
+    icon: "🏪",
+  },
   { to: "/admin/requests/rider", label: "Rider Requests", icon: "🏍️" },
 ];
 

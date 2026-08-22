@@ -52,7 +52,7 @@ const PageTitle = () => {
 
   useEffect(() => {
     const match = ROUTE_TITLES.find(
-      ([path]) => pathname === path || pathname.startsWith(`${path}/`)
+      ([path]) => pathname === path || pathname.startsWith(`${path}/`),
     );
 
     document.title = match ? match[1] : NOT_FOUND_TITLE;

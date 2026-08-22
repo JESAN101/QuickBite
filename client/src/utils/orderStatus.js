@@ -17,8 +17,10 @@ export const ORDER_STATUS_BADGE = {
   Cancelled: "bg-red-100 text-red-600",
 };
 
-export const getStatusBadgeClass = (status, fallback = "bg-gray-100 text-gray-600") =>
-  ORDER_STATUS_BADGE[status] || fallback;
+export const getStatusBadgeClass = (
+  status,
+  fallback = "bg-gray-100 text-gray-600",
+) => ORDER_STATUS_BADGE[status] || fallback;
 
 // Solid fills with white text (used as <select> backgrounds in admin tables).
 export const ORDER_STATUS_SOLID = {
@@ -43,7 +45,7 @@ export const ORDER_STATUS_BADGE_BORDERED = {
 
 export const getStatusBorderedClass = (
   status,
-  fallback = "bg-gray-100 text-gray-600"
+  fallback = "bg-gray-100 text-gray-600",
 ) => ORDER_STATUS_BADGE_BORDERED[status] || fallback;
 
 // Storefront-themed badges (cream/amber palette).
@@ -57,7 +59,7 @@ export const ORDER_STATUS_BADGE_STOREFRONT = {
 
 export const getStatusStorefrontClass = (
   status,
-  fallback = "bg-[#EADFC8] text-[#1D1512]"
+  fallback = "bg-[#EADFC8] text-[#1D1512]",
 ) => ORDER_STATUS_BADGE_STOREFRONT[status] || fallback;
 
 // Hex colors for Chart.js doughnut charts.

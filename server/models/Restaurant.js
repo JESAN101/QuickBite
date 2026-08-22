@@ -71,7 +71,7 @@ const restaurantSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Restaurant", restaurantSchema);

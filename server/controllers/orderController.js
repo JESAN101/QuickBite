@@ -4,14 +4,9 @@ const Food = require("../models/Food");
 const Coupon = require("../models/Coupon");
 const Restaurant = require("../models/Restaurant");
 const User = require("../models/User");
-const {
-  validateCouponLogic,
-} = require("./couponController");
+const { validateCouponLogic } = require("./couponController");
 const asyncHandler = require("../utils/asyncHandler");
-const {
-  isRestaurantOpenNow,
-  formatHours,
-} = require("../utils/openingHours");
+const { isRestaurantOpenNow, formatHours } = require("../utils/openingHours");
 const {
   sendOrderPlacedEmail,
   sendOrderStatusEmail,
@@ -21,10 +16,7 @@ const { parsePagination, escapeRegex } = require("../utils/pagination");
 // Time (in minutes) customers can cancel their own
 // order after placing it. Configurable via env.
 const cancellationWindowMinutes = () =>
-  Math.max(
-    0,
-    parseInt(process.env.ORDER_CANCELLATION_WINDOW_MINUTES, 10) || 5
-  );
+  Math.max(0, parseInt(process.env.ORDER_CANCELLATION_WINDOW_MINUTES, 10) || 5);
 
 // ==========================================
 // Place Order
@@ -65,12 +57,7 @@ const placeOrder = asyncHandler(async (req, res) => {
     _id: { $in: foodIds },
   });
 
-  const foodMap = new Map(
-    foodDocs.map((food) => [
-      food._id.toString(),
-      food,
-    ])
-  );
+  const foodMap = new Map(foodDocs.map((food) => [food._id.toString(), food]));
 
   let subtotal = 0;
 
@@ -80,8 +67,7 @@ const placeOrder = asyncHandler(async (req, res) => {
     if (!food) {
       return res.status(400).json({
         success: false,
-        message:
-          "One or more foods in your cart are invalid.",
+        message: "One or more foods in your cart are invalid.",
       });
     }
 
@@ -100,10 +86,7 @@ const placeOrder = asyncHandler(async (req, res) => {
       code: couponCode.toUpperCase().trim(),
     });
 
-    const result = validateCouponLogic(
-      foundCoupon,
-      subtotal
-    );
+    const result = validateCouponLogic(foundCoupon, subtotal);
 
     if (!result.valid) {
       return res.status(400).json({
@@ -142,7 +125,7 @@ const placeOrder = asyncHandler(async (req, res) => {
 
   // Fire-and-forget confirmation email (never blocks the response)
   sendOrderPlacedEmail(order._id).catch((error) =>
-    console.error("[mailer] order placement email failed:", error)
+    console.error("[mailer] order placement email failed:", error),
   );
 
   res.status(201).json({
@@ -193,10 +176,7 @@ const getOrder = asyncHandler(async (req, res) => {
   // Admin can view any order
   if (req.user.role !== "admin") {
     // Customer can only view their own order
-    if (
-      order.user._id.toString() !==
-      req.user._id.toString()
-    ) {
+    if (order.user._id.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: "Access denied.",
@@ -241,8 +221,7 @@ const cancelOrder = asyncHandler(async (req, res) => {
   }
 
   const elapsedMinutes =
-    (Date.now() - new Date(order.createdAt).getTime()) /
-    60000;
+    (Date.now() - new Date(order.createdAt).getTime()) / 60000;
 
   if (elapsedMinutes > cancellationWindowMinutes()) {
     return res.status(400).json({
@@ -265,17 +244,15 @@ const cancelOrder = asyncHandler(async (req, res) => {
   // Emit real-time update to the customer's room
   try {
     const { getIO } = require("../config/socket");
-    getIO()
-      .to(order.user.toString())
-      .emit("order:status", {
-        orderId: order._id,
-        status: order.orderStatus,
-      });
+    getIO().to(order.user.toString()).emit("order:status", {
+      orderId: order._id,
+      status: order.orderStatus,
+    });
   } catch (_) {}
 
   // Fire-and-forget status-change email
   sendOrderStatusEmail(order._id).catch((error) =>
-    console.error("[mailer] cancellation email failed:", error)
+    console.error("[mailer] cancellation email failed:", error),
   );
 
   res.status(200).json({
@@ -305,13 +282,12 @@ const getAllOrders = asyncHandler(async (req, res) => {
   if (search) {
     const regex = new RegExp(escapeRegex(search), "i");
 
-    const [matchingUsers, matchingRestaurants] =
-      await Promise.all([
-        User.find({
-          $or: [{ name: regex }, { email: regex }],
-        }).select("_id"),
-        Restaurant.find({ name: regex }).select("_id"),
-      ]);
+    const [matchingUsers, matchingRestaurants] = await Promise.all([
+      User.find({
+        $or: [{ name: regex }, { email: regex }],
+      }).select("_id"),
+      Restaurant.find({ name: regex }).select("_id"),
+    ]);
 
     filter.$or = [
       { user: { $in: matchingUsers.map((u) => u._id) } },
@@ -361,8 +337,7 @@ const getAllOrders = asyncHandler(async (req, res) => {
       pendingOrders: statusCounts["Pending"] || 0,
       preparingOrders: statusCounts["Preparing"] || 0,
       deliveredOrders: statusCounts["Delivered"] || 0,
-      totalRevenue:
-        revenueAgg.length > 0 ? revenueAgg[0].total : 0,
+      totalRevenue: revenueAgg.length > 0 ? revenueAgg[0].total : 0,
     },
   });
 });
@@ -390,17 +365,15 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 
   // Emit real-time update to the customer's room
   try {
-    getIO()
-      .to(order.user.toString())
-      .emit("order:status", {
-        orderId: order._id,
-        status: order.orderStatus,
-      });
+    getIO().to(order.user.toString()).emit("order:status", {
+      orderId: order._id,
+      status: order.orderStatus,
+    });
   } catch (_) {}
 
   // Fire-and-forget status-change email
   sendOrderStatusEmail(order._id).catch((error) =>
-    console.error("[mailer] status-change email failed:", error)
+    console.error("[mailer] status-change email failed:", error),
   );
 
   res.status(200).json({
@@ -414,9 +387,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 // Delete Order (Admin Only)
 // ==========================================
 const deleteOrder = asyncHandler(async (req, res) => {
-  const order = await Order.findByIdAndDelete(
-    req.params.id
-  );
+  const order = await Order.findByIdAndDelete(req.params.id);
 
   if (!order) {
     return res.status(404).json({

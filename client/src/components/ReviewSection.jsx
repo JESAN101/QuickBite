@@ -11,17 +11,17 @@ const StarRating = ({ value, size = 16, interactive = false, onChange }) => (
         key={star}
         type={interactive ? "button" : undefined}
         onClick={() => interactive && onChange?.(star)}
-        className={interactive ? "cursor-pointer transition hover:scale-110" : "cursor-default"}
+        className={
+          interactive
+            ? "cursor-pointer transition hover:scale-110"
+            : "cursor-default"
+        }
         disabled={!interactive}
         aria-label={`${star} star${star > 1 ? "s" : ""}`}
       >
         <FaStar
           size={size}
-          className={
-            star <= value
-              ? "text-[#F0A438]"
-              : "text-[#EADFC8]"
-          }
+          className={star <= value ? "text-[#F0A438]" : "text-[#EADFC8]"}
         />
       </button>
     ))}
@@ -53,10 +53,14 @@ const ReviewSection = ({ foodId }) => {
 
   const avgRating =
     reviews.length > 0
-      ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+      ? (
+          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        ).toFixed(1)
       : null;
 
-  const hasReviewed = user && reviews.some((r) => r.user?._id === user._id || r.user === user._id);
+  const hasReviewed =
+    user &&
+    reviews.some((r) => r.user?._id === user._id || r.user === user._id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,7 +113,9 @@ const ReviewSection = ({ foodId }) => {
         {avgRating && (
           <div className="flex items-center gap-2">
             <FaStar className="text-[#F0A438]" />
-            <span className="text-xl font-bold text-[#1D1512]">{avgRating}</span>
+            <span className="text-xl font-bold text-[#1D1512]">
+              {avgRating}
+            </span>
             <span className="text-sm text-[#3A2A20]/50">
               ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
             </span>
@@ -147,15 +153,16 @@ const ReviewSection = ({ foodId }) => {
                   {review.comment}
                 </p>
               )}
-              {user && (review.user?._id === user._id || review.user === user._id) && (
-                <button
-                  onClick={() => handleDelete(review._id)}
-                  className="mt-3 flex items-center gap-1 text-xs text-[#D64933]/60 transition hover:text-[#D64933]"
-                >
-                  <FaTrash className="text-[10px]" />
-                  Delete
-                </button>
-              )}
+              {user &&
+                (review.user?._id === user._id || review.user === user._id) && (
+                  <button
+                    onClick={() => handleDelete(review._id)}
+                    className="mt-3 flex items-center gap-1 text-xs text-[#D64933]/60 transition hover:text-[#D64933]"
+                  >
+                    <FaTrash className="text-[10px]" />
+                    Delete
+                  </button>
+                )}
             </div>
           ))}
         </div>
@@ -163,11 +170,16 @@ const ReviewSection = ({ foodId }) => {
 
       {/* Add review form */}
       {!hasReviewed && (
-        <form onSubmit={handleSubmit} className="mt-10 border-t border-[#EADFC8] pt-8">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-10 border-t border-[#EADFC8] pt-8"
+        >
           <h3 className="text-lg font-bold text-[#1D1512]">Leave a review</h3>
 
           <div className="mt-4">
-            <p className="mb-2 text-sm font-semibold text-[#1D1512]">Your rating</p>
+            <p className="mb-2 text-sm font-semibold text-[#1D1512]">
+              Your rating
+            </p>
             <StarRating
               value={rating}
               size={24}
@@ -178,7 +190,8 @@ const ReviewSection = ({ foodId }) => {
 
           <div className="mt-4">
             <label className="mb-2 block text-sm font-semibold text-[#1D1512]">
-              Comment <span className="font-normal text-[#3A2A20]/50">(optional)</span>
+              Comment{" "}
+              <span className="font-normal text-[#3A2A20]/50">(optional)</span>
             </label>
             <textarea
               rows={3}
